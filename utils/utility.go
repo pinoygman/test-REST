@@ -1,10 +1,10 @@
 package utils
 
 import (
-	//"encoding/json"
-	//"fmt"
+	"encoding/json"
+	"fmt"
 	"io/ioutil"
-	//"net/http"
+	"net/http"
 	"os"
 )
 
@@ -39,4 +39,15 @@ func ReadFile(path string) (content []byte, err error) {
 	content = bytes
 
 	return
+}
+
+func WriteResponse(w http.ResponseWriter, code int, object interface{}) {
+	data, err := json.Marshal(object)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(code)
+	fmt.Fprintf(w, string(data))
 }
