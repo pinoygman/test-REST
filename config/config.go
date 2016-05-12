@@ -2,7 +2,7 @@ package config
 
 import (
 	"encoding/json"
-	utils "github.build.ge.com/PredixSolutions/catalog-onboarding-backend/utils"
+	utils "github.build.ge.com/catalog-onboarding-backend/utils"
 )
 
 type Config struct {

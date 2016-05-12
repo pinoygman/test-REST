@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.build.ge.com/PredixSolutions/catalog-onboarding-backend",
+	"ImportPath": "github.build.ge.com/catalog-onboarding-backend",
 	"GoVersion": "go1.6",
 	"GodepVersion": "v66",
 	"Deps": [

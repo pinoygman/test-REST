@@ -20,8 +20,8 @@ import (
 	//"flag"
 	//"log"
 	//"path/filepath"
-	conf "github.build.ge.com/PredixSolutions/catalog-onboarding-backend/config"
-	utils "github.build.ge.com/PredixSolutions/catalog-onboarding-backend/utils"
+	conf "github.build.ge.com/catalog-onboarding-backend/config"
+	utils "github.build.ge.com/catalog-onboarding-backend/utils"
 	"github.com/gorilla/mux"	
 )
 
