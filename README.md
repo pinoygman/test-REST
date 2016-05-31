@@ -39,6 +39,6 @@ Request
 Response:
 {
   "Status":"Submitted"
-  :ApplicationId":"123td-1231f-wef1-312ed"
+  "ApplicationId":"123td-1231f-wef1-312ed"
 }
 ```
