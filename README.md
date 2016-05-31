@@ -54,3 +54,18 @@ Response:
   "ApplicationId":"123td-1231f-wef1-312ed"
 }
 ```
+
+###Architecture
+```
+HTTP 1.1 POST Application/json
+Request:
+{
+  "ArchUserTypesAndTasks":<text>,
+  "ArchIoTUseCases":<text>,
+  "ArchAPIDetails":<text>,
+  "ArchPredixNative":text/boolean
+  "ArchExternalSourceList":txt
+  "ArchLicenseSoftwareList":text
+  "ArchMultiTenancyModel":text
+  "ArchVersioning":text
+}
