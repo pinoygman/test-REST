@@ -26,14 +26,15 @@ go build
 HTTP 1.1 POST Application/json
 Request
 {
-  "GESponsorship":<text>
-  "ServiceName":<text>
-  "Purpose":<text>
-  "ServiceHowTo":<text>
-  "IntegrationProsAndCons":<text>
-  "ServiceVSAltSolutions":<text>
-  "ServiceCustListBenifitExamples":<text>
+  "GESponsorship":<text>,
+  "ServiceName":<text>,
+  "Purpose":<text>,
+  "ServiceHowTo":<text>,
+  "IntegrationProsAndCons":<text>,
+  "ServiceVSAltSolutions":<text>,
+  "ServiceCustListBenifitExamples":<text>,
   "ServicePotentialCustomers":<text>
+  "ServiceDocs":["1245e-23423-wfwef2-wrfw2",..]
 }
 Response:
 {
