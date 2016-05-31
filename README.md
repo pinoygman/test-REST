@@ -20,6 +20,17 @@ go build
   PAE-App: Basic \<UAA ClientId:Sec\>
 }
 ```
+###Documents
+```
+HTTP 1.1 POST multipart/form-data
+Request:
+File/FileName
+
+Response:
+{
+  "FileId":"1245e-23423-wfwef2-wrfw2"
+}
+```
 
 ###Service
 ```
@@ -36,9 +47,10 @@ Request
   "ServicePotentialCustomers":<text>
   "ServiceDocs":["1245e-23423-wfwef2-wrfw2",..]
 }
+
 Response:
 {
   "Status":"Submitted"
-  :ApplicationId":"123td-1231f-wef1-312ed"
+  "ApplicationId":"123td-1231f-wef1-312ed"
 }
 ```
