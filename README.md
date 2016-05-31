@@ -63,9 +63,9 @@ Request:
   "ArchUserTypesAndTasks":<text>,
   "ArchIoTUseCases":<text>,
   "ArchAPIDetails":<text>,
-  "ArchPredixNative":text/boolean
-  "ArchExternalSourceList":txt
-  "ArchLicenseSoftwareList":text
-  "ArchMultiTenancyModel":text
-  "ArchVersioning":text
+  "ArchPredixNative":true/false,
+  "ArchExternalSourceList":<text>
+  "ArchLicenseSoftwareList":<text>
+  "ArchMultiTenancyModel":<text>
+  "ArchVersioning":<text>
 }
