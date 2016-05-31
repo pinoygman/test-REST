@@ -16,8 +16,8 @@ go build
 ###Authentication Header
 ```
 {
-  Authorization: Bearer \<UAA Token\>
-  PAE-App: Basic \<UAA ClientId:Sec\>
+  Authorization: Bearer <UAA Token>
+  CO-App: Basic <UAA ClientId:Sec>
 }
 ```
 ###Documents
@@ -119,7 +119,7 @@ Response: Application/json
 }
 ```
 
-###DueDiligentStatus:
+###Due Diligent Status:
 ```
 HTTP 1.1 GET Application/json
 Request: /v1/api/DDStatus/<AppcationId>
@@ -134,7 +134,7 @@ Response:
 }
 ```
 
-###DueDiligentRequirement:
+###Due Diligent Requirement:
 ```
 HTTP 1.1 POST Application/json
 Request: /v1/api/DDRequirement/<ApplicationId>
@@ -152,7 +152,7 @@ Response:
 }
 ```
 
-###ArchitectureStatus:
+###Architecture Status:
 ```
 HTTP 1.1 GET Application/json
 Request: /v1/api/AStatus/<AppcationId>
@@ -167,7 +167,7 @@ Response:
 }
 ```
 
-###ArchitectureReuirement:
+###Architecture Reuirement:
 ```
 HTTP 1.1 POST Application/json
 Request: /v1/api/ARequirement/<ApplicationId>
