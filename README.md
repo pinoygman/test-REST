@@ -69,7 +69,7 @@ Request: /v1/api/architecture
   "ArchLicenseSoftwareList":<text>,
   "ArchMultiTenancyModel":<text>,
   "ArchVersioning":<text>,
-   "ArchitectureDocs":["1245e-23423-wfwef2-wrfw2",..]
+  "ArchitectureDocs":["1245e-23423-wfwef2-wrfw2",..]
 }
 
 Response:
@@ -92,5 +92,12 @@ Request: /v1/api/Pricing
   "PriceProposal":<text>,
   "PriceNameAndDesc":<text>,
   "PriceInMarket":<text>,
+  "PricingDocs":["1245e-23423-wfwef2-wrfw2",..]
+}
+
+Response:
+{
+  "Status":"Submitted"
+  "ApplicationId":"123td-1231f-wef1-312ed"
 }
 ```
