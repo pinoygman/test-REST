@@ -23,7 +23,8 @@ go build
 ###Documents
 ```
 HTTP 1.1 POST multipart/form-data
-Request:
+Request: /v1/api/file
+
 File/FileName
 
 Response:
@@ -35,7 +36,7 @@ Response:
 ###Service
 ```
 HTTP 1.1 POST Application/json
-Request
+Request: /v1/api/service
 {
   "GESponsorship":<text>,
   "ServiceName":<text>,
@@ -58,14 +59,38 @@ Response:
 ###Architecture
 ```
 HTTP 1.1 POST Application/json
-Request:
+Request: /v1/api/architecture
 {
   "ArchUserTypesAndTasks":<text>,
   "ArchIoTUseCases":<text>,
   "ArchAPIDetails":<text>,
   "ArchPredixNative":true/false,
-  "ArchExternalSourceList":<text>
-  "ArchLicenseSoftwareList":<text>
-  "ArchMultiTenancyModel":<text>
-  "ArchVersioning":<text>
+  "ArchExternalSourceList":<text>,
+  "ArchLicenseSoftwareList":<text>,
+  "ArchMultiTenancyModel":<text>,
+  "ArchVersioning":<text>,
+   "ArchitectureDocs":["1245e-23423-wfwef2-wrfw2",..]
 }
+
+Response:
+{
+  "Status":"Submitted"
+  "ApplicationId":"123td-1231f-wef1-312ed"
+}
+```
+
+###Pricing:
+```
+HTTP 1.1 POST Application/json
+Request: /v1/api/Pricing
+{
+  "PriceMetrics":<text>,
+  "PriceMeterFeatureList":<text>,
+  "PriceSBNuregoReport":<text>,
+  "PriceMeterUnit":<text>,
+  "PriceUnitCurrentOrCumulative:":<text>,
+  "PriceProposal":<text>,
+  "PriceNameAndDesc":<text>,
+  "PriceInMarket":<text>,
+}
+```
