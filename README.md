@@ -101,3 +101,87 @@ Response:
   "ApplicationId":"123td-1231f-wef1-312ed"
 }
 ```
+
+###Partner:
+```
+HTTP 1.1 GET
+Request: /v1/api/Partner/<PartnerId, SFDCContactId>
+
+Response: Application/json
+{
+  "PartnerInfo":
+  {
+    "ContactName":<text>,
+    "ContactEmail":<text>,
+    "ContactPhone":<text>,
+    "ContactOrgName":<text>
+  }
+}
+```
+
+###DueDiligentStatus:
+```
+HTTP 1.1 GET Application/json
+Request: /v1/api/DDStatus/<AppcationId>
+
+Response:
+{
+  "DDCurrentStep":<integer>,
+  "DDRequiredInfo":[
+    "RequiredRefId:"12345"
+    "RequiredRefDesc:"Credit Card Auth Info"
+  ]
+}
+```
+
+###DueDiligentRequirement:
+```
+HTTP 1.1 POST Application/json
+Request: /v1/api/DDRequirement/<ApplicationId>
+{
+  "DDRequiredRefId":<text>,
+  "DDRequiredField":<text>,
+  "DDRequiredDoc":[FileId1,FileId2]
+}
+
+Response:
+{
+  "Status":"Replied",
+  "RequiredRefId:"67893",
+  "ApplicationId":"123td-1231f-wef1-312ed"
+}
+```
+
+###ArchitectureStatus:
+```
+HTTP 1.1 GET Application/json
+Request: /v1/api/AStatus/<AppcationId>
+
+Response:
+{
+  "ACurrentStep"<text>,
+  "ARequiredInfo":[
+    "RequiredRefId:"67893"
+    "RequiredRefDesc:"Architecture Diagram"
+  ]
+}
+```
+
+###ArchitectureReuirement:
+```
+HTTP 1.1 POST Application/json
+Request: /v1/api/ARequirement/<ApplicationId>
+Body:
+{
+  "ARequiredRefId:<text>,
+  "ARequiredField":<text>,
+  "ARequiredDoc:[FileId1,FileId2]
+} 
+
+Response:
+{
+  "Status":"Replied",
+  "RequiredRefId:"67893",
+  "ApplicationId":"123td-1231f-wef1-312ed"
+}
+```
