@@ -128,8 +128,10 @@ Response:
 {
   "DDCurrentStep":<integer>,
   "DDRequiredInfo":[
-    "RequiredRefId:"12345"
-    "RequiredRefDesc:"Credit Card Auth Info"
+    {
+      "RequiredRefId:"12345",
+      "RequiredRefDesc:"Credit Card Auth Info"
+    }
   ]
 }
 ```
@@ -161,8 +163,10 @@ Response:
 {
   "ACurrentStep"<text>,
   "ARequiredInfo":[
-    "RequiredRefId:"67893"
-    "RequiredRefDesc:"Architecture Diagram"
+    {
+      "RequiredRefId:"67893",
+      "RequiredRefDesc:"Architecture Diagram"
+    }
   ]
 }
 ```
