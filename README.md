@@ -13,13 +13,6 @@ go build
 
 ## APIs Info
 
-###Authentication Header
-```
-{
-  Authorization: Bearer <UAA Token>
-  CO-App: Basic <UAA ClientId:Sec>
-}
-```
 ###Documents
 ```
 HTTP 1.1 POST multipart/form-data
@@ -33,72 +26,47 @@ Response:
 }
 ```
 
-###Service
+###Questionnaire
 ```
-HTTP 1.1 POST Application/json
-Request: /v1/api/service
+HTTP 1.1 POST multipart/form-data
+Request: /v1/api/question
 {
-  "GESponsorship":<text>,
-  "ServiceName":<text>,
-  "Purpose":<text>,
-  "ServiceHowTo":<text>,
-  "IntegrationProsAndCons":<text>,
-  "ServiceVSAltSolutions":<text>,
-  "ServiceCustListBenifitExamples":<text>,
-  "ServicePotentialCustomers":<text>
-  "ServiceDocs":["1245e-23423-wfwef2-wrfw2",..]
-}
-
-Response:
-{
-  "Status":"Submitted"
-  "ApplicationId":"123td-1231f-wef1-312ed"
+  id: <guid>,
+  questionTitle: <text>,
+  questionDesc: <text>,
+  questionType: <text>,
+  questionTypeId: <guid>,
+  answerType: <text,number>,
+  answerOptions: [<text,number>],
+  answerText: <text>,
+  answerFiles: [<guid>]
 }
 ```
 
-###Architecture
+###Orchestration
 ```
-HTTP 1.1 POST Application/json
-Request: /v1/api/architecture
 {
-  "ArchUserTypesAndTasks":<text>,
-  "ArchIoTUseCases":<text>,
-  "ArchAPIDetails":<text>,
-  "ArchPredixNative":true/false,
-  "ArchExternalSourceList":<text>,
-  "ArchLicenseSoftwareList":<text>,
-  "ArchMultiTenancyModel":<text>,
-  "ArchVersioning":<text>,
-  "ArchitectureDocs":["1245e-23423-wfwef2-wrfw2",..]
-}
-
-Response:
-{
-  "Status":"Submitted"
-  "ApplicationId":"123td-1231f-wef1-312ed"
+  questionId: <guid>,
+  triggerValue: <(text,num,boolean)>,
+  trueQuestionId: <guid>,
+  falseQuestionId: <guid>
 }
 ```
 
-###Pricing:
+###QuestionLog
 ```
-HTTP 1.1 POST Application/json
-Request: /v1/api/Pricing
 {
-  "PriceMetrics":<text>,
-  "PriceMeterFeatureList":<text>,
-  "PriceSBNuregoReport":<text>,
-  "PriceMeterUnit":<text>,
-  "PriceUnitCurrentOrCumulative:":<text>,
-  "PriceProposal":<text>,
-  "PriceNameAndDesc":<text>,
-  "PriceInMarket":<text>,
-  "PricingDocs":["1245e-23423-wfwef2-wrfw2",..]
+   questionIds: <array>,
+   currentQuestionId: <guid>,
+   applicationId: <guid>
 }
+```
 
-Response:
+###Authentication Header
+```
 {
-  "Status":"Submitted"
-  "ApplicationId":"123td-1231f-wef1-312ed"
+  Authorization: Bearer <UAA Token>
+  CO-App: Basic <UAA ClientId:Sec>
 }
 ```
 
