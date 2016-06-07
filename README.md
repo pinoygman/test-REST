@@ -145,7 +145,7 @@ HTTP 1.1 POST Application/json
 Request: /v1/api/ARequirement/<ApplicationId>
 Body:
 {
-  "ARequiredRefId:<text>,
+  "ARequiredQuestionId:<text>,
   "ARequiredField":<text>,
   "ARequiredDoc:[FileId1,FileId2]
 } 
@@ -153,7 +153,7 @@ Body:
 Response:
 {
   "Status":"Replied",
-  "RequiredRefId:"67893",
+  "RequiredQuestionId:"67893",
   "ApplicationId":"123td-1231f-wef1-312ed"
 }
 ```
