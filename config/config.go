@@ -1,35 +1,40 @@
+/*
+ * Copyright (c) 2016 General Electric Company. All rights reserved.
+ *
+ * The copyright to the computer software herein is the property of
+ * General Electric Company. The software may be used and/or copied only
+ * with the written permission of General Electric Company or in accordance
+ * with the terms and conditions stipulated in the agreement/contract
+ * under which the software has been supplied.
+ *
+ * author: chia.chang@ge.com
+ */
+
 package config
 
 import (
 	"encoding/json"
-	utils "github.build.ge.com/catalog-onboarding-backend/utils"
+	utils "github.build.ge.com/predixsolutions/catalog-onboarding-backend/utils"
 )
 
 type Config struct {
 	Port                     string `json:"port"`
-	DataPath                 string `json:"data_path"`
-	CatalogPath              string `json:"catalog_path"`
-	ServiceInstancesFileName string `json:"service_instances_file_name"`
-	ServiceBindingsFileName  string `json:"service_bindings_file_name"`
+//	DataPath                 string `json:"data_path"`
+//	CatalogPath              string `json:"catalog_path"`
 }
 
-var (
-	currentConfiguration Config
-)
+func Init(path string) (*Config, error) {
+	c:=&Config{}
 
-func LoadConfig(path string) (*Config, error) {
-	bytes, err := utils.ReadFile(path)
+	bytes, err:= utils.ReadFile(path)
+
 	if err != nil {
-		return &currentConfiguration, err
+		return c, err
 	}
-
-	err = json.Unmarshal(bytes, &currentConfiguration)
-	if err != nil {
-		return &currentConfiguration, err
+	
+	if err=json.Unmarshal(bytes, c);err != nil {
+		return c, err
 	}
-	return &currentConfiguration, nil
-}
-
-func GetConfig() *Config {
-	return &currentConfiguration
+	
+	return c, nil
 }
