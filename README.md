@@ -11,6 +11,12 @@ go install
 go build
 ```
 
+##Cloud Foundry: (Binary Push)
+```
+cd ./dist
+cf push pcs-212359746 -c './catalog-onboarding-backend' -b https://github.com/cloudfoundry/binary-buildpack.git
+```
+
 ## APIs Info
 
 ###Documents
