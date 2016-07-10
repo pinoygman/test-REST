@@ -3,12 +3,12 @@
 
 ## Requirement
 - Go compiler. GNU Compilers
+- Makefile
 
 ## Basic Commands:
 ```
 cd ./src/github.build.ge.com/predixsolutions/catalog-onboarding-backend
-go install
-go build
+make
 ```
 
 ##Cloud Foundry: (Binary Push)
