@@ -13,22 +13,34 @@
 SOURCEDIR=.
 SOURCES := $(shell find $(SOURCEDIR) -name '*.go')
 
-BINARY=roll
 
-VERSION=1.0.0
+REV=v1
+DIST=./dist
+BINARY=${DIST}/pcs-${REV}
 BUILD_TIME=`date +%FT%T%z`
 
-LDFLAGS=-ldflags "-X github.com/ariejan/roll/core.Version=${VERSION} -X github.com/ariejan/roll/core.BuildTime=${BUILD_TIME}"
+LDFLAGS=-ldflags "-X main.REV=${REV}"
 
 .DEFAULT_GOAL: $(BINARY)
 
-$(BINARY): $(SOURCES)
-    go build ${LDFLAGS} -o ${BINARY} main.go
+$(BINARY): darwin-build linux-build
+	@echo Copying Settings
+	@cp ./settings.json ./dist/
+
+darwin-build:
+	@echo Creating Mac OS X artifact
+	@GOOS=darwin go build ${LDFLAGS} -o ${BINARY}_darwin app.go
+
+linux-build:
+	@echo Creating amd64_x86 artifact
+	@GOOS=linux go build ${LDFLAGS} -o ${BINARY}_linux app.go
+
 
 .PHONY: install
 install:
-    go install ${LDFLAGS} ./...
+	go install ${LDFLAGS}
 
 .PHONY: clean
 clean:
-    if [ -f ${BINARY} ] ; then rm ${BINARY} ; fi
+	rm ${DIST}/*
+#if [ -f ${BINARY} ] ; then rm ${BINARY} ; fi

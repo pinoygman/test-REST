@@ -14,6 +14,7 @@ package model
 
 import (	
 	"github.com/pborman/uuid"
+	"errors"
 )
 
 //question type
@@ -23,6 +24,7 @@ const (
 
 type Application struct {
 	Guid            string              `json:"_id"`
+	PartnerId       string              `json:"partnerId"`
 	//Title           string              `json:"title"`
 	//Desc            string              `json:"description"`
 	//Type            uint8               `json:"type"`  //question type
@@ -31,28 +33,12 @@ type Application struct {
 
 var (
 	//questionnaires map[string]Questionnaire
-	applications map[string]*Application
+	applications map[string]interface{}
 )
 
 func init(){
 	
-	applications=make(map[string]*Application)
-
-}
-
-func InitApplication(guid string) (*Application, error){
-
-	op:=&Application{}
-
-	if guid!="" {
-		return op.load(guid)
-	}
-
-	guid=uuid.New()
-	
-	applications[guid]=op
-
-	return applications[guid], nil
+	applications=make(map[string]interface{})
 
 }
 
@@ -60,13 +46,21 @@ func GetApplicationsByPartnerId(pId string) (map[string]*Application,error){
 
 	//op:=make(map[string]*Application)
 	
-	return applications, nil
+	return applications[pId].(map[string]*Application), nil
 
 }
 
-func (a *Application) load(guid string) (*Application, error){
+func GetApplication(guid string) (*Application, error){
 
-	return applications[guid],nil
+	for _, l := range applications {
+		v:=l.(map[string]*Application)
+		if a:=v[guid];a!=nil {
+			return a,nil
+		}
+	}
+
+	return nil, errors.New("application does not exist.")
+	
 }
 
 
@@ -100,21 +94,37 @@ func (a *Application) Save() (*Application, error) {
 	//fmt.Println("err adding: ",err)
 	return e, err
 */
-	if a.Guid=="" {
-		a.Guid=uuid.New()
+
+	if a.PartnerId=="" {
+		return nil, errors.New("partnerId's empty.")
 	}
 
-	applications[a.Guid]=a
-	return applications[a.Guid],nil
+
+	var ap interface{}
+
+	if ap=applications[a.PartnerId]; ap==nil {
+		ap=make(map[string]*Application)
+		applications[a.PartnerId]=ap
+	}
+	
+	if a.Guid=="" {
+		a.Guid=uuid.New()
+	}	
+
+	ref:=ap.(map[string]*Application)
+	ref[a.Guid]=a
+	
+	return ref[a.Guid],nil
+	
 }
 
 func (a *Application) Submit() (*Application,error){
-	applications[a.Guid]=a
-	return applications[a.Guid],nil
+	a.Save()
+	return applications[a.PartnerId].(map[string]*Application)[a.Guid],nil
 }
 
 func (a *Application) Del() (string,error){
 
-	delete(applications,a.Guid)
+	delete(applications[a.PartnerId].(map[string]*Application),a.Guid)
 	return "delete",nil
 }

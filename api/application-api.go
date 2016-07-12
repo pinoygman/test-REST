@@ -51,16 +51,18 @@ func GetApplicationHttpHandler(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Content-Type", "application/json")
 
 	vars := mux.Vars(r)
-	key := vars["applicationId"]
+	ak := vars["applicationId"]
+	//pk := vars["partnerId"]
 
-	_ref, err:=model.InitApplication(key)
+	//_ref, err:=model.GetApplication(ak,pk)
+	_ref, err:=model.GetApplication(ak)
 
 	if err != nil {
 		fmt.Sprintf("err: %s", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(`{"err":`+err.Error()+`}`))
 		
-		fmt.Fprint(w, "get application service error.")
+		fmt.Fprint(w, "GET application service error.")
 		return
 	}
 	
@@ -120,7 +122,7 @@ func DeleteApplicationHttpHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key := vars["applicationId"]
 
-	_ref,_:=model.InitApplication(key)
+	_ref,_:=model.GetApplication(key)
 
 	_,err:=_ref.Del()
 	

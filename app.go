@@ -20,15 +20,16 @@ import (
 	api "github.build.ge.com/predixsolutions/catalog-onboarding-backend/api"
 	"github.com/gorilla/mux"
 	"github.com/cloudfoundry-community/go-cfenv"
+	"github.com/rs/cors"
 )
 
 var (
+	REV string
 	conf *config.Config
 )
 
 const (
 	SETTING = "./settings.json"
-	REV string = "v1"
 	ROOTPATH string = "api"
 )
 
@@ -46,11 +47,12 @@ func init(){
 	
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, "Hello, %s", "world!")
-}
-
 func main() {
+
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowCredentials: true,
+	})
 
 	r := mux.NewRouter()
 
@@ -84,11 +86,11 @@ func main() {
 	if err != nil {
 		s:=fmt.Sprintf("err cloud foundry env. %s. running server as localhost:%s.", err,conf.Port)
 		fmt.Println(s)
-		http.ListenAndServe(":"+conf.Port,nil)
+		http.ListenAndServe(":"+conf.Port,c.Handler(r))
 		return	
 	}
 
-	http.ListenAndServe(":"+os.Getenv("PORT"),nil)
+	http.ListenAndServe(":"+os.Getenv("PORT"),c.Handler(r))
 
 /*
 	for k, _:= range cfEnv.Services {
@@ -101,7 +103,7 @@ func main() {
 				return
 			}
 		}
-		
+ 		
 	}
 */
 }
