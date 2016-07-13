@@ -34,20 +34,35 @@ Response:
 }
 ```
 
-###Questionnaire
+###Application
+```
+HTTP 1.1 POST multipart/form-data
+Request: /v1/api/application
+{
+  _id: <guid>
+	partnerId: <string>
+	name: <string>
+	answers: {
+    "questionId":{
+       _qid: <string>
+       content: <any_object>
+       filesList: ["file_guid1","file_guid2",...n]
+    }
+	}
+	appstatus: <string>
+}
+```
+
+###Question
 ```
 HTTP 1.1 POST multipart/form-data
 Request: /v1/api/question
 {
-  id: <guid>,
-  questionTitle: <text>,
-  questionDesc: <text>,
-  questionType: <text>,
-  questionTypeId: <guid>,
-  answerType: <text,number>,
-  answerOptions: [<text,number>],
-  answerText: <text>,
-  answerFiles: [<guid>]
+   _id:<guid>
+	  title:<string>
+	  description:<string>
+	  type: <DueDiligent = 1001, Architecture = 1002, Security = 1003>
+	  answerOptions: {any_object}
 }
 ```
 
