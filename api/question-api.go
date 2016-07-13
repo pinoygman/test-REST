@@ -22,6 +22,28 @@ import (
 	"strconv"
 )
 
+func GetQuestionTypesHttpHandler(w http.ResponseWriter, r *http.Request){
+
+	w.Header().Set("Content-Type", "application/json")
+
+	_ref,err:=model.GetQuestionTypes()
+
+	if err != nil {
+		fmt.Sprintf("err: %s", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{"err":`+err.Error()+`}`))
+		
+		fmt.Fprint(w, "get questions service error.")
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+
+	_str,err:=json.Marshal(_ref)
+	w.Write(_str)	
+}
+
+
 func GetQuestionsHttpHandler(w http.ResponseWriter, r *http.Request){
 
 	w.Header().Set("Content-Type", "application/json")

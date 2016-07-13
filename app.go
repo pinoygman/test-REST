@@ -67,6 +67,10 @@ func main() {
 	
 	r.HandleFunc(fmt.Sprintf("/%s/%s/question/{key}",REV,ROOTPATH), api.DeleteQuestionHttpHandler).Methods("DELETE")
 
+	//QuestionTypes
+	r.HandleFunc(fmt.Sprintf("/%s/%s/questiontype/list",REV,ROOTPATH), api.GetQuestionTypesHttpHandler).Methods("GET")
+	
+	
 	//Applications
 	r.HandleFunc(fmt.Sprintf("/%s/%s/application",REV,ROOTPATH), api.UpsertApplicationHttpHandler).Methods("POST")
 	

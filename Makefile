@@ -23,9 +23,16 @@ LDFLAGS=-ldflags "-X main.REV=${REV}"
 
 .DEFAULT_GOAL: $(BINARY)
 
-$(BINARY): darwin-build linux-build
+$(BINARY): pre-install darwin-build linux-build
 	@echo Copying Settings
 	@cp ./settings.json ./dist/
+
+pre-install:
+	@echo install libraries 
+	@go get github.com/pborman/uuid
+	@go get github.com/gorilla/mux
+	@go get github.com/cloudfoundry-community/go-cfenv
+	@go get github.com/rs/cors
 
 darwin-build:
 	@echo Creating Mac OS X artifact

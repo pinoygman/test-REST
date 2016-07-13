@@ -18,10 +18,16 @@ import (
 
 //question type
 const (
-	DueDiligent = 1001
+	/*DueDiligent = 1001
 	Architecture = 1002
 	Security = 1003
+*/
 )
+type QuestionType struct {
+
+	Id    uint64   `json:"_id"`
+	Desc  string   `json:"desc"`
+}
 
 type Question struct {
 	Guid            string                      `json:"_id"`
@@ -33,10 +39,16 @@ type Question struct {
 
 var (
 	questionnaire map[string]*Question
+	questionTypes map[uint64]string
 )
 
 func init(){
 	questionnaire=make(map[string]*Question)
+	questionTypes=map[uint64]string{
+		1001:"DueDiligent",
+		1002:"Architecture",
+		1003:"Security",
+	}
 }
 
 func InitQuestion(guid string) (*Question, error) {
@@ -57,6 +69,10 @@ func GetQuestionsByType(typeId uint64) (map[string]*Question, error){
 	//op:=make(map[string]*Question)
 	return questionnaire,nil
 
+}
+
+func GetQuestionTypes()(map[uint64]string, error){
+        return questionTypes,nil
 }
 
 func GetQuestions() (map[string]*Question, error){
