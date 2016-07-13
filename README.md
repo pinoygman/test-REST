@@ -43,11 +43,16 @@ Request: /v1/api/application
 	partnerId: <string>
 	name: <string>
 	answers: {
-    "questionId":{
-       _qid: <string>
-       content: <any_object>
-       filesList: ["file_guid1","file_guid2",...n]
-    }
+    		"questionId1":{
+       			_qid: <string>
+       			content: <any_object>
+       			filesList: ["file_guid1","file_guid2",...n]
+    		}
+    		"questionId2":{
+       			_qid: <string>
+       			content: <any_object>
+       			filesList: ["file_guid1","file_guid2",...n]
+    		}
 	}
 	appstatus: <string>
 }
@@ -59,10 +64,10 @@ HTTP 1.1 POST multipart/form-data
 Request: /v1/api/question
 {
    _id:<guid>
-	  title:<string>
-	  description:<string>
-	  type: <DueDiligent = 1001, Architecture = 1002, Security = 1003>
-	  answerOptions: {any_object}
+   title:<string>
+   description:<string>
+   type: <DueDiligent = 1001, Architecture = 1002, Security = 1003>
+   answerOptions: {any_object}
 }
 ```
 
