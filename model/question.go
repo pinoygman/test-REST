@@ -18,10 +18,12 @@ import (
 
 //question type
 const (
-	/*DueDiligent = 1001
+	
+	Security = 1004
+	Pricing = 1003
 	Architecture = 1002
-	Security = 1003
-*/
+	Service = 1001
+
 )
 type QuestionType struct {
 
@@ -45,9 +47,10 @@ var (
 func init(){
 	questionnaire=make(map[string]*Question)
 	questionTypes=map[uint64]string{
-		1001:"DueDiligent",
-		1002:"Architecture",
-		1003:"Security",
+		Security:"Security",
+		Pricing:"Pricing",
+		Architecture:"Architecture",
+		Service:"Service",
 	}
 }
 
