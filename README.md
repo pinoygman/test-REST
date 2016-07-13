@@ -6,15 +6,17 @@
 - Makefile
 
 ## Basic Commands:
+
+### Build
 ```
-cd ./src/github.build.ge.com/predixsolutions/catalog-onboarding-backend
+cd ./<root-repo>
 make
 ```
 
 ##Cloud Foundry: (Binary Push)
 ```
-cd ./dist
-cf push pcs-212359746 -c './catalog-onboarding-backend' -b https://github.com/cloudfoundry/binary-buildpack.git
+cd ./<root-repo>
+make deploy
 ```
 
 ## APIs Info
