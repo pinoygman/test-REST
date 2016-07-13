@@ -51,3 +51,15 @@ install:
 clean:
 	rm ${DIST}/*
 #if [ -f ${BINARY} ] ; then rm ${BINARY} ; fi
+
+.PHONY: deploy
+deploy:
+	@echo Checking CF Envs..
+	@cf a &> /dev/null
+	@if [ $$? -eq 0 ] ; then \
+		echo Good you have logged in the CF; \
+		cf push pcs-${USER} -c "./${DIST}/${BINARY}_linux" -b https://github.com/cloudfoundry/binary-buildpack.git; \
+	 else \
+		echo Please log in the Cloud Foundry org/space.; \
+		exit 1; \
+	 fi;
