@@ -30,7 +30,7 @@ type Answer struct {
 	//Desc            string                    `json:"description"`
 	//Type            uint8                     `json:"type"`  //question type
 	//AnswerOptions   []string                  `json:"answerOptions"`
-	Content           map[string]interface{}    `json:"content"`
+	Answer           map[string]interface{}    `json:"answer"`
 	FileList          []string                  `json:"filesList"`  //file guid
 }
 

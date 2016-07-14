@@ -25,12 +25,12 @@ const (
 type Application struct {
 	Guid            string              `json:"_id"`
 	PartnerId       string              `json:"partnerId"`
-	Name            string              `jsn:"name"`
+	Name            string              `json:"applicationName"`
 	//Title           string              `json:"title"`
 	//Desc            string              `json:"description"`
 	//Type            uint8               `json:"type"`  //question type
 	Answers         map[string]Answer   `json:"answers"`
-	AppStatus          string           `json:"appstatus"`
+	AppStatus          string           `json:"applicationStatus"`
 }
 
 var (
@@ -101,7 +101,7 @@ func (a *Application) Save() (*Application, error) {
 		return nil, errors.New("partnerId's empty.")
 	}
 
-
+	//all applications belong to the partner
 	var ap interface{}
 
 	if ap=applications[a.PartnerId]; ap==nil {
@@ -114,6 +114,8 @@ func (a *Application) Save() (*Application, error) {
 	}	
 
 	ref:=ap.(map[string]*Application)
+
+	//ref1:=a.
 	ref[a.Guid]=a
 	
 	return ref[a.Guid],nil
