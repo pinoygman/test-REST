@@ -41,20 +41,20 @@ Request: /v1/api/application
 {
   _id: <guid>
 	partnerId: <string>
-	name: <string>
+	applicationName: <string>
 	answers: {
     		"questionId1":{
        			_qid: <string>
-       			content: <any_object>
+       			answer: <any_object>
        			filesList: ["file_guid1","file_guid2",...n]
     		}
     		"questionId2":{
        			_qid: <string>
-       			content: <any_object>
+       			answer: <any_object>
        			filesList: ["file_guid1","file_guid2",...n]
     		}
 	}
-	appstatus: <string>
+	applicationStatus: <string>
 }
 ```
 
