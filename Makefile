@@ -16,7 +16,8 @@ SOURCES := $(shell find $(SOURCEDIR) -name '*.go')
 
 REV=v1
 DIST=./dist
-BINARY=${DIST}/pcs-${REV}
+#BINARY=${DIST}/pcs-${REV}
+BINARY=pcs-${REV}
 BUILD_TIME=`date +%FT%T%z`
 
 LDFLAGS=-ldflags "-X main.REV=${REV}"
@@ -29,6 +30,10 @@ $(BINARY): pre-install darwin-build linux-build
 
 pre-install:
 	@echo install libraries 
+	@if [ -z $GOPATH ]; then \
+		export GOPATH="${PWD}"; \
+	 fi
+	@go get github.build.ge.com/predixsolutions/pae-api
 	@go get github.com/pborman/uuid
 	@go get github.com/gorilla/mux
 	@go get github.com/cloudfoundry-community/go-cfenv
@@ -58,7 +63,8 @@ deploy:
 	@cf a &> /dev/null
 	@if [ $$? -eq 0 ] ; then \
 		echo Good you have logged in the CF; \
-		cf push pcs-${USER} -c "./${DIST}/${BINARY}_linux" -b https://github.com/cloudfoundry/binary-buildpack.git; \
+		cd ${DIST}; \
+		cf push pcs-${USER}-vpc -c "./${BINARY}_linux" -b https://github.com/cloudfoundry/binary-buildpack.git; \
 	 else \
 		echo Please log in the Cloud Foundry org/space.; \
 		exit 1; \

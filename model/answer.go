@@ -25,7 +25,7 @@ const (
 )
 
 type Answer struct {
-	QuestionId              string                    `json:"_qid"`
+	QuestionId        string                    `json:"_qid"`
 	//Title           string                    `json:"title"`
 	//Desc            string                    `json:"description"`
 	//Type            uint8                     `json:"type"`  //question type
