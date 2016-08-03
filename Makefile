@@ -22,7 +22,7 @@ $(BINARY): darwin-build linux-build
 	@cp ./settings.json /${DIST}
 
 pre-install:
-@echo install libraries 
+	@echo install libraries 
 	@if [ -z $GOPATH ]; then \
 		export GOPATH="${PWD}"; \
 	 fi
