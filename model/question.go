@@ -34,8 +34,9 @@ type QuestionType struct {
 type Question struct {
 	Guid            string                      `json:"_id"`
 	Title           string                      `json:"title"`
+	Name            string                      `json:"name"`
 	Desc            string                      `json:"description"`
-	Type            uint64                       `json:"type"`  //question type
+	Type            uint64                      `json:"type"`  //question type
 	AnswerOptions   map[string]interface{}      `json:"answerOptions"`
 }
 

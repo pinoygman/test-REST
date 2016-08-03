@@ -21,6 +21,9 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/cloudfoundry-community/go-cfenv"
 	"github.com/rs/cors"
+	
+	//"log"
+	"net/smtp"
 )
 
 var (
@@ -30,8 +33,32 @@ var (
 
 const (
 	SETTING = "./settings.json"
+	DOCPATH = "./docs/"
 	ROOTPATH string = "api"
 )
+
+func send(){
+
+	fmt.Println("..send email.")
+	// Set up authentication information.
+	auth := smtp.PlainAuth("", "raasuser", "helloraas", "localhost")
+
+	// Connect to the server, authenticate, set the sender and recipient,
+	// and send the email all in one step.
+	//to := []string{"chia.chang@ge.com","Subba.Vadrevu@ge.com","subrata.saha@ge.com","Javier.Carbajal.Ramirez@ge.com"}
+	to := []string{"chia.chang@ge.com"}
+	msg := []byte("To: chia.chang@ge.com; \r\n" +
+		"Subject: Chia SMTP test for Predix CF #3\r\n" +
+		"\r\n" +
+		"This is a test email sent from the Predix Basic. #3\r\n")
+	//err := smtp.SendMail("rssmtp-212359746.run.aws-usw02-pr.ice.predix.io:80", auth, "chia.chang@ge.com", to, msg)
+	err := smtp.SendMail("localhost:31373", auth, "chia.chang@ge.com", to, msg)
+	if err != nil {
+		fmt.Println(err)
+		//log.Fatal(err)
+	}
+
+}
 
 func init(){
 	
@@ -49,6 +76,8 @@ func init(){
 
 func main() {
 
+	send()
+	
 	c := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
 		AllowCredentials: true,
@@ -84,6 +113,7 @@ func main() {
 	
 	http.Handle(fmt.Sprintf("/%s/",REV), r)
 
+	
 	//cfEnv, err := cfenv.Current()
 	_, err := cfenv.Current()
 
@@ -91,12 +121,14 @@ func main() {
 		s:=fmt.Sprintf("err cloud foundry env. %s. running server as localhost:%s.", err,conf.Port)
 		fmt.Println(s)
 		http.ListenAndServe(":"+conf.Port,c.Handler(r))
+		
 		return	
 	}
 
 	http.ListenAndServe(":"+os.Getenv("PORT"),c.Handler(r))
 
-/*
+	
+	/*
 	for k, _:= range cfEnv.Services {
 			if strings.Contains(k,"redis") {
 				op.Init(cfEnv.Services[k][0])	
