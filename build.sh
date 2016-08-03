@@ -97,7 +97,6 @@ function readinputs () {
 
 }
 
-
 readinputs $@
 
 DIST=dist
