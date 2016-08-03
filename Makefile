@@ -13,23 +13,16 @@
 SOURCEDIR=.
 SOURCES := $(shell find $(SOURCEDIR) -name '*.go')
 
-
-REV=v1
-DIST=./dist
-#BINARY=${DIST}/pcs-${REV}
-BINARY=pcs-${REV}
-BUILD_TIME=`date +%FT%T%z`
-
-LDFLAGS=-ldflags "-X main.REV=${REV}"
+BINARY=${DIST}/${ARTIFACT}
 
 .DEFAULT_GOAL: $(BINARY)
 
-$(BINARY): pre-install darwin-build linux-build
+$(BINARY): darwin-build linux-build
 	@echo Copying Settings
-	@cp ./settings.json ./dist/
+	@cp ./settings.json /${DIST}
 
 pre-install:
-	@echo install libraries 
+@echo install libraries 
 	@if [ -z $GOPATH ]; then \
 		export GOPATH="${PWD}"; \
 	 fi
@@ -41,11 +34,11 @@ pre-install:
 
 darwin-build:
 	@echo Creating Mac OS X artifact
-	@GOOS=darwin go build ${LDFLAGS} -o ${BINARY}_darwin app.go
+	@GOOS=darwin go build -ldflags "-X ${LDFLAGS}" -o /${BINARY}_darwin ./app.go
 
 linux-build:
 	@echo Creating amd64_x86 artifact
-	@GOOS=linux go build ${LDFLAGS} -o ${BINARY}_linux app.go
+	@GOOS=linux go build -ldflags "-X ${LDFLAGS}" -o /${BINARY}_linux ./app.go
 
 
 .PHONY: install
@@ -54,7 +47,7 @@ install:
 
 .PHONY: clean
 clean:
-	rm ${DIST}/*
+	rm ${DIST}
 #if [ -f ${BINARY} ] ; then rm ${BINARY} ; fi
 
 .PHONY: deploy
@@ -64,7 +57,7 @@ deploy:
 	@if [ $$? -eq 0 ] ; then \
 		echo Good you have logged in the CF; \
 		cd ${DIST}; \
-		cf push pcs-${USER}-vpc -c "./${BINARY}_linux" -b https://github.com/cloudfoundry/binary-buildpack.git; \
+		cf push pcs-${USER}-vpc-1 -c "./${BINARY}_linux" -b https://github.com/cloudfoundry/binary-buildpack.git; \
 	 else \
 		echo Please log in the Cloud Foundry org/space.; \
 		exit 1; \
