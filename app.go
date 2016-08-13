@@ -76,8 +76,10 @@ func init(){
 
 func main() {
 
-	send()
+	//send()
 	
+	REV="v1"
+
 	c := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
 		AllowCredentials: true,
@@ -99,7 +101,6 @@ func main() {
 	//QuestionTypes
 	r.HandleFunc(fmt.Sprintf("/%s/%s/questiontype/list",REV,ROOTPATH), api.GetQuestionTypesHttpHandler).Methods("GET")
 	
-	
 	//Applications
 	r.HandleFunc(fmt.Sprintf("/%s/%s/application",REV,ROOTPATH), api.UpsertApplicationHttpHandler).Methods("POST")
 	
@@ -110,9 +111,10 @@ func main() {
 	r.HandleFunc(fmt.Sprintf("/%s/%s/application/{applicationId}",REV,ROOTPATH), api.GetApplicationHttpHandler).Methods("GET")
 	
 	r.HandleFunc(fmt.Sprintf("/%s/%s/application/{applicationId}",REV,ROOTPATH), api.DeleteApplicationHttpHandler).Methods("DELETE")
-	
-	http.Handle(fmt.Sprintf("/%s/",REV), r)
 
+	r.PathPrefix(fmt.Sprintf("/%s/%s/assets/",REV,ROOTPATH)).Handler(http.StripPrefix(fmt.Sprintf("/%s/%s/assets/",REV,ROOTPATH), http.FileServer(http.Dir("./assets"))))
+	
+	http.Handle(fmt.Sprintf("/%s/%s/",REV,ROOTPATH), r)
 	
 	//cfEnv, err := cfenv.Current()
 	_, err := cfenv.Current()
