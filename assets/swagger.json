@@ -5,47 +5,29 @@
         "description": "PCS Portal Backend API",
         "version": "1.0.0"
     },
-    "host": "{HOST}",
+    "host": "pcs-backend-asv-dev.run.asv-pr.ice.predix.io",
     "schemes": [
         "https"
     ],
-    "basePath": "{BASE}",
+    "basePath": "/v1/api",
     "produces": [
         "application/json"
     ],
     "paths": {
-        "/question": {
+        "/question/list": {
             "get": {
-                "summary": "PCS Portal Questions API",
-                "description": "question api explain the details of overall questions\n",
-                "parameters": [
-                    {
-                        "name": "latitude",
-                        "in": "query",
-                        "description": "Latitude component of location.",
-                        "required": true,
-                        "type": "number",
-                        "format": "double"
-                    },
-                    {
-                        "name": "longitude",
-                        "in": "query",
-                        "description": "Longitude component of location.",
-                        "required": true,
-                        "type": "number",
-                        "format": "double"
-                    }
-                ],
+                "summary": "Get the question list",
+                "description": "Just get the list of the current questions.\n",
                 "tags": [
-                    "Questions"
+                    "Questionnaire"
                 ],
                 "responses": {
                     "200": {
-                        "description": "An array of products",
+                        "description": "An map of questionnaire",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Product"
+                            "type": "object",
+                            "additionalProperties": {
+                                "$ref": "#/definitions/Questions"
                             }
                         }
                     },
@@ -356,6 +338,39 @@
                     }
                 }
             }
+        },
+	"Question": {
+            "type": "object",
+            "properties": {
+                "_id": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "answerOptions": {
+                    "type": "object"
+		}
+            }
+        },
+	"Questions": {
+            "type": "object",
+            "additionalProperties": {
+		"type":"object",
+		"$ref": "#/definitions/Question"
+
+	    }
+            
+            
         },
         "Error": {
             "type": "object",
