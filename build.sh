@@ -25,7 +25,7 @@ function cf_push () {
     cf a &> /dev/null
     if [ $? -eq 0 ] ; then 
 	echo Good you have logged in the CF;
-	
+	cp -r ./assets ./{DIST}
 	cd ./${DIST}
 	cf push pcs-backend-${ENV} -c "./${ARTIFACT}_linux" -b https://github.com/cloudfoundry/binary-buildpack.git      
     else 
@@ -54,9 +54,16 @@ function readinputs () {
 
     if [ $# -eq 0 ]
     then
-	printf "   %-*s\n" 10 "-p | proxy"
-	printf "   %-*s\n" 10 "-r | revision"
-	printf "   %-*s\n" 10 "-b | build version by Jenkins"
+	printf "   %-*s\n" 10 "-p    | proxy"
+	printf "   %-*s\n" 10 "-r    | revision"
+	printf "   %-*s\n" 10 "-b    | build version by Jenkins"
+	
+	printf "   %-*s\n" 10 "-e    | environemntal variables"
+	printf "   %-*s\n" 10 "-user | cf username"
+	printf "   %-*s\n" 10 "-pwd  | cf password"
+	printf "   %-*s\n" 10 "-end  | cf endpoint"
+	printf "   %-*s\n" 10 "-org  | cf org"
+	printf "   %-*s\n" 10 "-spc  | cf space"
     else
 	for ((i = 1; i <=$#; i++));
 	do
@@ -90,6 +97,7 @@ function readinputs () {
 		    CF_SPC=${@:i+1:1}		   
 		    ;;
 		*)
+		    #echo "Invalid option ${@:i:1}"
 	            ;;
 	    esac
 	done
@@ -105,6 +113,9 @@ BUILD_TIME=`date +%FT%T%z`
 LDFLAGS="main.REV=${REV}"
 DHOME=github.build.ge.com/predixsolutions/catalog-onboarding-backend
 
+#predix select
+HOST=run.asv-pr.ice.predix.io
+
 eval "sed -i -e 's#{DHOME}#${DHOME}#g' ./Dockerfile"
 eval "sed -i -e 's#{ARTIFACT}#${ARTIFACT}#g' ./Dockerfile"
 eval "sed -i -e 's#{REV}#${REV}#g' ./Dockerfile"
@@ -114,5 +125,8 @@ eval "sed -i -e 's#{BUILD_VER}#${BUILD_VER}#g' ./Dockerfile"
 eval "sed -i -e 's#{LDFLAGS}#${LDFLAGS}#g' ./Dockerfile"
 eval "sed -i -e 's#{DIST}#${DIST}#g' ./Dockerfile"
 
-docker_run $@
+eval "sed -i -e 's#{HOST}#pcs-backend-${ENV}.${HOST}#g' ./assets/swagger.json"
+eval "sed -i -e 's#/{BASE}#${REV}/api#g' ./assets/swagger.json"
+
+docker_run
 cf_push
