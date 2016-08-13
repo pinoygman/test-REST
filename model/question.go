@@ -14,6 +14,7 @@ package model
 
 import (
 	"github.com/pborman/uuid"
+	"github.build.ge.com/predixsolutions/catalog-onboarding-backend/sql"
 )
 
 //question type
@@ -25,11 +26,7 @@ const (
 	Service = 1001
 
 )
-type QuestionType struct {
 
-	Id    uint64   `json:"_id"`
-	Desc  string   `json:"desc"`
-}
 
 type Question struct {
 	Guid            string                      `json:"_id"`
@@ -44,6 +41,35 @@ var (
 	questionnaire map[string]*Question
 	questionTypes map[uint64]string
 )
+
+
+func (q *Question) load(guid string) (*Question, error){
+	
+	return questionnaire[guid],nil
+}
+
+func (q *Question) Save() (*Question, error) {
+
+	if q.Guid=="" {
+		q.Guid=uuid.New()
+	}
+
+	err:=sql.AddAQuestion(q.Guid,q.Title,q.Name,q.Desc,q.Type,q.AnswerOptions)
+	if err!=nil{
+		return nil,err 
+	}
+	
+	questionnaire[q.Guid]=q
+	return q,nil
+}
+
+func (q *Question) Del() (string,error){
+
+	delete(questionnaire,q.Guid)
+	return "delete",nil
+
+}
+
 
 func init(){
 	questionnaire=make(map[string]*Question)
@@ -83,28 +109,5 @@ func GetQuestions() (map[string]*Question, error){
 
 	//op:=make(map[string]*Question)
 	return questionnaire,nil
-
-}
-
-func (q *Question) load(guid string) (*Question, error){
-	
-	return questionnaire[guid],nil
-}
-
-func (q *Question) Save() (*Question, error) {
-
-	if q.Guid=="" {
-		q.Guid=uuid.New()
-	}
-
-	questionnaire[q.Guid]=q
-	return q,nil
-}
-
-
-func (q *Question) Del() (string,error){
-
-	delete(questionnaire,q.Guid)
-	return "delete",nil
 
 }
