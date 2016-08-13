@@ -23,7 +23,7 @@ function cf_push () {
     echo Checking CF Envs..
 
     cf a &> /dev/null
-    if [ $? -eq 0 ] ; then 
+    if [ $? -eq 0 ] ; then   
 	echo Good you have logged in the CF;
 	cp -r ./assets ./${DIST}
 	cd ./${DIST}
