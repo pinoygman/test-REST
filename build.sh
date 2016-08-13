@@ -23,9 +23,9 @@ function cf_push () {
     echo Checking CF Envs..
 
     cf a &> /dev/null
-    if [ $? -eq 0 ] ; then 
+    if [ $? -eq 0 ] ; then   
 	echo Good you have logged in the CF;
-	cp -r ./assets ./{DIST}
+	cp -r ./assets ./${DIST}
 	cd ./${DIST}
 	cf push pcs-backend-${ENV} -c "./${ARTIFACT}_linux" -b https://github.com/cloudfoundry/binary-buildpack.git      
     else 
