@@ -35,6 +35,8 @@ RUN go get github.com/cloudfoundry-community/go-cfenv
 RUN go get github.com/pborman/uuid
 RUN go get github.com/gorilla/mux
 RUN go get github.com/rs/cors
+RUN go get github.com/lib/pq
+RUN go get github.com/jmoiron/sqlx
 RUN make
 RUN ls -al && ls /{DIST} -al && pwd
 #RUN chmod +x $GOPATH/src/{DHOME}
