@@ -17,6 +17,7 @@ MAINTAINER Chia Chang "chia.chang@ge.com"
 
 #ENTRYPOINT $GOPATH/src/{DHOME}
 
+
 COPY ./ $GOPATH/src/{DHOME}
 
 WORKDIR $GOPATH/src/{DHOME}
