@@ -99,6 +99,7 @@ function readinputs () {
 		    ;;
 		-sql)
 		    SQLPARAM=${@:i+1:1}
+		    echo $SQLPARAM
 		    ;;
 		*)
 		    #echo "Invalid option ${@:i:1}"
