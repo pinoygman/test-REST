@@ -48,6 +48,7 @@ var (
 	questionnaire map[string]*Question
 	questionTypes map[string]string
 	db *sqlx.DB
+	SQLDSN string
 )
 
 func init(){
@@ -63,8 +64,8 @@ func init(){
 	_conn:=fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s connect_timeout=%s sslmode=%s",_host,_port,_user,_pwd,_dbname,_connect_timeout,_sslmode)
 	
 */
-
-	_conn:=strings.Replace(os.Getenv("SQLPARAM"),"|"," ",-1)
+	
+	_conn:=strings.Replace(SQLDSN,"|"," ",-1)
 	op, err := sqlx.Connect("postgres",_conn)
 	
 	if err != nil {
