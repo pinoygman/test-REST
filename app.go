@@ -79,12 +79,12 @@ func main() {
 	//send()
 	
 	REV="v1"
-
+/*
 	c := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
 		AllowCredentials: true,
 	})
-
+*/
 	r := mux.NewRouter()
 
 	//Questions
@@ -122,12 +122,12 @@ func main() {
 	if err != nil {
 		s:=fmt.Sprintf("err cloud foundry env. %s. running server as localhost:%s.", err,conf.Port)
 		fmt.Println(s)
-		http.ListenAndServe(":"+conf.Port,c.Handler(r))
+		http.ListenAndServe(":"+conf.Port,cors.Default().Handler(r))
 		
 		return	
 	}
 
-	http.ListenAndServe(":"+os.Getenv("PORT"),c.Handler(r))
+	http.ListenAndServe(":"+os.Getenv("PORT"),cors.Default().Handler(r))
 
 	
 	/*
