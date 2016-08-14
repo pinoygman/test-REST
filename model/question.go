@@ -13,10 +13,15 @@
 package model
 
 import (
-	"fmt"
+	//"fmt"
+	"os"
 	"strconv"
 	"github.com/pborman/uuid"
-	"github.build.ge.com/predixsolutions/catalog-onboarding-backend/sql"
+	"encoding/json"
+	_ "github.com/lib/pq"
+	//"database/sql"
+	"github.com/jmoiron/sqlx"
+	"log"
 )
 
 //question type
@@ -42,8 +47,25 @@ type Question struct {
 var (
 	questionnaire map[string]*Question
 	questionTypes map[string]string
+	db *sqlx.DB
 )
 
+func init(){
+	op, err := sqlx.Connect("postgres",os.Getenv("SQLPARAM"))
+	if err != nil {
+		log.Fatalln(err)
+	}
+	
+	db=op
+
+	questionnaire=make(map[string]*Question)
+	questionTypes=map[string]string{
+		strconv.Itoa(Security):"Security",
+		strconv.Itoa(Pricing):"Pricing",
+		strconv.Itoa(Architecture):"Architecture",
+		strconv.Itoa(Service):"Service",
+	}
+}
 
 func (q *Question) load(guid string) (*Question, error){
 	
@@ -55,13 +77,21 @@ func (q *Question) Save() (*Question, error) {
 	if q.Guid=="" {
 		q.Guid=uuid.New()
 	}
+	
+	_ans,err:=json.Marshal(q.AnswerOptions)
 
-	err:=sql.AddAQuestion(q.Guid,q.Title,q.Name,q.Desc,q.Type,q.AnswerOptions)
 	if err!=nil{
-		return nil,err 
+		return nil, err
 	}
 	
+	tx := db.MustBegin()
+
+	tx.MustExec(`INSERT INTO "pcs-question-tbl" (_id, title, name, description, type, "answerOptions") VALUES ($1, $2, $3, $4, $5, $6)`, q.Guid,q.Title,q.Name,q.Desc,q.Type,_ans)
+	
+	tx.Commit()
+
 	questionnaire[q.Guid]=q
+
 	return q,nil
 }
 
@@ -70,17 +100,6 @@ func (q *Question) Del() (string,error){
 	delete(questionnaire,q.Guid)
 	return "delete",nil
 
-}
-
-
-func init(){
-	questionnaire=make(map[string]*Question)
-	questionTypes=map[string]string{
-		strconv.Itoa(Security):"Security",
-		strconv.Itoa(Pricing):"Pricing",
-		strconv.Itoa(Architecture):"Architecture",
-		strconv.Itoa(Service):"Service",
-	}
 }
 
 func InitQuestion(guid string) (*Question, error) {
@@ -104,14 +123,11 @@ func GetQuestionsByType(typeId uint64) (map[string]*Question, error){
 }
 
 func GetQuestionTypes() (map[string]string, error) {
-	fmt.Println(questionTypes)
-
         return questionTypes,nil
 }
 
 func GetQuestions() (map[string]*Question, error){
 
-	//op:=make(map[string]*Question)
 	return questionnaire,nil
 
 }
