@@ -60,7 +60,7 @@ func init(){
 	_connect_timeout:="5"
 	_sslmode:="disable"
 	
-	op, err := sqlx.Connect("postgres",fmt.Sprintf(`host=%s port=%s user=%s password=%s dbname=%s connect_timeout=%s sslmode=%s`,_host,_port,_user,_pwd,_dbname,_connect_timeout,_sslmode))
+	op, err := sqlx.Connect("postgres",fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s connect_timeout=%s sslmode=%s",_host,_port,_user,_pwd,_dbname,_connect_timeout,_sslmode))
 	
 	if err != nil {
 		log.Fatalln(err)
