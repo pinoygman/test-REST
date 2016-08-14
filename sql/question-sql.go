@@ -25,7 +25,7 @@ CREATE TABLE "pcs-question-tbl"
 package sql
 
 import(
-	//"encoding/json"
+	"encoding/json"
 	_ "github.com/lib/pq"
 	//"database/sql"
 	"github.com/jmoiron/sqlx"
