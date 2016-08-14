@@ -13,7 +13,7 @@
 package model
 
 import (
-	//"fmt"
+	"fmt"
 	"os"
 	"strconv"
 	"github.com/pborman/uuid"
@@ -50,10 +50,8 @@ var (
 	db *sqlx.DB
 )
 
-func init(){
-	os.Getenv("SQLPARAM")
-	_sql:=strings.Replace(os.Getenv("SQLPARAM"), ";", " ", -1)	
-	op, err := sqlx.Connect("postgres",_sql)
+func init(){	
+	op, err := sqlx.Connect("postgres","host=10.131.54.5 port=5432 user=uc49c9583047d4173a217667509e17ddf password=fb46202694704a7d994dd8e906666e6c dbname=d13291d5f50c645f5b90d26b8a58e2f6bconnect_timeout=5 sslmode=disable")
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -118,7 +116,10 @@ func InitQuestion(guid string) (*Question, error) {
 }
 
 func GetQuestionsByType(typeId uint64) (map[string]*Question, error){
-	
+
+	os.Getenv("SQLPARAM")
+	_sql:=strings.Replace(os.Getenv("SQLPARAM"), ";", " ", -1)
+	fmt.Println(_sql)
 	//op:=make(map[string]*Question)
 	return questionnaire,nil
 
