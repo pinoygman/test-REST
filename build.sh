@@ -64,6 +64,7 @@ function readinputs () {
 	printf "   %-*s\n" 10 "-end  | cf endpoint"
 	printf "   %-*s\n" 10 "-org  | cf org"
 	printf "   %-*s\n" 10 "-spc  | cf space"
+	printf "   %-*s\n" 10 "-sql  | postgresSql constr"
     else
 	for ((i = 1; i <=$#; i++));
 	do
@@ -95,6 +96,9 @@ function readinputs () {
 		    ;;
 		-spc)
 		    CF_SPC=${@:i+1:1}		   
+		    ;;
+		-sql)
+		    SQLPARAM=${@:i+1:1}
 		    ;;
 		*)
 		    #echo "Invalid option ${@:i:1}"
