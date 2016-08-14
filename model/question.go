@@ -51,7 +51,7 @@ var (
 )
 
 func init(){	
-	op, err := sqlx.Connect("postgres","host=10.131.54.5 port=5432 user=uc49c9583047d4173a217667509e17ddf password=fb46202694704a7d994dd8e906666e6c dbname=d13291d5f50c645f5b90d26b8a58e2f6bconnect_timeout=5 sslmode=disable")
+	op, err := sqlx.Connect("postgres","host=10.131.54.5 port=5432 user=uc49c9583047d4173a217667509e17ddf password=fb46202694704a7d994dd8e906666e6c dbname=d13291d5f50c645f5b90d26b8a58e2f6b connect_timeout=5 sslmode=disable")
 	if err != nil {
 		log.Fatalln(err)
 	}
