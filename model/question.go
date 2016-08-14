@@ -31,7 +31,6 @@ const (
 	Pricing = 1003
 	Architecture = 1002
 	Service = 1001
-
 )
 
 

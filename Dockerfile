@@ -29,6 +29,7 @@ ENV https_proxy {PROXY}
 ENV BUILD_TIME {BUILD_TIME}
 ENV BUILD_VER {BUILD_VER}
 ENV LDFLAGS "{LDFLAGS}"
+ENV SQLPARAM {SQLPARAM}
 
 RUN go env
 RUN go get github.com/cloudfoundry-community/go-cfenv
