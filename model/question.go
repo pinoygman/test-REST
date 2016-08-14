@@ -13,6 +13,7 @@
 package model
 
 import (
+	"fmt"
 	"github.com/pborman/uuid"
 	"github.build.ge.com/predixsolutions/catalog-onboarding-backend/sql"
 )
@@ -102,6 +103,8 @@ func GetQuestionsByType(typeId uint64) (map[string]*Question, error){
 }
 
 func GetQuestionTypes()(map[uint64]string, error){
+	fmt.Println(questionTypes)
+
         return questionTypes,nil
 }
 

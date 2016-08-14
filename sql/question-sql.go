@@ -48,7 +48,6 @@ func init(){
 func AddAQuestion(_id string, _title string, _name string, _desc string, _type uint64,_ans map[string]interface{}) error {
 
 	tx := db.MustBegin()
-	// Named queries can use structs, so if you have an existing struct (i.e. person := &Person{}) that you have populated, you can pass it in as &person
 
 	__ans,err:=json.Marshal(_ans)
 
