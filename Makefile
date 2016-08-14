@@ -34,11 +34,11 @@ pre-install:
 
 darwin-build:
 	@echo Creating Mac OS X artifact
-	@GOOS=darwin go build -ldflags "-X ${LDFLAGS} -X ${LDFLAGSQL}" -o /${BINARY}_darwin ./app.go
+	@GOOS=darwin go build -ldflags "-X ${LDFLAGS}" -o /${BINARY}_darwin ./app.go
 
 linux-build:
 	@echo Creating amd64_x86 artifact
-	@GOOS=linux go build -ldflags "-X ${LDFLAGS} -X ${LDFLAGSQL}" -o /${BINARY}_linux ./app.go
+	@GOOS=linux go build -ldflags "-X ${LDFLAGS}" -o /${BINARY}_linux ./app.go
 
 
 .PHONY: install

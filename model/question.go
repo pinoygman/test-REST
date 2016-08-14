@@ -48,7 +48,6 @@ var (
 	questionnaire map[string]*Question
 	questionTypes map[string]string
 	db *sqlx.DB
-	SQLDSN string
 )
 
 func init(){
@@ -65,7 +64,7 @@ func init(){
 	
 */
 	
-	_conn:=strings.Replace(SQLDSN,"|"," ",-1)
+	_conn:=strings.Replace(os.Getenv("SQLDSN"),"|"," ",-1)
 	op, err := sqlx.Connect("postgres",_conn)
 	
 	if err != nil {
