@@ -27,7 +27,9 @@ function cf_push () {
 	echo Good you have logged in the CF;
 	cp -r ./assets ./${DIST}
 	cd ./${DIST}
-	cf push pcs-backend-${ENV} -c "./${ARTIFACT}_linux" -b https://github.com/cloudfoundry/binary-buildpack.git      
+	cf push pcs-backend-${ENV} -c "./${ARTIFACT}_linux" -b https://github.com/cloudfoundry/binary-buildpack.git --no-start
+	cf set-env pcs-backend-${ENV} SQLDSN "${SQLDSN}"
+	cf start pcs-backend-${ENV}
     else 
 	echo Please log in the Cloud Foundry org/space.; 
 	exit 1; 
@@ -115,7 +117,6 @@ DIST=dist
 ARTIFACT=pcs_backend_${REV}_${ENV}
 BUILD_TIME=`date +%FT%T%z`
 LDFLAGS="main.REV=${REV}"
-LDFLAGSQL="model.SQLDSN='${SQLDSN}'"
 DHOME=github.build.ge.com/predixsolutions/catalog-onboarding-backend
 
 #predix select
@@ -129,7 +130,7 @@ eval "sed -i -e 's#{BUILD_TIME}#${BUILD_TIME}#g' ./Dockerfile"
 eval "sed -i -e 's#{BUILD_VER}#${BUILD_VER}#g' ./Dockerfile"
 eval "sed -i -e 's#{LDFLAGS}#${LDFLAGS}#g' ./Dockerfile"
 eval "sed -i -e 's#{DIST}#${DIST}#g' ./Dockerfile"
-eval "sed -i -e 's#{LDFLAGSQL}#${LDFLAGSQL}#g' ./Dockerfile"
+eval "sed -i -e 's#{SQLDSN}#${SQLDSN}#g' ./Dockerfile"
 
 eval "sed -i -e 's#{HOST}#pcs-backend-${ENV}.${HOST}#g' ./assets/swagger.json"
 eval "sed -i -e 's#{BASE}#/${REV}/api#g' ./assets/swagger.json"
