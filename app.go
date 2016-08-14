@@ -114,7 +114,7 @@ func main() {
 
 	r.PathPrefix(fmt.Sprintf("/%s/%s/assets/",REV,ROOTPATH)).Handler(http.StripPrefix(fmt.Sprintf("/%s/%s/assets/",REV,ROOTPATH), http.FileServer(http.Dir("./assets"))))
 	
-	http.Handle(fmt.Sprintf("/%s/%s/",REV,ROOTPATH), r)
+	//http.Handle(fmt.Sprintf("/%s/%s/",REV,ROOTPATH), r)
 	
 	//cfEnv, err := cfenv.Current()
 	_, err := cfenv.Current()
