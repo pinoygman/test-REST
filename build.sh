@@ -115,7 +115,7 @@ DIST=dist
 ARTIFACT=pcs_backend_${REV}_${ENV}
 BUILD_TIME=`date +%FT%T%z`
 LDFLAGS="main.REV=${REV}"
-LDFLAGSQL="model.SQLDSN=${SQLDSN}"
+LDFLAGSQL="model.SQLDSN='${SQLDSN}'"
 DHOME=github.build.ge.com/predixsolutions/catalog-onboarding-backend
 
 #predix select
