@@ -14,6 +14,7 @@ package model
 
 import (
 	"fmt"
+	"strconv"
 	"github.com/pborman/uuid"
 	"github.build.ge.com/predixsolutions/catalog-onboarding-backend/sql"
 )
@@ -40,7 +41,7 @@ type Question struct {
 
 var (
 	questionnaire map[string]*Question
-	questionTypes map[uint64]string
+	questionTypes map[string]string
 )
 
 
@@ -74,11 +75,11 @@ func (q *Question) Del() (string,error){
 
 func init(){
 	questionnaire=make(map[string]*Question)
-	questionTypes=map[uint64]string{
-		Security:"Security",
-		Pricing:"Pricing",
-		Architecture:"Architecture",
-		Service:"Service",
+	questionTypes=map[string]string{
+		strconv.Itoa(Security):"Security",
+		strconv.Itoa(Pricing):"Pricing",
+		strconv.Itoa(Architecture):"Architecture",
+		strconv.Itoa(Service):"Service",
 	}
 }
 
@@ -102,7 +103,7 @@ func GetQuestionsByType(typeId uint64) (map[string]*Question, error){
 
 }
 
-func GetQuestionTypes() (map[uint64]string, error) {
+func GetQuestionTypes() (map[string]string, error) {
 	fmt.Println(questionTypes)
 
         return questionTypes,nil
