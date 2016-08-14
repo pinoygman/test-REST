@@ -39,7 +39,7 @@ func GetQuestionTypesHttpHandler(w http.ResponseWriter, r *http.Request){
 
 	w.WriteHeader(http.StatusOK)
 
-	_str,err:=json.Marshal(_ref)
+	_str,err:=json.Marshal(&_ref)
 	w.Write(_str)	
 }
 
@@ -61,7 +61,7 @@ func GetQuestionsHttpHandler(w http.ResponseWriter, r *http.Request){
 
 	w.WriteHeader(http.StatusOK)
 
-	_str,err:=json.Marshal(_ref)
+	_str,err:=json.Marshal(&_ref)
 	w.Write(_str)	
 }
 

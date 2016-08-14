@@ -102,7 +102,7 @@ func GetQuestionsByType(typeId uint64) (map[string]*Question, error){
 
 }
 
-func GetQuestionTypes()(map[uint64]string, error){
+func GetQuestionTypes() (map[uint64]string, error) {
 	fmt.Println(questionTypes)
 
         return questionTypes,nil
