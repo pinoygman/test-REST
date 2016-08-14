@@ -51,18 +51,6 @@ var (
 )
 
 func init(){
-/*
-	_host:="10.131.54.5"
-	_port:="5432"
-	_user:="uc49c9583047d4173a217667509e17ddf"
-	_pwd:="fb46202694704a7d994dd8e906666e6c"
-	_dbname:="d13291d5f50c645f5b90d26b8a58e2f6b"
-	_connect_timeout:="5"
-	_sslmode:="disable"
-
-	_conn:=fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s connect_timeout=%s sslmode=%s",_host,_port,_user,_pwd,_dbname,_connect_timeout,_sslmode)
-	
-*/
 	
 	_conn:=strings.Replace(os.Getenv("SQLDSN"),"|"," ",-1)
 	op, err := sqlx.Connect("postgres",_conn)
@@ -138,9 +126,7 @@ func GetQuestionsByType(typeId uint64) (map[string]*Question, error){
 }
 
 func GetQuestionTypes() (map[string]string, error) {
-	//os.Getenv("SQLPARAM")
-	_sql:=strings.Replace(os.Getenv("SQLPARAM"), ";", " ", -1)
-	fmt.Println(_sql)
+
         return questionTypes,nil
 }
 
