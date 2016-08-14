@@ -123,7 +123,7 @@ func GetQuestionsByType(typeId uint64) (map[string]*Question, error){
 }
 
 func GetQuestionTypes() (map[string]string, error) {
-	os.Getenv("SQLPARAM")
+	//os.Getenv("SQLPARAM")
 	_sql:=strings.Replace(os.Getenv("SQLPARAM"), ";", " ", -1)
 	fmt.Println(_sql)
         return questionTypes,nil
