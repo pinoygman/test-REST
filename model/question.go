@@ -51,7 +51,7 @@ var (
 )
 
 func init(){
-
+/*
 	_host:="10.131.54.5"
 	_port:="5432"
 	_user:="uc49c9583047d4173a217667509e17ddf"
@@ -62,6 +62,9 @@ func init(){
 
 	_conn:=fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s connect_timeout=%s sslmode=%s",_host,_port,_user,_pwd,_dbname,_connect_timeout,_sslmode)
 	
+*/
+
+	_conn:=strings.Replace(os.Getenv("SQLPARAM"),"|"," ",-1)
 	op, err := sqlx.Connect("postgres",_conn)
 	
 	if err != nil {
