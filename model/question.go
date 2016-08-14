@@ -13,7 +13,7 @@
 package model
 
 import (
-	//"fmt"
+	"fmt"
 	"os"
 	"strconv"
 	"github.com/pborman/uuid"
@@ -50,6 +50,7 @@ var (
 )
 
 func init(){
+	fmt.Println(os.Getenv("SQLPARAM"))
 	op, err := sqlx.Connect("postgres",os.Getenv("SQLPARAM"))
 	if err != nil {
 		log.Fatalln(err)
