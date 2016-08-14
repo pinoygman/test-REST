@@ -51,7 +51,7 @@ var (
 )
 
 func init(){
-
+/*
 	_host:="10.131.54.5"
 	_port:="5432"
 	_user:="=uc49c9583047d4173a217667509e17ddf"
@@ -59,7 +59,7 @@ func init(){
 	_dbname:="d13291d5f50c645f5b90d26b8a58e2f6b"
 	_connect_timeout:="5"
 	_sslmode:="disable"
-	
+*/	
 	//op, err := sqlx.Connect("postgres",fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s connect_timeout=%s sslmode=%s",_host,_port,_user,_pwd,_dbname,_connect_timeout,_sslmode))
 	
 	op, err := sqlx.Connect("postgres","host=10.131.54.5;port=5432;user=uc49c9583047d4173a217667509e17ddf;password=fb46202694704a7d994dd8e906666e6c;dbname=d13291d5f50c645f5b90d26b8a58e2f6b;connect_timeout=5;sslmode=disable")
