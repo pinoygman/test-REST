@@ -50,13 +50,13 @@ func AddAQuestion(_id string, _title string, _name string, _desc string, _type u
 	tx := db.MustBegin()
 	// Named queries can use structs, so if you have an existing struct (i.e. person := &Person{}) that you have populated, you can pass it in as &person
 
-	//__ans,err:=json.Marshal(_ans)
+	__ans,err:=json.Marshal(_ans)
 
-	//if err!=nil{
-	//	return err
-	//}
+	if err!=nil{
+		return err
+	}
 	
-	tx.MustExec("INSERT INTO pcs-question-tbl (_id, title, name, description, type, answerOptions) VALUES ($1, $2, $3, $4, $5, $6)", "test1","test2","test3","test4",1001,nil)
+	tx.MustExec(`INSERT INTO "pcs-question-tbl" (_id, title, name, description, type, "answerOptions") VALUES ($1, $2, $3, $4, $5, $6)`, _id,_title,_name,_desc,_type,__ans)
 	
 	tx.Commit()
 
