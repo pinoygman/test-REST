@@ -16,7 +16,7 @@
     "paths": {
         "/question/list": {
             "get": {
-                "summary": "Get the question list",
+                "summary": "get the question list",
                 "description": "Just get the list of the current questions.\n",
                 "tags": [
                     "Questionnaire"
@@ -40,6 +40,71 @@
                 }
             }
         },
+	"/question":{
+            "post":{
+		"summary":"create a question",
+		"description":"Create a new question.",
+		"tags": [
+                    "Questionnaire"
+                ],
+		"parameters":[
+		    {
+                        "in": "body",
+                        "name": "title",
+                	"description":"title",
+			"required": true,
+		        "type": "string"
+		    },
+		    {
+                        "in": "body",
+                        "name": "name",
+                	"description":"name",
+			"required": true,
+		        "type": "string"
+		    },
+                    {
+                        "in": "body",
+                        "name": "description",
+                	"description":"description",
+			"required": true,
+		        "type": "string"
+		    },
+		    {
+                        "in": "body",
+                        "name": "type",
+                	"description":"type",
+			"required": true,
+		        "type": "string"
+		    },
+                    {
+                        "in": "body",
+                        "name": "answerOptions",
+                	"description":"free format.",
+			"required": true,
+		        "type": "object"
+		    }
+
+		],
+                "responses": {
+                    "200": {
+                        "description": "Question details",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "$ref": "#/definitions/Question"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+		
+            }
+	},
         "/application": {
             "get": {
                 "summary": "Price Estimates",
