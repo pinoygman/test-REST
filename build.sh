@@ -98,8 +98,7 @@ function readinputs () {
 		    CF_SPC=${@:i+1:1}		   
 		    ;;
 		-sql)
-		    SQLPARAM=${@:i+1:1}
-		    echo $SQLPARAM
+		    SQLDSN=${@:i+1:1}
 		    ;;
 		*)
 		    #echo "Invalid option ${@:i:1}"
@@ -116,6 +115,7 @@ DIST=dist
 ARTIFACT=pcs_backend_${REV}_${ENV}
 BUILD_TIME=`date +%FT%T%z`
 LDFLAGS="main.REV=${REV}"
+LDFLAGSQL="model.SQLDSN=${SQLDSN}"
 DHOME=github.build.ge.com/predixsolutions/catalog-onboarding-backend
 
 #predix select
@@ -129,7 +129,7 @@ eval "sed -i -e 's#{BUILD_TIME}#${BUILD_TIME}#g' ./Dockerfile"
 eval "sed -i -e 's#{BUILD_VER}#${BUILD_VER}#g' ./Dockerfile"
 eval "sed -i -e 's#{LDFLAGS}#${LDFLAGS}#g' ./Dockerfile"
 eval "sed -i -e 's#{DIST}#${DIST}#g' ./Dockerfile"
-eval "sed -i -e 's#{SQLPARAM}#${SQLPARAM}#g' ./Dockerfile"
+eval "sed -i -e 's#{LDFLAGSQL}#${LDFLAGSQL}#g' ./Dockerfile"
 
 eval "sed -i -e 's#{HOST}#pcs-backend-${ENV}.${HOST}#g' ./assets/swagger.json"
 eval "sed -i -e 's#{BASE}#/${REV}/api#g' ./assets/swagger.json"
