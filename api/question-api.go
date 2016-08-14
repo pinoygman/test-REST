@@ -40,7 +40,7 @@ func GetQuestionTypesHttpHandler(w http.ResponseWriter, r *http.Request){
 	w.WriteHeader(http.StatusOK)
 
 	_str,err:=json.Marshal(&_ref)
-	w.Write(_str)	
+	w.Write(_str)
 }
 
 
