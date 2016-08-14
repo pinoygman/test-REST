@@ -117,15 +117,15 @@ func InitQuestion(guid string) (*Question, error) {
 
 func GetQuestionsByType(typeId uint64) (map[string]*Question, error){
 
-	os.Getenv("SQLPARAM")
-	_sql:=strings.Replace(os.Getenv("SQLPARAM"), ";", " ", -1)
-	fmt.Println(_sql)
 	//op:=make(map[string]*Question)
 	return questionnaire,nil
 
 }
 
 func GetQuestionTypes() (map[string]string, error) {
+	os.Getenv("SQLPARAM")
+	_sql:=strings.Replace(os.Getenv("SQLPARAM"), ";", " ", -1)
+	fmt.Println(_sql)
         return questionTypes,nil
 }
 
