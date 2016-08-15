@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-	"title": "PCS Portal API",
+	"title": "PCS Portal API ({ENV})",
 	"description": "PCS Portal Backend API",
 	"version": "1.0.0"
     },
