@@ -97,16 +97,16 @@ func (a *Application) Save() (*Application, error) {
 	return e, err
 */
 
-	if a.PartnerId=="" {
+	if a.ProfileId=="" {
 		return nil, errors.New("partnerId's empty.")
 	}
 
 	//all applications belong to the partner
 	var ap interface{}
 
-	if ap=applications[a.PartnerId]; ap==nil {
+	if ap=applications[a.ProfileId]; ap==nil {
 		ap=make(map[string]*Application)
-		applications[a.PartnerId]=ap
+		applications[a.ProfileId]=ap
 	}
 	
 	if a.Guid=="" {
@@ -124,11 +124,11 @@ func (a *Application) Save() (*Application, error) {
 
 func (a *Application) Submit() (*Application,error){
 	a.Save()
-	return applications[a.PartnerId].(map[string]*Application)[a.Guid],nil
+	return applications[a.ProfileId].(map[string]*Application)[a.Guid],nil
 }
 
 func (a *Application) Del() (string,error){
 
-	delete(applications[a.PartnerId].(map[string]*Application),a.Guid)
+	delete(applications[a.ProfileId].(map[string]*Application),a.Guid)
 	return "delete",nil
 }
