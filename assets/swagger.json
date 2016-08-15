@@ -5,7 +5,7 @@
 	"description": "PCS Portal Backend API",
 	"version": "1.0.0"
     },
-    "host": "{HOST}}",
+    "host": "{HOST}",
     "schemes": [
 	"https"
     ],
