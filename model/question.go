@@ -13,14 +13,15 @@
 package model
 
 import (
-	//"fmt"
+	"fmt"
 	"os"
 	"strconv"
 	"github.com/pborman/uuid"
-	"encoding/json"
+	_ "encoding/json"
 	_ "github.com/lib/pq"
 	//"database/sql"
 	"github.com/jmoiron/sqlx"
+	sqltypes "github.com/jmoiron/sqlx/types"
 	"log"
 	"strings"
 )
@@ -41,7 +42,8 @@ type Question struct {
 	Name            string                      `json:"name"`
 	Desc            string                      `json:"description"`
 	Type            uint64                      `json:"type"`  //question type
-	AnswerOptions   map[string]interface{}      `json:"answerOptions"`
+        //AnswerOptions   map[string]interface{}      `json:"answerOptions"`
+	AnswerOptions   sqltypes.JSONText           `json:"answerOptions"`
 }
 
 var (
@@ -51,8 +53,13 @@ var (
 )
 
 func init(){
+
+	_ref:=""
+	if _ref=os.Getenv("SQLDSN");_ref=="" {
+		_ref="host=localhost|port=7990|user=uc49c9583047d4173a217667509e17ddf|password=fb46202694704a7d994dd8e906666e6c|dbname=d13291d5f50c645f5b90d26b8a58e2f6b|connect_timeout=5|sslmode=disable"
+	}
 	
-	_conn:=strings.Replace(os.Getenv("SQLDSN"),"|"," ",-1)
+	_conn:=strings.Replace(_ref,"|"," ",-1)
 	op, err := sqlx.Connect("postgres",_conn)
 	
 	if err != nil {
@@ -81,15 +88,15 @@ func (q *Question) Save() (*Question, error) {
 		q.Guid=uuid.New()
 	}
 	
-	_ans,err:=json.Marshal(q.AnswerOptions)
+	//_ans,err:=json.Marshal(q.AnswerOptions)
 
-	if err!=nil{
-		return nil, err
-	}
+	//if err!=nil{
+	//	return nil, err
+	//}
 	
 	tx := db.MustBegin()
 
-	tx.MustExec(`INSERT INTO "pcs-question-tbl" (_id, title, name, description, type, "answerOptions") VALUES ($1, $2, $3, $4, $5, $6)`, q.Guid,q.Title,q.Name,q.Desc,q.Type,_ans)
+	tx.MustExec(`INSERT INTO "pcs-question-tbl" (_id, title, name, description, type, "answerOptions") VALUES ($1, $2, $3, $4, $5, $6)`, q.Guid,q.Title,q.Name,q.Desc,q.Type,q.AnswerOptions)
 	
 	tx.Commit()
 
@@ -120,7 +127,6 @@ func InitQuestion(guid string) (*Question, error) {
 
 func GetQuestionsByType(typeId uint64) (map[string]*Question, error){
 
-	//op:=make(map[string]*Question)
 	return questionnaire,nil
 
 }
@@ -130,8 +136,27 @@ func GetQuestionTypes() (map[string]string, error) {
         return questionTypes,nil
 }
 
-func GetQuestions() (map[string]*Question, error){
+func GetQuestions() ([]Question, error){
+/*
+	_q:=Question{}
+	rows, _ := db.Queryx(`SELECT _id as "guid", title, name, description as "desc", type FROM "pcs-question-tbl"`)
+	
+	for rows.Next() {
+		err := rows.StructScan(&_q)
+		if err != nil {
+			log.Fatalln(err)
+		} 
+		fmt.Printf("%#v\n", _q)
+	}
+*/
+	
+	_qs := []Question{}
+	db.Select(&_qs, `SELECT _id as "guid", title, name, description as "desc", type,"answerOptions" as "answeroptions" FROM "pcs-question-tbl"`)
 
-	return questionnaire,nil
+	//_ref1:=_qs[0]
+	
+	fmt.Println(_qs)
+
+	return _qs,nil
 
 }
