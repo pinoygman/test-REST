@@ -96,7 +96,7 @@ func main() {
 	
 	r.HandleFunc(fmt.Sprintf("/%s/%s/question/list/{typeId}",REV,ROOTPATH), api.GetQuestionsByTypeIdHttpHandler).Methods("GET")
 	
-	r.HandleFunc(fmt.Sprintf("/%s/%s/question/{key}",REV,ROOTPATH), api.DeleteQuestionHttpHandler).Methods("DELETE")
+	r.HandleFunc(fmt.Sprintf("/%s/%s/question/{questionId}",REV,ROOTPATH), api.DeleteQuestionHttpHandler).Methods("DELETE")
 
 	//QuestionTypes
 	r.HandleFunc(fmt.Sprintf("/%s/%s/questiontype/list",REV,ROOTPATH), api.GetQuestionTypesHttpHandler).Methods("GET")

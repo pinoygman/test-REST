@@ -71,8 +71,8 @@ func GetQuestionsByTypeIdHttpHandler(w http.ResponseWriter, r *http.Request){
 
 	vars := mux.Vars(r)
 	key := vars["typeId"]
-
-	u, _:=strconv.ParseUint(key,10,8)
+	
+	u, _:=strconv.ParseUint(key,10,32)
 	_ref,err:=model.GetQuestionsByType(u)
 
 	if err != nil {
@@ -152,9 +152,7 @@ func DeleteQuestionHttpHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key := vars["questionId"]
 
-	_ref,_:=model.InitQuestion(key)
-
-	_,err:=_ref.Del()
+	err:=model.DeleteQuestionById(key)
 
 	if err != nil {
 		fmt.Sprintf("err: %s", err)
@@ -165,6 +163,6 @@ func DeleteQuestionHttpHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"status": "question `+key+` has been deleted."`))
+	w.Write([]byte(`{"status": "question `+key+` has been deleted."}`))
 	return
 }

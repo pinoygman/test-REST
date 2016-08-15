@@ -110,10 +110,16 @@ func (q *Question) Save() (*Question, error) {
 	return q,nil
 }
 
-func (q *Question) Del() (string,error){
+func DeleteQuestionById(guid string) (error){
 
-	delete(questionnaire,q.Guid)
-	return "delete",nil
+	tx := db.MustBegin()
+
+	tx.MustExec(`DELETE FROM "pcs-question-tbl" WHERE _id=$1`,guid)
+	
+	tx.Commit()
+
+	//delete(questionnaire,q.Guid)
+	return nil
 
 }
 
@@ -130,9 +136,17 @@ func InitQuestion(guid string) (*Question, error) {
 	return questionnaire[guid], nil
 }
 
-func GetQuestionsByType(typeId uint64) (map[string]*Question, error){
+func GetQuestionsByType(typeId uint64) ([]Question, error){
 
-	return questionnaire,nil
+	fmt.Println(typeId)
+	_qs := []Question{}
+	db.Select(&_qs, `SELECT _id as "guid", title, name, description as "desc", type,"answerOptions" as "answeroptions" FROM "pcs-question-tbl" WHERE type=$1`,typeId)
+
+	//_ref1:=_qs[0]
+	
+	fmt.Println(_qs)
+
+	return _qs,nil
 
 }
 
@@ -142,25 +156,13 @@ func GetQuestionTypes() (map[string]string, error) {
 }
 
 func GetQuestions() ([]Question, error){
-/*
-	_q:=Question{}
-	rows, _ := db.Queryx(`SELECT _id as "guid", title, name, description as "desc", type FROM "pcs-question-tbl"`)
-	
-	for rows.Next() {
-		err := rows.StructScan(&_q)
-		if err != nil {
-			log.Fatalln(err)
-		} 
-		fmt.Printf("%#v\n", _q)
-	}
-*/
 	
 	_qs := []Question{}
 	db.Select(&_qs, `SELECT _id as "guid", title, name, description as "desc", type,"answerOptions" as "answeroptions" FROM "pcs-question-tbl"`)
 
 	//_ref1:=_qs[0]
 	
-	fmt.Println(_qs)
+	//fmt.Println(_qs)
 
 	return _qs,nil
 
