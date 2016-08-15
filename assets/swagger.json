@@ -5,7 +5,7 @@
 	"description": "PCS Portal Backend API",
 	"version": "1.0.0"
     },
-    "host": "{HOST}",
+    "host": "{HOST}}",
     "schemes": [
 	"https"
     ],
@@ -31,12 +31,6 @@
 				"$ref": "#/definitions/Question"
 			    }
 			}
-		    },
-		    "default": {
-			"description": "Unexpected error",
-			"schema": {
-			    "$ref": "#/definitions/Error"
-			}
 		    }
 		}
 	    }
@@ -53,8 +47,24 @@
 			"name": "body",
 			"in": "body",
 			"schema": {
-			    "$ref": "#/definitions/Question",
-			    "type": "object"
+			    "type": "object",
+			    "properties": {
+				"title": {
+				    "type": "string"
+				},
+				"name": {
+				    "type": "string"
+				},
+				"description": {
+				    "type": "string"
+				},
+				"type": {
+				    "type": "integer"
+				},
+				"answerOptions": {
+				    "type": "object"
+				}
+			    }
 			}
 		    }
 		],
@@ -118,7 +128,12 @@
 		    "200": {
 			"description": "An object of question type.",
 			"schema": {
-			    "type": "object"
+			    "type": "object",
+			    "properties": {
+				"question_type_id": {
+				    "type": "string"
+				}
+			    }
 			}
 		    },
 		    "default": {
