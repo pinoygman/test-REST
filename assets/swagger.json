@@ -35,6 +35,41 @@
 		}
 	    }
 	},
+	"/question/list/{questionTypeId}": {
+	    "get": {
+		"summary": "get questions by Question TypeId",
+		"description": "get questions by Question TypeId.",
+		"tags": [
+		    "Questionnaire"
+		],
+		"parameters": [
+		    {
+			"name": "questionTypeId",
+			"in": "path",
+			"required": true,
+			"type": "string"
+		    }
+		],
+		"responses": {
+		    "200": {
+			"description": "retrieve successful.",
+			"schema": {
+			    "type":"array",
+			    "items":{
+				"type":"object",
+				"$ref": "#/definitions/Question"
+			    }
+			}
+		    },
+		    "default": {
+			"description": "Unexpected error",
+			"schema": {
+			    "$ref": "#/definitions/Error"
+			}
+		    }
+		}
+	    }
+	},
 	"/question": {
 	    "post": {
 		"summary": "create a question",
@@ -117,12 +152,41 @@
 		}
 	    }
 	},
+	"/question/{questionId}": {
+	    "delete": {
+		"summary": "delete a question",
+		"description": "delete an existing question.",
+		"tags": [
+		    "Questionnaire"
+		],
+		"parameters": [
+		    {
+			"name": "questionId",
+			"in": "path",
+			"required": true,
+			"type": "string"
+		    }
+		],
+		"responses": {
+		    "200": {
+			"description": "delete successful.",
+			"type":"string"
+		    },
+		    "default": {
+			"description": "Unexpected error",
+			"schema": {
+			    "$ref": "#/definitions/Error"
+			}
+		    }
+		}
+	    }
+	},
 	"/questiontype/list": {
 	    "get": {
 		"summary": "Question Types",
 		"description": "Get question types.",
 		"tags": [
-		    "Questionnaire"
+		    "Question Type"
 		],
 		"responses": {
 		    "200": {
@@ -136,7 +200,7 @@
 			    }
 			}
 		    },
-		    "default": {
+		    "503": {
 			"description": "Unexpected error",
 			"schema": {
 			    "$ref": "#/definitions/Error"
