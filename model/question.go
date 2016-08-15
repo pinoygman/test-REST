@@ -82,17 +82,11 @@ func (q *Question) load(guid string) (*Question, error){
 	return questionnaire[guid],nil
 }
 
-func (q *Question) Save() (*Question, error) {
+func (q *Question) Create() (*Question, error) {
 
 	if q.Guid=="" {
 		q.Guid=uuid.New()
 	}
-	
-	//_ans,err:=json.Marshal(q.AnswerOptions)
-
-	//if err!=nil{
-	//	return nil, err
-	//}
 	
 	tx := db.MustBegin()
 
@@ -101,6 +95,17 @@ func (q *Question) Save() (*Question, error) {
 	tx.Commit()
 
 	questionnaire[q.Guid]=q
+
+	return q,nil
+}
+
+func (q *Question) Save() (*Question, error) {
+	
+	tx := db.MustBegin()
+
+	tx.MustExec(`UPDATE "pcs-question-tbl" SET title=$1, name=$2, description=$3, type=$4, "answerOptions"=$5 WHERE _id=$6`,q.Title,q.Name,q.Desc,q.Type,q.AnswerOptions,q.Guid)
+	
+	tx.Commit()
 
 	return q,nil
 }

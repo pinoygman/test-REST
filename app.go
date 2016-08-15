@@ -88,9 +88,9 @@ func main() {
 	r := mux.NewRouter()
 
 	//Questions
-	r.HandleFunc(fmt.Sprintf("/%s/%s/question",REV,ROOTPATH), api.UpsertQuestionHttpHandler).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/%s/question",REV,ROOTPATH), api.InsertQuestionHttpHandler).Methods("POST")
 	
-	r.HandleFunc(fmt.Sprintf("/%s/%s/question",REV,ROOTPATH), api.UpsertQuestionHttpHandler).Methods("PUT")
+	r.HandleFunc(fmt.Sprintf("/%s/%s/question",REV,ROOTPATH), api.UpdateQuestionHttpHandler).Methods("PUT")
 	
 	r.HandleFunc(fmt.Sprintf("/%s/%s/question/list",REV,ROOTPATH), api.GetQuestionsHttpHandler).Methods("GET")
 	
