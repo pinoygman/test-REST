@@ -134,6 +134,7 @@ eval "sed -i -e 's#{SQLDSN}#${SQLDSN}#g' ./Dockerfile"
 
 eval "sed -i -e 's#{HOST}#pcs-backend-${ENV}.${HOST}#g' ./assets/swagger.json"
 eval "sed -i -e 's#{BASE}#/${REV}/api#g' ./assets/swagger.json"
+eval "sed -i -e 's#{ENV}#/${ENV}#g' ./assets/swagger.json"
 
 docker_run
 cf_push
