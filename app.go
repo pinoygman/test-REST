@@ -112,7 +112,7 @@ func main() {
 	
 	r.HandleFunc(fmt.Sprintf("/%s/%s/application/{applicationId}",REV,ROOTPATH), api.DeleteApplicationHttpHandler).Methods("DELETE")
 
-	r.PathPrefix(fmt.Sprintf("/%s/%s/assets/",REV,ROOTPATH)).Handler(http.StripPrefix(fmt.Sprintf("/%s/%s/assets/",REV,ROOTPATH), http.FileServer(http.Dir("./assets"))))
+	r.PathPrefix(fmt.Sprintf("/%s/%s/",REV,ROOTPATH)).Handler(http.StripPrefix(fmt.Sprintf("/%s/%s/",REV,ROOTPATH), http.FileServer(http.Dir("./assets"))))
 	
 	//http.Handle(fmt.Sprintf("/%s/%s/",REV,ROOTPATH), r)
 	
