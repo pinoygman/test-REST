@@ -91,7 +91,7 @@ func GetQuestionsByTypeIdHttpHandler(w http.ResponseWriter, r *http.Request){
 	return 
 }
 
-func UpsertQuestionHttpHandler(w http.ResponseWriter, r *http.Request) {
+func UpdateQuestionHttpHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	
@@ -107,7 +107,34 @@ func UpsertQuestionHttpHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(`{"err":`+err.Error()+`}`))
 		
-		fmt.Fprint(w, "update/insert questions service error.")
+		fmt.Fprint(w, "update questions service error.")
+		return
+	}
+	
+	w.WriteHeader(http.StatusOK)
+
+	j, _ := json.Marshal(&s)
+	w.Write(j)
+	return 
+}
+
+func InsertQuestionHttpHandler(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "application/json")
+	
+	p:=&model.Question{}
+	b, _ := ioutil.ReadAll(r.Body)
+	
+	json.Unmarshal(b, p)
+
+	s,err:=p.Create()
+	
+	if err!=nil {
+		fmt.Sprintf("err: %s", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{"err":`+err.Error()+`}`))
+		
+		fmt.Fprint(w, "update questions service error.")
 		return
 	}
 	
