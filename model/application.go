@@ -24,13 +24,13 @@ const (
 
 type Application struct {
 	Guid            string              `json:"_id"`
-	PartnerId       string              `json:"partnerId"`
-	Name            string              `json:"applicationName"`
+	ProfileId       string              `json:"profileId"`
+	Name            string              `json:"name"`
 	//Title           string              `json:"title"`
 	//Desc            string              `json:"description"`
 	//Type            uint8               `json:"type"`  //question type
 	Answers         map[string]Answer   `json:"answers"`
-	AppStatus          string           `json:"applicationStatus"`
+	AppStatus          string           `json:"status"`
 }
 
 var (
