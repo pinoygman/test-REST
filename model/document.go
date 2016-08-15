@@ -24,16 +24,14 @@ const (
 //	Security = 1003
 )
 
-type Answer struct {
-	GUID              string                    `json:"_id"`
-	QuestionId        string                    `json:"questionid"`
-	ApplicationId     string                    `json:"appid"`
+type Document struct {
+	DocId        string                    `json:"_did"`
 	//Title           string                    `json:"title"`
 	//Desc            string                    `json:"description"`
 	//Type            uint8                     `json:"type"`  //question type
 	//AnswerOptions   []string                  `json:"answerOptions"`
-	Answer            map[string]interface{}     `json:"answer"`
-	FileList          []string                  `json:"filesList"`  //file guid
+	//Answer           map[string]interface{}    `json:"answer"`
+	//FileList          []string                  `json:"filesList"`  //file guid
 }
 
 var (

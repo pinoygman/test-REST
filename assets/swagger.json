@@ -14,6 +14,290 @@
 	"application/json"
     ],
     "paths": {
+	"/profile": {
+	    "get": {
+		"summary": "get current profile info",
+		"description": "get currnt profile information.\n",
+		"tags": [
+		    "Profile"
+		],
+		"responses": {
+		    "200": {
+			"description": "successful retrieve current profile",
+			"schema": {
+			    "type": "array",
+			    "items": {
+				"type": "object",
+				"$ref": "#/definitions/Profile"
+			    }
+			}
+		    }
+		}
+	    }
+	},
+	"/document/list": {
+	    "get": {
+		"summary": "get a list of documents",
+		"description": "get a list of documents to the current profile.\n",
+		"tags": [
+		    "Document"
+		],
+		"responses": {
+		    "200": {
+			"description": "successful retrieve current profile",
+			"schema": {
+			    "type": "array",
+			    "items": {
+				"type": "object",
+				"$ref": "#/definitions/Document"
+			    }
+			}
+		    }
+		}
+	    }
+	},
+	"/document": {
+	    "post": {
+		"summary": "create a document",
+		"description": "create a new document.\n",
+		"tags": [
+		    "Document"
+		],
+		"responses": {
+		    "200": {
+			"description": "successful retrieve current profile",
+			"schema": {
+			    "type": "object",
+			    "$ref": "#/definitions/Document"
+			}
+		    }
+		}
+	    }
+	},
+	"/document/{docId}": {
+	    "get": {
+		"summary": "download a document",
+		"description": "download a document.\n",
+		"tags": [
+		    "Document"
+		],
+		"parameters": [
+		    {
+			"name": "docId",
+			"in": "path",
+			"required": true,
+			"type": "string"
+		    }
+		],
+		"responses": {
+		    "200": {
+			"description": "successful retrieve current profile",
+			"schema": {
+			    "type": "object"
+			}
+		    }
+		}
+	    },
+	    "delete": {
+		"summary": "delete a document",
+		"description": "delete a document.\n",
+		"tags": [
+		    "Document"
+		],
+		"parameters": [
+		    {
+			"name": "docId",
+			"in": "path",
+			"required": true,
+			"type": "string"
+		    }
+		],
+		"responses": {
+		    "200": {
+			"description": "successful delete a document",
+			"schema": {
+			    "type": "object",
+			    "properties": {
+				"message": {
+				    "type": "string"
+				}
+			    }
+			}
+		    },
+		    "501": {
+			"description": "Unexpected error",
+			"schema": {
+			    "$ref": "#/definitions/Error"
+			}
+		    }
+		}
+	    },
+	    "put": {
+		"summary": "update a document",
+		"description": "update a document.\n",
+		"tags": [
+		    "Document"
+		],
+		"parameters": [
+		    {
+			"name": "docId",
+			"in": "path",
+			"required": true,
+			"type": "string"
+		    }
+		],
+		"responses": {
+		    "200": {
+			"description": "successful update a document",
+			"schema": {
+			    "type": "object",
+			    "properties": {
+				"message": {
+				    "type": "string"
+				}
+			    }
+			}
+		    },
+		    "501": {
+			"description": "Unexpected error",
+			"schema": {
+			    "$ref": "#/definitions/Error"
+			}
+		    }
+		}
+	    }
+	},
+	"/application/list": {
+	    "get": {
+		"summary": "get the application list",
+		"description": "get the list of applications.\n",
+		"tags": [
+		    "Application"
+		],
+		"responses": {
+		    "200": {
+			"description": "An array of application",
+			"schema": {
+			    "type": "array",
+			    "items": {
+				"type": "object",
+				"$ref": "#/definitions/Application"
+			    }
+			}
+		    }
+		}
+	    }
+	},
+	"/application":{
+	    "post": {
+		"summary": "create an application",
+		"description": "create a new application.\n",
+		"tags": [
+		    "Application"
+		],
+		"parameters": [
+		    {
+			"name": "body",
+			"in": "body",
+			"schema": {
+			    "type": "object",
+			    "properties": {
+				"profileId": {
+				    "type": "string"
+				},
+				"name": {
+				    "type": "string"
+				},
+				"answers": {
+				    "type": "object",
+				    "properties": {
+					"questionId": {
+					    "type": "object",
+					    "$ref": "#/definitions/Answer"
+					}
+				    }
+				},
+				"status": {
+				    "type": "string"
+				}
+			    }
+			}
+		    }
+		],
+		"responses": {
+		    "200": {
+			"description": "successful create an application",
+			"schema": {
+			    "type": "object",
+			    "$ref": "#/definitions/Application"
+			}
+		    }
+		}
+	    },
+	    "put": {
+		"summary": "update an application",
+		"description": "update an application.\n",
+		"tags": [
+		    "Application"
+		],
+		"parameters": [
+		    {
+			"name": "body",
+			"in": "body",
+			"schema": {
+			    "type": "object",
+			    "$ref": "#/definitions/Application"
+			}
+		    }	
+		],
+		"responses": {
+		    "200": {
+			"description": "successful update an application",
+			"schema": {
+			    "type": "object",
+			    "$ref":"#/definitions/Application"
+			}
+		    },
+		    "501": {
+			"description": "Unexpected error",
+			"schema": {
+			    "type":"object",
+			    "$ref": "#/definitions/Error"
+			}
+		    }
+		}
+	    }
+
+	},
+	"/application/{appId}": {
+	    "delete": {
+		"summary": "delete an application",
+		"description": "delete an existing application.",
+		"tags": [
+		    "Application"
+		],
+		"parameters": [
+		    {
+			"name": "appId",
+			"in": "path",
+			"required": true,
+			"type": "string"
+		    }
+		],
+		"responses": {
+		    "200": {
+			"description": "delete successful.",
+			"type": "string"
+		    },
+		    "default": {
+			"description": "Unexpected error",
+			"schema": {
+			    "$ref": "#/definitions/Error"
+			}
+		    }
+		}
+	    }
+	},
 	"/question/list": {
 	    "get": {
 		"summary": "get the question list",
@@ -23,7 +307,7 @@
 		],
 		"responses": {
 		    "200": {
-			"description": "An map of questionnaire",
+			"description": "An array of questionnaire",
 			"schema": {
 			    "type": "array",
 			    "items": {
@@ -54,9 +338,9 @@
 		    "200": {
 			"description": "retrieve successful.",
 			"schema": {
-			    "type":"array",
-			    "items":{
-				"type":"object",
+			    "type": "array",
+			    "items": {
+				"type": "object",
 				"$ref": "#/definitions/Question"
 			    }
 			}
@@ -170,7 +454,7 @@
 		"responses": {
 		    "200": {
 			"description": "delete successful.",
-			"type":"string"
+			"type": "string"
 		    },
 		    "default": {
 			"description": "Unexpected error",
@@ -211,6 +495,32 @@
 	}
     },
     "definitions": {
+	"Application": {
+	    "type": "object",
+	    "properties": {
+		"_id": {
+		    "type": "string"
+		},
+		"profileId": {
+		    "type": "string"
+		},
+		"name": {
+		    "type": "string"
+		},
+		"answers": {
+		    "type": "object",
+		    "properties": {
+			"questionId": {
+			    "type": "object",
+			    "$ref": "#/definitions/Answer"
+			}
+		    }
+		},
+		"status": {
+		    "type": "string"
+		}
+	    }
+	},
 	"Question": {
 	    "type": "object",
 	    "properties": {
@@ -231,6 +541,55 @@
 		},
 		"answerOptions": {
 		    "type": "object"
+		}
+	    }
+	},
+	"Answer": {
+	    "type": "object",
+	    "properties": {
+		"_id": {
+		    "type": "string"
+		},
+		"_questionid": {
+		    "type": "string"
+		},
+		"_appid": {
+		    "type": "string"
+		},
+		"answer": {
+		    "type": "object"
+		},
+		"fileList": {
+		    "type": "array",
+		    "items": {
+			"type": "object",
+			"$ref": "#/definitions/Document"
+		    }
+		}
+	    }
+	},
+	"Document": {
+	    "type": "object",
+	    "properties": {
+		"_did": {
+		    "type": "string"
+		}
+	    }
+	},
+	"Profile": {
+	    "type": "object",
+	    "properties": {
+		"_pid": {
+		    "type": "string"
+		},
+		"name": {
+		    "type": "string"
+		},
+		"email": {
+		    "type": "string"
+		},
+		"sfdcid": {
+		    "type": "string"
 		}
 	    }
 	},
