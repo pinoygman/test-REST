@@ -35,138 +35,6 @@
 		}
 	    }
 	},
-	"/document/list": {
-	    "get": {
-		"summary": "get a list of documents",
-		"description": "get a list of documents to the current profile.\n",
-		"tags": [
-		    "Document"
-		],
-		"responses": {
-		    "200": {
-			"description": "successful retrieve current profile",
-			"schema": {
-			    "type": "array",
-			    "items": {
-				"type": "object",
-				"$ref": "#/definitions/Document"
-			    }
-			}
-		    }
-		}
-	    }
-	},
-	"/document": {
-	    "post": {
-		"summary": "create a document",
-		"description": "create a new document.\n",
-		"tags": [
-		    "Document"
-		],
-		"responses": {
-		    "200": {
-			"description": "successful retrieve current profile",
-			"schema": {
-			    "type": "object",
-			    "$ref": "#/definitions/Document"
-			}
-		    }
-		}
-	    }
-	},
-	"/document/{docId}": {
-	    "get": {
-		"summary": "download a document",
-		"description": "download a document.\n",
-		"tags": [
-		    "Document"
-		],
-		"parameters": [
-		    {
-			"name": "docId",
-			"in": "path",
-			"required": true,
-			"type": "string"
-		    }
-		],
-		"responses": {
-		    "200": {
-			"description": "successful retrieve current profile",
-			"schema": {
-			    "type": "object"
-			}
-		    }
-		}
-	    },
-	    "delete": {
-		"summary": "delete a document",
-		"description": "delete a document.\n",
-		"tags": [
-		    "Document"
-		],
-		"parameters": [
-		    {
-			"name": "docId",
-			"in": "path",
-			"required": true,
-			"type": "string"
-		    }
-		],
-		"responses": {
-		    "200": {
-			"description": "successful delete a document",
-			"schema": {
-			    "type": "object",
-			    "properties": {
-				"message": {
-				    "type": "string"
-				}
-			    }
-			}
-		    },
-		    "501": {
-			"description": "Unexpected error",
-			"schema": {
-			    "$ref": "#/definitions/Error"
-			}
-		    }
-		}
-	    },
-	    "put": {
-		"summary": "update a document",
-		"description": "update a document.\n",
-		"tags": [
-		    "Document"
-		],
-		"parameters": [
-		    {
-			"name": "docId",
-			"in": "path",
-			"required": true,
-			"type": "string"
-		    }
-		],
-		"responses": {
-		    "200": {
-			"description": "successful update a document",
-			"schema": {
-			    "type": "object",
-			    "properties": {
-				"message": {
-				    "type": "string"
-				}
-			    }
-			}
-		    },
-		    "501": {
-			"description": "Unexpected error",
-			"schema": {
-			    "$ref": "#/definitions/Error"
-			}
-		    }
-		}
-	    }
-	},
 	"/application/list/{profileId}": {
 	    "get": {
 		"summary": "get the application list by profileId",
@@ -596,7 +464,140 @@
 		    }
 		}
 	    }
+	},
+	"/document/list": {
+	    "get": {
+		"summary": "get a list of documents",
+		"description": "get a list of documents to the current profile.\n",
+		"tags": [
+		    "Document"
+		],
+		"responses": {
+		    "200": {
+			"description": "successful retrieve current profile",
+			"schema": {
+			    "type": "array",
+			    "items": {
+				"type": "object",
+				"$ref": "#/definitions/Document"
+			    }
+			}
+		    }
+		}
+	    }
+	},
+	"/document": {
+	    "post": {
+		"summary": "create a document",
+		"description": "create a new document.\n",
+		"tags": [
+		    "Document"
+		],
+		"responses": {
+		    "200": {
+			"description": "successful retrieve current profile",
+			"schema": {
+			    "type": "object",
+			    "$ref": "#/definitions/Document"
+			}
+		    }
+		}
+	    }
+	},
+	"/document/{docId}": {
+	    "get": {
+		"summary": "download a document",
+		"description": "download a document.\n",
+		"tags": [
+		    "Document"
+		],
+		"parameters": [
+		    {
+			"name": "docId",
+			"in": "path",
+			"required": true,
+			"type": "string"
+		    }
+		],
+		"responses": {
+		    "200": {
+			"description": "successful retrieve current profile",
+			"schema": {
+			    "type": "object"
+			}
+		    }
+		}
+	    },
+	    "delete": {
+		"summary": "delete a document",
+		"description": "delete a document.\n",
+		"tags": [
+		    "Document"
+		],
+		"parameters": [
+		    {
+			"name": "docId",
+			"in": "path",
+			"required": true,
+			"type": "string"
+		    }
+		],
+		"responses": {
+		    "200": {
+			"description": "successful delete a document",
+			"schema": {
+			    "type": "object",
+			    "properties": {
+				"message": {
+				    "type": "string"
+				}
+			    }
+			}
+		    },
+		    "501": {
+			"description": "Unexpected error",
+			"schema": {
+			    "$ref": "#/definitions/Error"
+			}
+		    }
+		}
+	    },
+	    "put": {
+		"summary": "update a document",
+		"description": "update a document.\n",
+		"tags": [
+		    "Document"
+		],
+		"parameters": [
+		    {
+			"name": "docId",
+			"in": "path",
+			"required": true,
+			"type": "string"
+		    }
+		],
+		"responses": {
+		    "200": {
+			"description": "successful update a document",
+			"schema": {
+			    "type": "object",
+			    "properties": {
+				"message": {
+				    "type": "string"
+				}
+			    }
+			}
+		    },
+		    "501": {
+			"description": "Unexpected error",
+			"schema": {
+			    "$ref": "#/definitions/Error"
+			}
+		    }
+		}
+	    }
 	}
+
     },
     "definitions": {
 	"Application": {
