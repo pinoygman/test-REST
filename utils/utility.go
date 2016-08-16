@@ -112,7 +112,6 @@ func RetrieveUploadFile(r *http.Request,s string) (string, error) {
         //fmt.Println(filename)
 
 	uid:=uuid.New()
-
 	
 	out, err := os.Create(s+uid+"."+filename)
 
@@ -124,7 +123,6 @@ func RetrieveUploadFile(r *http.Request,s string) (string, error) {
 
 	if _, err = io.Copy(out, file);err != nil {
 		log.Fatal(err)
-		//fmt.Println(err)
 		return "", err
         }
 
