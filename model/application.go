@@ -143,7 +143,7 @@ func InitRedis() error {
 		for k, _:= range cfEnv.Services {
 			if strings.Contains(k,"redis") {
 				o:=cfEnv.Services[k][0].Credentials
-				err:=InitRedisClient(o["host"].(string),o["port"].(string),o["password"].(string))
+				err:=InitRedisClient(o["host"].(string),fmt.Sprintf("%.0f",o["port"]),o["password"].(string))
 				if err!=nil {
 					return err
 				}
