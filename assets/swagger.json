@@ -15,11 +15,26 @@
     ],
     "paths": {
 	"/profile": {
-	    "get": {
+	    "post": {
 		"summary": "get current profile info",
 		"description": "get currnt profile information.\n",
 		"tags": [
 		    "Profile"
+		],
+		"parameters": [
+		    {
+			"name": "email",
+			"in": "body",
+			"required": true,
+			"type": "string"
+		    },
+		    {
+			"name": "token",
+			"in": "body",
+			"required": true,
+			"type": "string",
+			"description":"token from predix.io UAA"
+		    }
 		],
 		"responses": {
 		    "200": {

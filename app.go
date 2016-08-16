@@ -92,7 +92,7 @@ func main() {
 	r := mux.NewRouter()
 
 	//Profile
-	r.HandleFunc(fmt.Sprintf("/%s/%s/profile",REV,ROOTPATH), api.GetProfileHttpHandler).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/%s/profile",REV,ROOTPATH), api.GetProfileHttpHandler).Methods("POST")
 	
 	//Questions
 	r.HandleFunc(fmt.Sprintf("/%s/%s/question",REV,ROOTPATH), api.InsertQuestionHttpHandler).Methods("POST")
