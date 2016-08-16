@@ -167,12 +167,20 @@
 		}
 	    }
 	},
-	"/application/list": {
+	"/application/list/{profileId}": {
 	    "get": {
-		"summary": "get the application list",
-		"description": "get the list of applications.\n",
+		"summary": "get the application list by profileId",
+		"description": "get the list of applications by profileId.\n",
 		"tags": [
 		    "Application"
+		],
+		"parameters": [
+		    {
+			"name": "profileId",
+			"in": "path",
+			"required": true,
+			"type": "string"
+		    }
 		],
 		"responses": {
 		    "200": {
@@ -183,6 +191,64 @@
 				"type": "object",
 				"$ref": "#/definitions/Application"
 			    }
+			}
+		    }
+		}
+	    }
+	},
+	"/application/draft/list/{profileId}": {
+	    "get": {
+		"summary": "get the draft list by profileId",
+		"description": "get the list of applications by profileId.\n",
+		"tags": [
+		    "Application"
+		],
+		"parameters": [
+		    {
+			"name": "profileId",
+			"in": "path",
+			"required": true,
+			"type": "string"
+		    }
+		],
+		"responses": {
+		    "200": {
+			"description": "An array of application",
+			"schema": {
+			    "type": "array",
+			    "items": {
+				"type": "object",
+				"$ref": "#/definitions/Application"
+			    }
+			}
+		    }
+		}
+	    }
+	},
+	"/application/draft/{applicationId}": {
+	    "delete": {
+		"summary": "delete a draft",
+		"description": "delete an existing draft.",
+		"tags": [
+		    "Application"
+		],
+		"parameters": [
+		    {
+			"name": "applicationId",
+			"in": "path",
+			"required": true,
+			"type": "string"
+		    }
+		],
+		"responses": {
+		    "200": {
+			"description": "delete successful.",
+			"type": "string"
+		    },
+		    "default": {
+			"description": "Unexpected error",
+			"schema": {
+			    "$ref": "#/definitions/Error"
 			}
 		    }
 		}
@@ -216,6 +282,10 @@
 					    "$ref": "#/definitions/Answer"
 					}
 				    }
+				},
+				"notification": {
+				    "type": "object",
+				    "$ref": "#/definitions/Notification"
 				},
 				"status": {
 				    "type": "string"
@@ -288,6 +358,40 @@
 		    "200": {
 			"description": "delete successful.",
 			"type": "string"
+		    },
+		    "default": {
+			"description": "Unexpected error",
+			"schema": {
+			    "$ref": "#/definitions/Error"
+			}
+		    }
+		}
+	    }
+	},
+	"/application/submit": {
+	    "post": {
+		"summary": "submit an application",
+		"description": "submit an existing application.",
+		"tags": [
+		    "Application"
+		],
+		"parameters": [
+		    {
+			"name": "body",
+			"in": "body",
+			"schema": {
+			    "type": "object",
+			    "$ref": "#/definitions/Application"
+			}
+		    }	
+		],
+		"responses": {
+		    "200": {
+			"description": "successful submitted an application",
+			"schema": {
+			    "type": "object",
+			    "$ref":"#/definitions/Application"
+			}
 		    },
 		    "default": {
 			"description": "Unexpected error",
@@ -507,6 +611,21 @@
 		"name": {
 		    "type": "string"
 		},
+		"notification":{
+		    "type": "object",
+		    "$ref": "#/definitions/Notification"
+		},
+		"created_date":{
+		    "type": "string",
+		    "format":"date-time"
+		},
+		"modified_date":{
+		    "type": "string",
+		    "format":"date-time"
+		},
+		"modified_by":{
+		    "type": "string"
+		},
 		"answers": {
 		    "type": "object",
 		    "properties": {
@@ -541,6 +660,18 @@
 		},
 		"answerOptions": {
 		    "type": "object"
+		}
+	    }
+	},
+	"Notification": {
+	    "type": "object",
+	    "properties": {
+		"_questionTypeId": {
+		    "type": "array",
+		    "items":{
+			"type": "string",
+			"description":"email"
+		    }
 		}
 	    }
 	},

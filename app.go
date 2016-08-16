@@ -21,7 +21,6 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/cloudfoundry-community/go-cfenv"
 	"github.com/rs/cors"
-	
 	//"log"
 	"net/smtp"
 )
@@ -71,22 +70,30 @@ func init(){
 
 	conf=s
 	
-	
+	_=api.InitServices()
+
 }
 
 func main() {
 
 	//send()
 	
-	REV="v1"
+	if REV=="" {
+		REV="v1"
+	}
 /*
 	c := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
 		AllowCredentials: true,
 	})
 */
+
+	
 	r := mux.NewRouter()
 
+	//Profile
+	r.HandleFunc(fmt.Sprintf("/%s/%s/profile",REV,ROOTPATH), api.GetProfileHttpHandler).Methods("GET")
+	
 	//Questions
 	r.HandleFunc(fmt.Sprintf("/%s/%s/question",REV,ROOTPATH), api.InsertQuestionHttpHandler).Methods("POST")
 	
@@ -102,16 +109,22 @@ func main() {
 	r.HandleFunc(fmt.Sprintf("/%s/%s/questiontype/list",REV,ROOTPATH), api.GetQuestionTypesHttpHandler).Methods("GET")
 	
 	//Applications
-	r.HandleFunc(fmt.Sprintf("/%s/%s/application",REV,ROOTPATH), api.UpsertApplicationHttpHandler).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/%s/application",REV,ROOTPATH), api.CreateApplicationHttpHandler).Methods("POST")
 	
-	r.HandleFunc(fmt.Sprintf("/%s/%s/application",REV,ROOTPATH), api.UpsertApplicationHttpHandler).Methods("PUT")
+	r.HandleFunc(fmt.Sprintf("/%s/%s/application",REV,ROOTPATH), api.SaveApplicationHttpHandler).Methods("PUT")
 	
-	r.HandleFunc(fmt.Sprintf("/%s/%s/application/list/{partnerId}",REV,ROOTPATH), api.GetApplicationsByPartnerIdHttpHandler).Methods("GET")
-	
-	r.HandleFunc(fmt.Sprintf("/%s/%s/application/{applicationId}",REV,ROOTPATH), api.GetApplicationHttpHandler).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/%s/application/submit",REV,ROOTPATH), api.SubmitApplicationHttpHandler).Methods("POST")
+
+	r.HandleFunc(fmt.Sprintf("/%s/%s/application/list/{profileId}",REV,ROOTPATH), api.GetApplicationsByProfileIdHttpHandler).Methods("GET")
 	
 	r.HandleFunc(fmt.Sprintf("/%s/%s/application/{applicationId}",REV,ROOTPATH), api.DeleteApplicationHttpHandler).Methods("DELETE")
 
+	//draft
+	r.HandleFunc(fmt.Sprintf("/%s/%s/application/draft/list/{profileId}",REV,ROOTPATH), api.GetDraftsByProfileIdHttpHandler).Methods("GET")
+
+	r.HandleFunc(fmt.Sprintf("/%s/%s/application/draft/{applicationId}",REV,ROOTPATH), api.DeleteDraftHttpHandler).Methods("DELETE")
+	
+	//assets
 	r.PathPrefix(fmt.Sprintf("/%s/%s/",REV,ROOTPATH)).Handler(http.StripPrefix(fmt.Sprintf("/%s/%s/",REV,ROOTPATH), http.FileServer(http.Dir("./assets"))))
 	
 	//http.Handle(fmt.Sprintf("/%s/%s/",REV,ROOTPATH), r)

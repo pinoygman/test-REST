@@ -38,6 +38,7 @@ RUN go get github.com/gorilla/mux
 RUN go get github.com/rs/cors
 RUN go get github.com/lib/pq
 RUN go get github.com/jmoiron/sqlx
+RUN go get gopkg.in/redis.v4
 RUN make
 RUN ls -al && ls /{DIST} -al && pwd
 #RUN chmod +x $GOPATH/src/{DHOME}

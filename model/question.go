@@ -14,16 +14,16 @@ package model
 
 import (
 	"fmt"
-	"os"
+	//"os"
 	"strconv"
 	"github.com/pborman/uuid"
 	_ "encoding/json"
 	_ "github.com/lib/pq"
 	//"database/sql"
-	"github.com/jmoiron/sqlx"
+	//"github.com/jmoiron/sqlx"
 	sqltypes "github.com/jmoiron/sqlx/types"
-	"log"
-	"strings"
+	//"log"
+	//"strings"
 )
 
 //question type
@@ -49,24 +49,9 @@ type Question struct {
 var (
 	questionnaire map[string]*Question
 	questionTypes map[string]string
-	db *sqlx.DB
 )
 
 func init(){
-
-	_ref:=""
-	if _ref=os.Getenv("SQLDSN");_ref=="" {
-		_ref="host=localhost|port=7990|user=uc49c9583047d4173a217667509e17ddf|password=fb46202694704a7d994dd8e906666e6c|dbname=d13291d5f50c645f5b90d26b8a58e2f6b|connect_timeout=5|sslmode=disable"
-	}
-	
-	_conn:=strings.Replace(_ref,"|"," ",-1)
-	op, err := sqlx.Connect("postgres",_conn)
-	
-	if err != nil {
-		log.Fatalln(err)
-	}
-	
-	db=op
 
 	questionnaire=make(map[string]*Question)
 	questionTypes=map[string]string{

@@ -12,9 +12,19 @@
 
 package model
 
-import (	
+import (
+	"github.com/cloudfoundry-community/go-cfenv"
+	"fmt"
+	"encoding/json"
+	"time"
 	"github.com/pborman/uuid"
+	"gopkg.in/redis.v4"
+	"github.com/jmoiron/sqlx"
+	sqltypes "github.com/jmoiron/sqlx/types"
 	"errors"
+	"log"
+	"os"
+	"strings"
 )
 
 //question type
@@ -23,112 +33,236 @@ const (
 )
 
 type Application struct {
-	Guid            string              `json:"_id"`
-	ProfileId       string              `json:"profileId"`
-	Name            string              `json:"name"`
-	//Title           string              `json:"title"`
-	//Desc            string              `json:"description"`
-	//Type            uint8               `json:"type"`  //question type
-	Answers         map[string]Answer   `json:"answers"`
-	AppStatus          string           `json:"status"`
+	Guid              string                  `json:"_id"`
+	ProfileId         string                  `json:"profileId"`
+	Name              string                  `json:"name"`
+	Answers           sqltypes.JSONText       `json:"answers"`
+	Notification      sqltypes.JSONText       `json:"notification"`
+	CreatedDate       time.Time               `json:"created_date"`
+	ModifiedDate      time.Time               `json:"modified_date"`
+	ModifiedBy        string                  `json:"modified_by"`
+	Status            string                  `json:"status"`
 }
 
 var (
-	//questionnaires map[string]Questionnaire
-	applications map[string]interface{}
+	client    *redis.Client
+	db        *sqlx.DB
 )
 
 func init(){
 	
-	applications=make(map[string]interface{})
 
-}
-
-func GetApplicationsByPartnerId(pId string) (map[string]*Application,error){
-
-	//op:=make(map[string]*Application)
-	
-	return applications[pId].(map[string]*Application), nil
-
-}
-
-func GetApplication(guid string) (*Application, error){
-
-	for _, l := range applications {
-		v:=l.(map[string]*Application)
-		if a:=v[guid];a!=nil {
-			return a,nil
-		}
-	}
-
-	return nil, errors.New("application does not exist.")
+	//init redis client
 	
 }
-
 
 func (a *Application) Save() (*Application, error) {
 
-	/*
-	if services==nil {
-		sevrvices=make(map[string]PAEService)
-		fmt.Println("service list initialised.")
-	}
-
-	if k=="" {
-		p.Guid=uuid.New()
-	} else {
-		p.Guid=k
-	}
-	
-	services[p.Guid]=*p
-
-	b, _ := json.Marshal(services[p.Guid]);
-	
-	fmt.Println(string(b))
-	
-	err := client.Set(p.Guid, string(b), 0).Err()
-
-	//validate
-	e:=&PAEService{}
-	val, _ := client.Get(p.Guid).Result()
-	json.Unmarshal([]byte(val),e)
-	
-	//fmt.Println("err adding: ",err)
-	return e, err
-*/
-
-	if a.ProfileId=="" {
-		return nil, errors.New("partnerId's empty.")
-	}
-
-	//all applications belong to the partner
-	var ap interface{}
-
-	if ap=applications[a.ProfileId]; ap==nil {
-		ap=make(map[string]*Application)
-		applications[a.ProfileId]=ap
-	}
-	
 	if a.Guid=="" {
 		a.Guid=uuid.New()
-	}	
+	}
 
-	ref:=ap.(map[string]*Application)
+	_ea:=make(map[string]*Application)
+	
+	_b, err := client.Get(a.ProfileId).Result()
+	if err == redis.Nil {
+		//fmt.Println("key2 does not exists")
+		_ea=make(map[string]*Application)
+		
+	} else if err != nil {
+		return nil, err.(error)
+	} else {
 
-	//ref1:=a.
-	ref[a.Guid]=a
+		//fmt.Println(_b)
+		json.Unmarshal([]byte(_b),&_ea)
+
+		//fmt.Println(_ea)
+		if _ea==nil{
+			_ea=make(map[string]*Application)
+		}
+	}
 	
-	return ref[a.Guid],nil
-	
+	_ea[a.Guid]=a
+
+	b,_:=json.Marshal(_ea)
+	err2 := client.Set(CurrentProfile.ProfileId, string(b), 0).Err()
+
+	if err2!=nil{
+		return nil, err2
+	}
+
+	return a, nil
+
 }
 
 func (a *Application) Submit() (*Application,error){
+
+	fmt.Println(a)
+	
+	_ea:=make(map[string]*Application)
+	_b, err := client.Get(CurrentProfile.ProfileId).Result()
+	if err == redis.Nil {
+		return nil, errors.New("draft not found.")
+		
+	} else if err != nil {
+		return nil, err
+	} 
+
+	json.Unmarshal([]byte(_b),&_ea)
+
+	if _ea==nil{
+		return nil, errors.New("draft not found.")
+	}
+
+	if _ea[a.Guid]==nil {
+		return nil, errors.New("draft not found.")
+	}
+	
 	a.Save()
-	return applications[a.ProfileId].(map[string]*Application)[a.Guid],nil
+	
+	tx := db.MustBegin()
+
+	tx.MustExec(`INSERT INTO "pcs-application-tbl" (_id, profileid, name, answers, status, notification, modifieddate, modifiedby) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,a.Guid,a.ProfileId,a.Name,a.Answers,a.Status,a.Notification,a.ModifiedDate,a.ModifiedBy)
+
+	tx.Commit()
+
+	DeleteDraftById(a.Guid)
+	
+	return a, nil
 }
 
-func (a *Application) Del() (string,error){
+func InitRedis() error {
 
-	delete(applications[a.ProfileId].(map[string]*Application),a.Guid)
-	return "delete",nil
+	if cfEnv, err := cfenv.Current(); err != nil {
+		if err:=InitRedisClient("localhost","7991","8f5a2bd2-09db-4b6b-b6e7-2d191b07b11a");err!=nil{
+			return err
+		}
+		
+	} else {
+
+		for k, _:= range cfEnv.Services {
+			if strings.Contains(k,"redis") {
+				o:=cfEnv.Services[k][0].Credentials
+				err:=InitRedisClient(o["host"].(string),o["port"].(string),o["password"].(string))
+				if err!=nil {
+					return err
+				}
+			}
+		}
+		
+	}
+
+	return nil
+	
 }
+
+func InitRedisClient(_host string,_port string, _pwd string) error {
+
+	client = redis.NewClient(&redis.Options{
+		Addr:     fmt.Sprintf("%s:%s",_host,_port),
+		Password: _pwd,
+		DB:       0,
+	})
+
+	if _, err := client.Ping().Result();err!=nil{
+		return err
+	}
+
+	return nil
+}
+
+func InitPostgresSql() error {
+	_ref:=""
+	if _ref=os.Getenv("SQLDSN");_ref=="" {
+		_ref="host=localhost|port=7990|user=uc49c9583047d4173a217667509e17ddf|password=fb46202694704a7d994dd8e906666e6c|dbname=d13291d5f50c645f5b90d26b8a58e2f6b|connect_timeout=5|sslmode=disable"
+	}
+	
+	_conn:=strings.Replace(_ref,"|"," ",-1)
+	op, err := sqlx.Connect("postgres",_conn)
+	
+	if err != nil {
+		log.Fatalln(err)
+		return err
+	}
+	
+	db=op
+	return nil
+
+}
+
+func GetApplicationsByProfileId(pId string) ([]Application,error){
+	_ap := []Application{}
+	db.Select(&_ap, `SELECT _id as "guid", profileid, name, status, answers, notification,createddate, modifieddate, modifiedby FROM "pcs-application-tbl"`)// where "profileId"=$1`,pId)
+	//created_date, last_modifed,
+	return _ap,nil
+
+
+}
+
+func GetDraftsByProfileId(pId string) ([]Application ,error){
+
+	_ea:=make(map[string]*Application)
+	_b, err := client.Get(pId).Result()
+	if err == redis.Nil {
+		return nil, errors.New("draft not found 1.")
+		
+	} else if err != nil {
+		return nil, err
+	} 
+
+	json.Unmarshal([]byte(_b),&_ea)
+
+	if _ea==nil{
+		return nil, errors.New("draft not found 2")
+	}
+
+	var _a  []Application
+	for _, v := range _ea {
+		_a=append(_a,*v)
+	}
+	return _a,nil
+	
+}
+
+func DeleteDraftById(guid string) (error){
+
+	_ea:=make(map[string]*Application)
+	_b, err := client.Get(CurrentProfile.ProfileId).Result()
+	if err == redis.Nil {
+		return errors.New("draft not found 1.")
+		
+	} else if err != nil {
+		return err
+	} 
+
+	json.Unmarshal([]byte(_b),&_ea)
+
+	delete(_ea,guid)
+	
+	_v,_:=json.Marshal(_ea)
+
+	err2 := client.Set(CurrentProfile.ProfileId, string(_v), 0).Err()
+
+	if err2!=nil{
+		return err2
+	}
+
+	return nil
+}
+
+
+func DeleteApplicationById(guid string) (error){
+
+	if err:=DeleteDraftById(guid);err!=nil{
+		return err
+	}
+
+	tx := db.MustBegin()
+
+	tx.MustExec(`DELETE FROM "pcs-application-tbl" WHERE _id=$1`,guid)
+	
+	tx.Commit()
+
+	return nil
+}
+

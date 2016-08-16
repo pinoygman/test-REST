@@ -22,21 +22,34 @@ import (
 	"io/ioutil"
 )
 
-func GetApplicationsByPartnerIdHttpHandler(w http.ResponseWriter, r *http.Request){
+func InitServices() error {
+	if err:=model.InitRedis();err!=nil {
+		return err
+	}
+	
+	if err:=model.InitPostgresSql();err!=nil {
+		return err
+	}
+
+	return nil
+
+}
+
+func GetApplicationsByProfileIdHttpHandler(w http.ResponseWriter, r *http.Request){
 
 	w.Header().Set("Content-Type", "application/json")
 
 	vars := mux.Vars(r)
-	key := vars["partnerId"]
+	key := vars["profileId"]
 
-	_ref,err:=model.GetApplicationsByPartnerId(key)
+	_ref,err:=model.GetApplicationsByProfileId(key)
 
 	if err != nil {
 		fmt.Sprintf("err: %s", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(`{"err":`+err.Error()+`}`))
 		
-		fmt.Fprint(w, "get applications service error.")
+		fmt.Fprint(w, "get applications list error.")
 		return
 	}
 
@@ -46,26 +59,24 @@ func GetApplicationsByPartnerIdHttpHandler(w http.ResponseWriter, r *http.Reques
 	w.Write(_str)	
 }
 
-func GetApplicationHttpHandler(w http.ResponseWriter, r *http.Request){
+func GetDraftsByProfileIdHttpHandler(w http.ResponseWriter, r *http.Request){
 
 	w.Header().Set("Content-Type", "application/json")
 
 	vars := mux.Vars(r)
-	ak := vars["applicationId"]
-	//pk := vars["partnerId"]
+	key := vars["profileId"]
 
-	//_ref, err:=model.GetApplication(ak,pk)
-	_ref, err:=model.GetApplication(ak)
+	_ref,err:=model.GetDraftsByProfileId(key)
 
 	if err != nil {
 		fmt.Sprintf("err: %s", err)
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(`{"err":`+err.Error()+`}`))
+		w.Write([]byte(`{"err":"`+err.Error()+`"}`))
 		
-		fmt.Fprint(w, "GET application service error.")
+		fmt.Fprint(w, "get applications list error.")
 		return
 	}
-	
+
 	_str,err:=json.Marshal(_ref)
 	
 	w.WriteHeader(http.StatusOK)
@@ -86,7 +97,6 @@ func SubmitApplicationHttpHandler(w http.ResponseWriter, r *http.Request){
 	if err!=nil {
 		w.Write([]byte(`{"err": "`+err.Error()+`"}`))
 		return
-
 	}
 	
 	j, _ := json.Marshal(s)
@@ -94,7 +104,30 @@ func SubmitApplicationHttpHandler(w http.ResponseWriter, r *http.Request){
 
 }
 
-func UpsertApplicationHttpHandler(w http.ResponseWriter, r *http.Request) {
+func CreateApplicationHttpHandler(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "application/json")
+	
+	p:=&model.Application{}
+	b, _ := ioutil.ReadAll(r.Body)
+
+	
+	json.Unmarshal(b, p)
+
+	p.Guid=""
+	s,err:=p.Save()
+	
+	if err!=nil{
+		w.Write([]byte(`{"err": "`+err.Error()+`"}`))
+		return 
+	}
+
+	j, _ := json.Marshal(s)
+	w.Write(j)
+	
+}
+
+func SaveApplicationHttpHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	
@@ -122,18 +155,37 @@ func DeleteApplicationHttpHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key := vars["applicationId"]
 
-	_ref,_:=model.GetApplication(key)
-
-	_,err:=_ref.Del()
+	err :=model.DeleteApplicationById(key)
 	
 	if err != nil {
 		fmt.Sprintf("err: %s", err)
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(`{"err":`+err.Error()+`}`))
+		w.Write([]byte(`{"err":"`+err.Error()+`"}`))
 		fmt.Fprint(w, "delete application error.")
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"status": "application `+key+` has been deleted."`))
+	w.Write([]byte(`{"status": "application `+key+` has been deleted."}`))
+}
+
+func DeleteDraftHttpHandler(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "application/json")
+
+	vars := mux.Vars(r)
+	key := vars["applicationId"]
+
+	err :=model.DeleteDraftById(key)
+	
+	if err != nil {
+		fmt.Sprintf("err: %s", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{"err":"`+err.Error()+`"}`))
+		fmt.Fprint(w, "delete application error.")
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(`{"status": "application `+key+` has been deleted."}`))
 }
