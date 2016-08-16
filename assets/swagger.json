@@ -124,8 +124,8 @@
 	},
 	"/application":{
 	    "post": {
-		"summary": "create an application",
-		"description": "create a new application.\n",
+		"summary": "create an appliaction draft",
+		"description": "create a new draft.\n",
 		"tags": [
 		    "Application"
 		],
@@ -173,8 +173,8 @@
 		}
 	    },
 	    "put": {
-		"summary": "update an application",
-		"description": "update an application.\n",
+		"summary": "update an application draft",
+		"description": "update an application draft.\n",
 		"tags": [
 		    "Application"
 		],
@@ -596,8 +596,33 @@
 		    }
 		}
 	    }
+	},
+	"/email": {
+	    "post": {
+		"summary": "send an email",
+		"description": "send an email.\n",
+		"tags": [
+		    "Email"
+		],
+		
+		"parameters": [
+		    {
+			"name": "body",
+			"in": "body",
+			"schema": {
+			    "type": "object",
+			    "$ref": "#/definitions/Email"
+			}
+		    }	
+		],
+		"responses": {
+		    "200": {
+			"description": "successful retrieve current profile"
+			
+		    }
+		}
+	    }
 	}
-
     },
     "definitions": {
 	"Application": {
@@ -737,6 +762,36 @@
 		},
 		"fields": {
 		    "type": "string"
+		}
+	    }
+	},
+	"Email":{
+	    "type":"object",
+	    "properties":{
+		"from":{
+		    "type":"string"
+		},
+		"to":{
+		    "type":"string"
+		},
+		"cc":{
+		    "type":"string"
+		},
+		"bcc":{
+		    "type":"string"
+		},
+		"subject":{
+		    "type":"string"
+		},
+		"msg":{
+		    "type":"string"
+		},
+		"attachment":{
+		    "type":"array",
+		    "items":{
+			"type":"string",
+			"description":"docId"
+		    }
 		}
 	    }
 	}
