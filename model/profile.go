@@ -14,7 +14,7 @@
 package model
 
 import (
-
+	_ "fmt"
 )
 
 //question type
@@ -33,4 +33,14 @@ type Profile struct {
 
 var (
 	//questionnaires map[string]Questionnaire
+	CurrentProfile    * Profile 
 )
+
+func init(){
+	CurrentProfile=&Profile{
+		ProfileId:"sentochihirono_kamikakushi",
+		Name:"千と千尋の神隠し",
+		Email:"chia.chang@ge.com",
+		SFDCId:"299a0979-d06b-4796-a329-7b5d4d3abf20",
+	}
+}
