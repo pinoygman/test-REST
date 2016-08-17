@@ -45,13 +45,13 @@ func send(){
 	// Connect to the server, authenticate, set the sender and recipient,
 	// and send the email all in one step.
 	//to := []string{"chia.chang@ge.com","Subba.Vadrevu@ge.com","subrata.saha@ge.com","Javier.Carbajal.Ramirez@ge.com"}
-	to := []string{"chia.chang@ge.com"}
+	to := []string{" PCS-Portal-Development@ge.com"}
 	msg := []byte("To: PCS-Portal-Development@ge.com; \r\n" +
 		"Subject: Chia test SMTP for PCS Onboarding Portal #3\r\n" +
 		"\r\n" +
 		"This is a test email sent from the Predix Select. #3\r\n")
 	//err := smtp.SendMail("rssmtp-212359746.run.aws-usw02-pr.ice.predix.io:80", auth, "chia.chang@ge.com", to, msg)
-	err := smtp.SendMail("localhost:31373", auth, "chia.chang@ge.com", to, msg)
+	err := smtp.SendMail("localhost:31373", auth, "pcs-onboarding-team-DoNotReply@ge.com", to, msg)
 	if err != nil {
 		fmt.Println(err)
 		//log.Fatal(err)
