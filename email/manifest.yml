@@ -1,0 +1,12 @@
+---
+applications:
+  - name: pcs-backend-${ENV}
+    memory: 1G
+    instances: 1
+    stack: cflinuxfs2
+    path: .
+    command: ./smtp.sh
+    buildpack: https://github.com/cloudfoundry/buildpack-nodejs.git
+    env:
+       SQLDSN {SQLDSN}
+       ARTIFACT {ARTIFACT}

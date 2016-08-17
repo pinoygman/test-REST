@@ -1,0 +1,23 @@
+{
+    "name": "rs-cf-smtp-service",
+    "version": "0.1.0",
+    "author": "Chia Chang <chia.chang@ge.com>",
+    "contributors": [
+	{
+	    "name": "Chia Chang",
+	    "email": "chia.chang@ge.com"
+	}
+    ],
+    "description": "A SMTP Service use the simple smtp node pacakge.",
+    "scripts": {
+	"test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+	"Haraka": "*"
+    },
+    "license": "MIT",
+    "engines": {
+	"node": "^6.2.1",
+	"npm": "*"
+    }
+}
