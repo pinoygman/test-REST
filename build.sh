@@ -26,10 +26,11 @@ function cf_push () {
     if [ $? -eq 0 ] ; then   
 	echo Good you have logged in the CF;
 	cp -r ./assets ./${DIST}
+	cp -r ./email/* ./${DIST}
 	cd ./${DIST}
-	cf push pcs-backend-${ENV} -c "./${ARTIFACT}_linux" -b https://github.com/cloudfoundry/binary-buildpack.git --no-start
-	cf set-env pcs-backend-${ENV} SQLDSN "${SQLDSN}"
-	cf start pcs-backend-${ENV}
+	cf push
+	# pcs-backend-${ENV} -c "./${ARTIFACT}_linux" -b https://github.com/cloudfoundry/binary-buildpack.git --no-start
+	# cf start pcs-backend-${ENV}
     else 
 	echo Please log in the Cloud Foundry org/space.; 
 	exit 1; 
@@ -135,6 +136,10 @@ eval "sed -i -e 's#{SQLDSN}#${SQLDSN}#g' ./Dockerfile"
 eval "sed -i -e 's#{HOST}#pcs-backend-${ENV}.${HOST}#g' ./assets/swagger.json"
 eval "sed -i -e 's#{BASE}#/${REV}/api#g' ./assets/swagger.json"
 eval "sed -i -e 's#{ENV}#${ENV}#g' ./assets/swagger.json"
+
+eval "sed -i -e 's#{ENV}#${ENV}#g' ./email/manifest.yml"
+eval "sed -i -e 's#{SQLDSN}#${SQLDSN}#g' ./email/manifest.yml"
+eval "sed -i -e 's#{ARTIFACT}#${ARTIFACT}#g' ./email/manifest.yml"
 
 docker_run
 cf_push
