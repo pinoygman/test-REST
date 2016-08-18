@@ -35,13 +35,13 @@ const (
 type Application struct {
 	Guid              string                  `json:"_id"`
 	ProfileId         string                  `json:"profileId"`
-	Name              string                  `json:"name"`
+	Name              string                  `json:"applicationName"`
 	Answers           sqltypes.JSONText       `json:"answers"`
 	Notification      sqltypes.JSONText       `json:"notification"`
 	CreatedDate       time.Time               `json:"created_date"`
 	ModifiedDate      time.Time               `json:"modified_date"`
 	ModifiedBy        string                  `json:"modified_by"`
-	Status            string                  `json:"status"`
+	Status            string                  `json:"applicationStatus"`
 }
 
 var (
@@ -66,8 +66,9 @@ func (a *Application) Save() (*Application, error) {
 	
 	_b, err := client.Get(a.ProfileId).Result()
 	if err == redis.Nil {
-		//fmt.Println("key2 does not exists")
-		_ea=make(map[string]*Application)
+		fmt.Println("key does not exist in redis")
+		//do nothing
+		//_ea=make(map[string]*Application)
 		
 	} else if err != nil {
 		return nil, err.(error)
@@ -168,6 +169,8 @@ func InitRedisClient(_host string,_port string, _pwd string) error {
 		return err
 	}
 
+	InitQuestionType()
+	
 	return nil
 }
 
