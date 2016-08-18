@@ -17,7 +17,7 @@ import (
 	"net/smtp"
 	"strings"
 	"encoding/base64"
-	"github.build.ge.com/predixsolutions/catalog-onboarding-backend/utils"
+	//"github.build.ge.com/predixsolutions/catalog-onboarding-backend/utils"
 )
 
 var (
@@ -56,7 +56,8 @@ func (e *Email) Send() (*Email, error){
 	header["From"] = e.From
 	header["To"] = e.To
 	header["Cc"] = e.Cc
-	header["Subject"] = utils.EncodeRFC2047(e.Subject)
+	//RFC 2047 for localisation
+	header["Subject"] = e.Subject//utils.EncodeRFC2047(e.Subject)
 	header["MIME-Version"] = "1.0"
 	header["Content-Type"] = "text/plain; charset=\"utf-8\""
 	header["Content-Transfer-Encoding"] = "base64"
