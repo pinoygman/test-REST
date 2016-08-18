@@ -30,7 +30,7 @@ func SendMailApplicationHttpHandler(w http.ResponseWriter, r *http.Request){
 
 	//auth := smtp.PlainAuth("", "raasuser", "helloraas", "localhost")
 
-	p:=model.InitEmail("",os.Getenv("HUSER"),os.Getenv("HPWD"),os.Getenv("HHOST"),os.Getenv("HSHOST"))
+	p:=model.InitEmail("",os.Getenv("HUSER"),os.Getenv("HPWD"),os.Getenv("HSHOST"),os.Getenv("HHOST"))
 	
 	b, _ := ioutil.ReadAll(r.Body)
 	
