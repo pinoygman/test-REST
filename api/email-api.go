@@ -20,7 +20,7 @@ import (
 	//"fmt"
 	"io/ioutil"
 	//"strconv"
-	//"github.com/cloudfoundry-community/go-cfenv"
+	"github.com/cloudfoundry-community/go-cfenv"
 	"os"
 )
 
@@ -28,14 +28,17 @@ func SendMailApplicationHttpHandler(w http.ResponseWriter, r *http.Request){
 
 	w.Header().Set("Content-Type", "application/json")
 
-	//auth := smtp.PlainAuth("", "raasuser", "helloraas", "localhost")
-
-	p:=model.InitEmail("",os.Getenv("HUSER"),os.Getenv("HPWD"),os.Getenv("HSHOST"),os.Getenv("HHOST"))
+	p:=&model.Email{}
+	if _, err := cfenv.Current(); err != nil {
+		p=model.InitEmail("","raasuser","helloraas","localhost:31373","localhost")
+	} else {
+		p=model.InitEmail("",os.Getenv("HUSER"),os.Getenv("HPWD"),os.Getenv("HSHOST"),os.Getenv("HHOST"))
+	}
 	
 	b, _ := ioutil.ReadAll(r.Body)
 	
 	json.Unmarshal(b, p)
-
+	
 	if _, err:=p.Send();err!=nil {
 		w.Write([]byte(`{"err": "`+err.Error()+`"}`))
 		return
