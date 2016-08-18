@@ -68,6 +68,10 @@ function readinputs () {
 	printf "   %-*s\n" 10 "-org  | cf org"
 	printf "   %-*s\n" 10 "-spc  | cf space"
 	printf "   %-*s\n" 10 "-sql  | postgresSql constr"
+	printf "   %-*s\n" 10 "-husr | haraka user"
+	printf "   %-*s\n" 10 "-hpwd | haraka pwd"
+	printf "   %-*s\n" 10 "-hhst | haraka host"
+	printf "   %-*s\n" 10 "-hsht | haraka smtp host"
     else
 	for ((i = 1; i <=$#; i++));
 	do
@@ -102,6 +106,18 @@ function readinputs () {
 		    ;;
 		-sql)
 		    SQLDSN=${@:i+1:1}
+		    ;;
+		-husr)
+		    HUSER=${@:i+1:1}
+		    ;;
+		-hpwd)
+		    HPWD=${@:i+1:1}
+		    ;;
+		-hhst)
+		    HHOST=${@:i+1:1}
+		    ;;
+		-hsht)
+		    HSHOST=${@:i+1:1}
 		    ;;
 		*)
 		    #echo "Invalid option ${@:i:1}"
@@ -140,6 +156,10 @@ eval "sed -i -e 's#{ENV}#${ENV}#g' ./assets/swagger.json"
 eval "sed -i -e 's#{ENV}#${ENV}#g' ./email/manifest.yml"
 eval "sed -i -e 's#{SQLDSN}#${SQLDSN}#g' ./email/manifest.yml"
 eval "sed -i -e 's#{ARTIFACT}#${ARTIFACT}#g' ./email/manifest.yml"
+eval "sed -i -e 's#{HUSER}#${HUSER}#g' ./email/manifest.yml"
+eval "sed -i -e 's#{HPWD}#${HPWD}#g' ./email/manifest.yml"
+eval "sed -i -e 's#{HHOST}#${HHOST}#g' ./email/manifest.yml"
+eval "sed -i -e 's#{HSHOST}#${HSHOST}#g' ./email/manifest.yml"
 
 docker_run
 cf_push
