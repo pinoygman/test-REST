@@ -43,6 +43,53 @@ func GetQuestionTypesHttpHandler(w http.ResponseWriter, r *http.Request){
 	w.Write(_str)
 }
 
+func DeleteQuestionTypeHttpHandler(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "application/json")
+
+	vars := mux.Vars(r)
+	key := vars["questionTypeId"]
+	
+	err:=model.DeleteQuestionTypeById(key)
+
+	if err != nil {
+		fmt.Sprintf("err: %s", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{"err":`+err.Error()+`}`))
+		fmt.Fprint(w, "delete question type error.")
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(`{"status": "question type `+key+` has been deleted."}`))
+	return
+}
+
+func AddQuestionTypeHttpHandler(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "application/json")
+
+	p:=map[string]string{}
+	b, _ := ioutil.ReadAll(r.Body)
+	
+	json.Unmarshal(b, &p)
+
+	for k, v:= range p {
+		_,err:=model.AddQuestionType(k,v)
+
+		if err != nil {
+			fmt.Sprintf("err: %s", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(`{"err":`+err.Error()+`}`))
+			fmt.Fprint(w, "Add question type error.")
+			return
+		}
+	}	
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(`{"status": "question type has been added."}`))
+	return
+}
 
 func GetQuestionsHttpHandler(w http.ResponseWriter, r *http.Request){
 

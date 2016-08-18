@@ -33,7 +33,7 @@
 			"in": "body",
 			"required": true,
 			"type": "string",
-			"description":"token from predix.io UAA"
+			"description": "token from predix.io UAA"
 		    }
 		],
 		"responses": {
@@ -137,7 +137,7 @@
 		}
 	    }
 	},
-	"/application":{
+	"/application": {
 	    "post": {
 		"summary": "create an appliaction draft",
 		"description": "create a new draft.\n",
@@ -201,26 +201,25 @@
 			    "type": "object",
 			    "$ref": "#/definitions/Application"
 			}
-		    }	
+		    }
 		],
 		"responses": {
 		    "200": {
 			"description": "successful update an application",
 			"schema": {
 			    "type": "object",
-			    "$ref":"#/definitions/Application"
+			    "$ref": "#/definitions/Application"
 			}
 		    },
 		    "501": {
 			"description": "Unexpected error",
 			"schema": {
-			    "type":"object",
+			    "type": "object",
 			    "$ref": "#/definitions/Error"
 			}
 		    }
 		}
 	    }
-
 	},
 	"/application/{appId}": {
 	    "delete": {
@@ -266,14 +265,14 @@
 			    "type": "object",
 			    "$ref": "#/definitions/Application"
 			}
-		    }	
+		    }
 		],
 		"responses": {
 		    "200": {
 			"description": "successful submitted an application",
 			"schema": {
 			    "type": "object",
-			    "$ref":"#/definitions/Application"
+			    "$ref": "#/definitions/Application"
 			}
 		    },
 		    "default": {
@@ -480,6 +479,73 @@
 		}
 	    }
 	},
+	"/questiontype/{questionTypeId}": {
+	    "delete": {
+		"summary": "delete a question type",
+		"description": "delete an existing question type.",
+		"tags": [
+		    "Question Type"
+		],
+		"parameters": [
+		    {
+			"name": "questionTypeId",
+			"in": "path",
+			"required": true,
+			"type": "string"
+		    }
+		],
+		"responses": {
+		    "200": {
+			"description": "delete successful.",
+			"type": "string"
+		    },
+		    "default": {
+			"description": "Unexpected error",
+			"schema": {
+			    "$ref": "#/definitions/Error"
+			}
+		    }
+		}
+	    }
+	},
+	"/questiontype": {
+	    "post": {
+		"summary": "create a question type",
+		"description": "Create a new question type.",
+		"tags": [
+		    "Question Type"
+		],
+		"parameters": [
+		    {
+			"name": "body",
+			"in": "body",
+			"schema": {
+			    "type": "object",
+			    "properties": {
+				"questionTypeId": {
+				    "type": "string"
+				},
+				"questionType": {
+				    "type": "string"
+				}
+			    }
+			}
+		    }
+		],
+		"responses": {
+		    "200": {
+			"description": "Question details",
+			"type": "string"
+		    },
+		    "default": {
+			"description": "Unexpected error",
+			"schema": {
+			    "$ref": "#/definitions/Error"
+			}
+		    }
+		}
+	    }
+	},
 	"/document/list": {
 	    "get": {
 		"summary": "get a list of documents",
@@ -619,7 +685,6 @@
 		"tags": [
 		    "Email"
 		],
-		
 		"parameters": [
 		    {
 			"name": "body",
@@ -628,12 +693,11 @@
 			    "type": "object",
 			    "$ref": "#/definitions/Email"
 			}
-		    }	
+		    }
 		],
 		"responses": {
 		    "200": {
 			"description": "successful retrieve current profile"
-			
 		    }
 		}
 	    }
@@ -649,22 +713,22 @@
 		"profileId": {
 		    "type": "string"
 		},
-		"name": {
+		"applicatiinName": {
 		    "type": "string"
 		},
-		"notification":{
+		"notification": {
 		    "type": "object",
 		    "$ref": "#/definitions/Notification"
 		},
-		"created_date":{
+		"created_date": {
 		    "type": "string",
-		    "format":"date-time"
+		    "format": "date-time"
 		},
-		"modified_date":{
+		"modified_date": {
 		    "type": "string",
-		    "format":"date-time"
+		    "format": "date-time"
 		},
-		"modified_by":{
+		"modified_by": {
 		    "type": "string"
 		},
 		"answers": {
@@ -676,7 +740,7 @@
 			}
 		    }
 		},
-		"status": {
+		"applicationStatus": {
 		    "type": "string"
 		}
 	    }
@@ -697,7 +761,13 @@
 		    "type": "string"
 		},
 		"type": {
+		    "type": "integer"
+		},
+		"status": {
 		    "type": "string"
+		},
+		"priority":{
+		    "type": "integer"
 		},
 		"answerOptions": {
 		    "type": "object"
@@ -709,9 +779,9 @@
 	    "properties": {
 		"_questionTypeId": {
 		    "type": "array",
-		    "items":{
+		    "items": {
 			"type": "string",
-			"description":"email"
+			"description": "email"
 		    }
 		}
 	    }
@@ -780,32 +850,32 @@
 		}
 	    }
 	},
-	"Email":{
-	    "type":"object",
-	    "properties":{
-		"from":{
-		    "type":"string"
+	"Email": {
+	    "type": "object",
+	    "properties": {
+		"from": {
+		    "type": "string"
 		},
-		"to":{
-		    "type":"string"
+		"to": {
+		    "type": "string"
 		},
-		"cc":{
-		    "type":"string"
+		"cc": {
+		    "type": "string"
 		},
-		"bcc":{
-		    "type":"string"
+		"bcc": {
+		    "type": "string"
 		},
-		"subject":{
-		    "type":"string"
+		"subject": {
+		    "type": "string"
 		},
-		"body":{
-		    "type":"string"
+		"body": {
+		    "type": "string"
 		},
-		"attachment":{
-		    "type":"array",
-		    "items":{
-			"type":"string",
-			"description":"docId"
+		"attachment": {
+		    "type": "array",
+		    "items": {
+			"type": "string",
+			"description": "docId"
 		    }
 		}
 	    }
