@@ -36,29 +36,6 @@ const (
 	ROOTPATH string = "api"
 )
 
-func send(){
-
-	fmt.Println("..send email.")
-	// Set up authentication information.
-	auth := smtp.PlainAuth("", "raasuser", "helloraas", "localhost")
-
-	// Connect to the server, authenticate, set the sender and recipient,
-	// and send the email all in one step.
-	//to := []string{"chia.chang@ge.com","Subba.Vadrevu@ge.com","subrata.saha@ge.com","Javier.Carbajal.Ramirez@ge.com"}
-	to := []string{" PCS-Portal-Development@ge.com"}
-	msg := []byte("To: PCS-Portal-Development@ge.com; \r\n" +
-		"Subject: Chia test SMTP for PCS Onboarding Portal #3\r\n" +
-		"\r\n" +
-		"This is a test email sent from the Predix Select. #3\r\n")
-	//err := smtp.SendMail("rssmtp-212359746.run.aws-usw02-pr.ice.predix.io:80", auth, "chia.chang@ge.com", to, msg)
-	err := smtp.SendMail("localhost:31373", auth, "pcs-onboarding-team-DoNotReply@ge.com", to, msg)
-	if err != nil {
-		fmt.Println(err)
-		//log.Fatal(err)
-	}
-
-}
-
 func init(){
 	
 	s,err:=config.Init(SETTING)
@@ -76,8 +53,6 @@ func init(){
 
 func main() {
 
-	send()
-	
 	if REV=="" {
 		REV="v1"
 	}
@@ -124,9 +99,14 @@ func main() {
 
 	r.HandleFunc(fmt.Sprintf("/%s/%s/application/draft/{applicationId}",REV,ROOTPATH), api.DeleteDraftHttpHandler).Methods("DELETE")
 	
+	//email
+	r.HandleFunc(fmt.Sprintf("/%s/%s/email",REV,ROOTPATH), api.SendMailApplicationHttpHandler).Methods("POST")
+
 	//assets
 	r.PathPrefix(fmt.Sprintf("/%s/%s/",REV,ROOTPATH)).Handler(http.StripPrefix(fmt.Sprintf("/%s/%s/",REV,ROOTPATH), http.FileServer(http.Dir("./assets"))))
 	
+
+
 	//http.Handle(fmt.Sprintf("/%s/%s/",REV,ROOTPATH), r)
 	
 	//cfEnv, err := cfenv.Current()
