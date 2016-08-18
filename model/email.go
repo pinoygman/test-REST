@@ -13,6 +13,7 @@
 package model
 
 import (
+	"os"
 	"fmt"
 	"net/smtp"
 	"strings"
@@ -57,7 +58,7 @@ func (e *Email) Send() (*Email, error){
 	header["To"] = e.To
 	header["Cc"] = e.Cc
 	//RFC 2047 for localisation
-	header["Subject"] = e.Subject//utils.EncodeRFC2047(e.Subject)
+	header["Subject"] = e.Subject+" - "+os.Getenv("ARTIFACT")//utils.EncodeRFC2047(e.Subject)
 	header["MIME-Version"] = "1.0"
 	header["Content-Type"] = "text/plain; charset=\"utf-8\""
 	header["Content-Transfer-Encoding"] = "base64"
