@@ -10,3 +10,7 @@ applications:
     env:
        SQLDSN: {SQLDSN}
        ARTIFACT: {ARTIFACT}
+       HUSER: {HUSER}
+       HPWD: {HPWD}
+       HHOST: {HHOST}
+       HSHOST: {HSHOST}

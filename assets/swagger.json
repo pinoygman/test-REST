@@ -798,7 +798,7 @@
 		"subject":{
 		    "type":"string"
 		},
-		"msg":{
+		"body":{
 		    "type":"string"
 		},
 		"attachment":{
