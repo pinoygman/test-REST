@@ -22,7 +22,6 @@ import (
 	"github.com/cloudfoundry-community/go-cfenv"
 	"github.com/rs/cors"
 	//"log"
-	"net/smtp"
 )
 
 var (
