@@ -524,9 +524,6 @@
 			    "properties": {
 				"questionTypeId": {
 				    "type": "string"
-				},
-				"questionType": {
-				    "type": "string"
 				}
 			    }
 			}
