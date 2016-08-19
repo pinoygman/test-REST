@@ -39,6 +39,13 @@ RUN go get github.com/rs/cors
 RUN go get github.com/lib/pq
 RUN go get github.com/jmoiron/sqlx
 RUN go get gopkg.in/redis.v4
+RUN go get github.com/aws/aws-sdk-go/aws/request
+RUN go get github.com/aws/aws-sdk-go/aws
+RUN go get github.com/aws/aws-sdk-go/aws/credentials
+RUN go get github.com/aws/aws-sdk-go/aws/session
+RUN go get github.com/aws/aws-sdk-go/service/s3
+RUN go get github.com/aws/aws-sdk-go/service/s3/s3manager
+	
 RUN make
 RUN ls -al && ls /{DIST} -al && pwd
 #RUN chmod +x $GOPATH/src/{DHOME}

@@ -27,7 +27,7 @@ const (
 	DOCPATH = "./docs/"	
 )
 
-func UploadDocesHttpHandler(w http.ResponseWriter, r *http.Request){
+func UploadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 /*
 	w.Header().Set("Content-Type", "application/json")
 
@@ -46,3 +46,65 @@ func UploadDocesHttpHandler(w http.ResponseWriter, r *http.Request){
 	w.Write([]byte(`{"status": "ok","_docId":"`+uid+`"}`))
 */
 }
+
+func DeleteDocHttpHandler(w http.ResponseWriter, r *http.Request){
+/*
+	w.Header().Set("Content-Type", "application/json")
+
+	uid, err:=utils.RetrieveUpdateFile(r,DOCPATH); 
+
+	
+	if err != nil {
+		fmt.Sprintln("err: %s", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{"err":`+err.Error()+`}`))
+		
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(`{"status": "ok","_docId":"`+uid+`"}`))
+*/
+}
+
+func GetDocListHttpHandler(w http.ResponseWriter, r *http.Request){
+/*
+	w.Header().Set("Content-Type", "application/json")
+
+	uid, err:=utils.RetrieveUpdateFile(r,DOCPATH); 
+
+	
+	if err != nil {
+		fmt.Sprintln("err: %s", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{"err":`+err.Error()+`}`))
+		
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(`{"status": "ok","_docId":"`+uid+`"}`))
+*/
+}
+
+func DownloadDocHttpHandler(w http.ResponseWriter, r *http.Request){
+/*
+	w.Header().Set("Content-Type", "application/json")
+
+	uid, err:=utils.RetrieveUpdateFile(r,DOCPATH); 
+
+	
+	if err != nil {
+		fmt.Sprintln("err: %s", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{"err":`+err.Error()+`}`))
+		
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(`{"status": "ok","_docId":"`+uid+`"}`))
+*/
+}
+
+

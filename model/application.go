@@ -82,7 +82,14 @@ func (a *Application) Save() (*Application, error) {
 			_ea=make(map[string]*Application)
 		}
 	}
+
+	if a.CreatedDate.Equal(time.Time{}) {
+		a.CreatedDate=time.Now()
+	}
 	
+	a.ModifiedDate=time.Now()    
+	a.ModifiedBy=CurrentProfile.ProfileId
+
 	_ea[a.Guid]=a
 
 	b,_:=json.Marshal(_ea)
@@ -118,7 +125,7 @@ func (a *Application) Submit() (*Application,error){
 	if _ea[a.Guid]==nil {
 		return nil, errors.New("draft not found.")
 	}
-	
+
 	a.Save()
 	
 	tx := db.MustBegin()
