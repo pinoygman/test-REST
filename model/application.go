@@ -64,7 +64,7 @@ func (a *Application) Save() (*Application, error) {
 
 	_ea:=make(map[string]*Application)
 	
-	_b, err := client.Get(a.ProfileId).Result()
+	_b, err := client.Get(CurrentProfile.ProfileId).Result()
 	if err == redis.Nil {
 		fmt.Println("key does not exist in redis")
 		//do nothing
@@ -83,7 +83,9 @@ func (a *Application) Save() (*Application, error) {
 		}
 	}
 
-	if a.CreatedDate.Equal(time.Time{}) {
+	if _, ok := _ea[a.Guid]; ok {
+		a.CreatedDate=_ea[a.Guid].CreatedDate
+	} else {
 		a.CreatedDate=time.Now()
 	}
 	
