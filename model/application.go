@@ -13,7 +13,7 @@
 package model
 
 import (
-	"github.com/cloudfoundry-community/go-cfenv"
+	//"github.com/cloudfoundry-community/go-cfenv"
 	"fmt"
 	"encoding/json"
 	"time"
@@ -23,8 +23,8 @@ import (
 	sqltypes "github.com/jmoiron/sqlx/types"
 	"errors"
 	"log"
-	"os"
-	"strings"
+	//"os"
+	//"strings"
 )
 
 //question type
@@ -51,7 +51,6 @@ var (
 
 func init(){
 	
-
 	//init redis client
 	
 }
@@ -141,31 +140,6 @@ func (a *Application) Submit() (*Application,error){
 	return a, nil
 }
 
-func InitRedis() error {
-
-	if cfEnv, err := cfenv.Current(); err != nil {
-		if err:=InitRedisClient("localhost","7991","8f5a2bd2-09db-4b6b-b6e7-2d191b07b11a");err!=nil{
-			return err
-		}
-		
-	} else {
-
-		for k, _:= range cfEnv.Services {
-			if strings.Contains(k,"redis") {
-				o:=cfEnv.Services[k][0].Credentials
-				err:=InitRedisClient(o["host"].(string),fmt.Sprintf("%.0f",o["port"]),o["password"].(string))
-				if err!=nil {
-					return err
-				}
-			}
-		}
-		
-	}
-
-	return nil
-	
-}
-
 func InitRedisClient(_host string,_port string, _pwd string) error {
 
 	client = redis.NewClient(&redis.Options{
@@ -183,13 +157,8 @@ func InitRedisClient(_host string,_port string, _pwd string) error {
 	return nil
 }
 
-func InitPostgresSql() error {
-	_ref:=""
-	if _ref=os.Getenv("SQLDSN");_ref=="" {
-		_ref="host=localhost|port=7990|user=uc49c9583047d4173a217667509e17ddf|password=fb46202694704a7d994dd8e906666e6c|dbname=d13291d5f50c645f5b90d26b8a58e2f6b|connect_timeout=5|sslmode=disable"
-	}
-	
-	_conn:=strings.Replace(_ref,"|"," ",-1)
+func InitPostgresSql(_conn string) error {
+
 	op, err := sqlx.Connect("postgres",_conn)
 	
 	if err != nil {
