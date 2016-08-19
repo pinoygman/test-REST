@@ -42,9 +42,9 @@ const (
 type Document struct {
 	Guid        string                    `json:"_id"`
 	Label       string                    `json:"label"`
-	s           *session.Session
-	svc         *s3.S3
-	bucketName  string
+	S           *session.Session
+	Svc         *s3.S3
+	BucketName  string
 	//Title           string                    `json:"title"`
 	//Desc            string                    `json:"description"`
 	//Type            uint8                     `json:"type"`  //question type
@@ -80,9 +80,10 @@ func InitDoc(accessKeyID, secretAccessKey, bucketName, endpoint string) *Documen
 
 	return &Document{
 		Guid: uuid.New(),
-		s:          s,
-		svc:        svc,
-		bucketName: bucketName,
+		Label: "Untitled",
+		S:          s,
+		Svc:        svc,
+		BucketName: bucketName,
 	}
 
 }

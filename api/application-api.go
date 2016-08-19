@@ -22,19 +22,6 @@ import (
 	"io/ioutil"
 )
 
-func InitServices() error {
-	if err:=model.InitRedis();err!=nil {
-		return err
-	}
-	
-	if err:=model.InitPostgresSql();err!=nil {
-		return err
-	}
-
-	return nil
-
-}
-
 func GetApplicationsByProfileIdHttpHandler(w http.ResponseWriter, r *http.Request){
 
 	w.Header().Set("Content-Type", "application/json")

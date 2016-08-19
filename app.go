@@ -18,9 +18,11 @@ import (
 	"os"
 	config "github.build.ge.com/predixsolutions/catalog-onboarding-backend/config"
 	api "github.build.ge.com/predixsolutions/catalog-onboarding-backend/api"
+	model "github.build.ge.com/predixsolutions/catalog-onboarding-backend/model"
 	"github.com/gorilla/mux"
 	"github.com/cloudfoundry-community/go-cfenv"
 	"github.com/rs/cors"
+	"strings"
 	//"log"
 )
 
@@ -33,6 +35,22 @@ const (
 	SETTING = "./settings.json"
 	DOCPATH = "./docs/"
 	ROOTPATH string = "api"
+
+	PXBLOB = "predix-blobstore"
+	PXREDIS= "redis"
+	PXPSQL = "postgres"
+	
+	BACCESSKEYID     = "access_key_id"
+	BSECRETACCESSKEY = "secret_access_key"
+	BHOST            = "host"
+	BBOCKETNAME      = "bucket_name"
+
+	RHOST = "host"
+	RPORT = "port"
+	RPWD  = "password"
+
+	SDSN  = "dsn"
+		
 )
 
 func init(){
@@ -45,8 +63,6 @@ func init(){
 	}
 
 	conf=s
-	
-	_=api.InitServices()
 
 }
 
@@ -62,7 +78,6 @@ func main() {
 	})
 */
 
-	
 	r := mux.NewRouter()
 
 	//Profile
@@ -105,39 +120,76 @@ func main() {
 	//email
 	r.HandleFunc(fmt.Sprintf("/%s/%s/email",REV,ROOTPATH), api.SendMailApplicationHttpHandler).Methods("POST")
 
+	//document
+	r.HandleFunc(fmt.Sprintf("/%s/%s/document",REV,ROOTPATH), api.UploadDocHttpHandler).Methods("POST")	
+
+	r.HandleFunc(fmt.Sprintf("/%s/%s/document/{docId}",REV,ROOTPATH), api.DeleteDocHttpHandler).Methods("DELETE")
+
+	r.HandleFunc(fmt.Sprintf("/%s/%s/document/{docId}",REV,ROOTPATH), api.DownloadDocHttpHandler).Methods("GET")
+
+	r.HandleFunc(fmt.Sprintf("/%s/%s/document/{docId}",REV,ROOTPATH), api.GetDocListHttpHandler).Methods("GET")
+
+	r.HandleFunc(fmt.Sprintf("/%s/%s/document/list/{profileId}",REV,ROOTPATH), api.UpdateDocHttpHandler).Methods("PUT")
+	
 	//assets
 	r.PathPrefix(fmt.Sprintf("/%s/%s/",REV,ROOTPATH)).Handler(http.StripPrefix(fmt.Sprintf("/%s/%s/",REV,ROOTPATH), http.FileServer(http.Dir("./assets"))))
-	
 
-
-	//http.Handle(fmt.Sprintf("/%s/%s/",REV,ROOTPATH), r)
-	
-	//cfEnv, err := cfenv.Current()
-	_, err := cfenv.Current()
+	cfEnv, err := cfenv.Current()
 
 	if err != nil {
 		s:=fmt.Sprintf("err cloud foundry env. %s. running server as localhost:%s.", err,conf.Port)
 		fmt.Println(s)
+
+		//blobstore
+		api.InitDocApi("cf75ae68-2e02-4344-ba37-b85777f176a5-1","4d9a9c03-35c0-4848-af32-42cd4b377bdd","bucket-cf75ae68-2e02-4344-ba37-b85777f176a5", "store.gecis.io")
+
+		//redis
+		if err:=model.InitRedisClient("localhost","7991","8f5a2bd2-09db-4b6b-b6e7-2d191b07b11a");err!=nil{
+			panic(fmt.Sprintf("%v", err))
+		}
+		
+		//sql
+		if err:=model.InitPostgresSql("host=localhost port=7990 user=uc49c9583047d4173a217667509e17ddf password=fb46202694704a7d994dd8e906666e6c dbname=d13291d5f50c645f5b90d26b8a58e2f6b connect_timeout=5 sslmode=disable");err!=nil {
+			panic(fmt.Sprintf("%v", err))
+		}
+
 		http.ListenAndServe(":"+conf.Port,cors.Default().Handler(r))
 		
-		return	
+		return
+	}
+
+	for k, _:= range cfEnv.Services {
+		if strings.Contains(k,PXBLOB) {
+
+			_cred:=cfEnv.Services[k][0].Credentials
+			api.InitDocApi(_cred[BACCESSKEYID].(string),
+				_cred[BSECRETACCESSKEY].(string),
+				_cred[BBOCKETNAME].(string),
+				_cred[BHOST].(string),
+			)
+			
+			
+		}
+
+		if strings.Contains(k,PXREDIS) {
+			o:=cfEnv.Services[k][0].Credentials
+			err:=model.InitRedisClient(o[RHOST].(string),fmt.Sprintf("%.0f",o[RPORT]),o[RPWD].(string))
+			if err!=nil {
+				panic(fmt.Sprintf("%v", err))
+			}
+		}
+
+		if strings.Contains(k,PXPSQL) {
+			o:=cfEnv.Services[k][0].Credentials
+			err:=model.InitPostgresSql(o[SDSN].(string))
+			if err!=nil {
+				panic(fmt.Sprintf("%v", err))
+			}
+			
+		}
+
 	}
 
 	http.ListenAndServe(":"+os.Getenv("PORT"),cors.Default().Handler(r))
 
-	
-	/*
-	for k, _:= range cfEnv.Services {
-			if strings.Contains(k,"redis") {
-				op.Init(cfEnv.Services[k][0])	
-				p, _ :=json.Marshal(op)
-				fmt.Println("service.PAEService")
-				fmt.Println(string(p))
-				log.Fatal("Failed to start server, exiting...", http.ListenAndServe(":"+os.Getenv("PORT"), nil))
-				return
-			}
-		}
- 		
-	}
-*/
 }

@@ -368,6 +368,12 @@
 				},
 				"answerOptions": {
 				    "type": "object"
+				},
+				"status": {
+				    "type": "string"
+				},
+				"priority":{
+				    "type": "integer"
 				}
 			    }
 			}
