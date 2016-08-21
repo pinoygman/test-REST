@@ -57,7 +57,7 @@ func (d *Document) Create() (*Document, error) {
 	
 	tx := db.MustBegin()
 
-	tx.MustExec(`INSERT INTO "pcs-document-tbl" (_id, label, uploadid, filename) VALUES ($1, $2, $3, $4);`, d.Guid,d.Label,d.UploadId,d.FileName)
+	tx.MustExec(`INSERT INTO "pcs-document-tbl" (_id, label, uploadid, filename, createddate, createdby) VALUES ($1, $2, $3, $4, $5, $6);`, d.Guid,d.Label,d.UploadId,d.FileName, d.CreatedDate, d.CreatedBy)
 	
 	tx.Commit()
 
