@@ -127,9 +127,7 @@ func main() {
 
 	r.HandleFunc(fmt.Sprintf("/%s/%s/document/{docId}",REV,ROOTPATH), api.DownloadDocHttpHandler).Methods("GET")
 
-	r.HandleFunc(fmt.Sprintf("/%s/%s/document/{docId}",REV,ROOTPATH), api.GetDocListHttpHandler).Methods("GET")
-
-	r.HandleFunc(fmt.Sprintf("/%s/%s/document/list/{profileId}",REV,ROOTPATH), api.UpdateDocHttpHandler).Methods("PUT")
+	r.HandleFunc(fmt.Sprintf("/%s/%s/document/list",REV,ROOTPATH), api.GetDocListHttpHandler).Methods("GET")
 	
 	//assets
 	r.PathPrefix(fmt.Sprintf("/%s/%s/",REV,ROOTPATH)).Handler(http.StripPrefix(fmt.Sprintf("/%s/%s/",REV,ROOTPATH), http.FileServer(http.Dir("./assets"))))

@@ -16,15 +16,12 @@ package model
 import (
 	//"strings"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
 	//"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	//"github.com/gorilla/mux"
 	"github.com/pborman/uuid"
-	"github.build.ge.com/predixsolutions/catalog-onboarding-backend/utils"
-
+	//"github.build.ge.com/predixsolutions/catalog-onboarding-backend/utils"
+	_ "github.com/lib/pq"
+	"time"
 	//"log"
 	
 	//"fmt"
@@ -40,53 +37,66 @@ const (
 )
 
 type Document struct {
-	Guid        string                    `json:"_id"`
-	Label       string                    `json:"label"`
-	S           *session.Session
-	Svc         *s3.S3
-	BucketName  string
-	//Title           string                    `json:"title"`
-	//Desc            string                    `json:"description"`
-	//Type            uint8                     `json:"type"`  //question type
-	//AnswerOptions   []string                  `json:"answerOptions"`
-	//Answer           map[string]interface{}    `json:"answer"`
-	//FileList          []string                  `json:"filesList"`  //file guid
+	Guid              string                    `json:"_id"`
+	Label             string                    `json:"label"`
+	UploadId          string                    `json:"uploadId"`
+	FileName          string                    `json:"fileName"`
+	CreatedDate       time.Time                 `json:"created_date"`
+	CreatedBy         string                    `json:"created_by"`
 }
 
 var (
 	//questionnaires map[string]Questionnaire
 )
 
-func InitDoc(accessKeyID, secretAccessKey, bucketName, endpoint string) *Document {
-	
-	region := "us-east-1"
-	
-	disableSSL := true
-	logLevel := aws.LogDebugWithRequestErrors
-	awsConfig := aws.Config{
-		Credentials: credentials.NewStaticCredentials(accessKeyID, secretAccessKey, ""),
-		Region:      &region,
-		Endpoint:    &endpoint,
-		DisableSSL:  &disableSSL,
-		LogLevel:    &logLevel,
+func (d *Document) Create() (*Document, error) {
+
+	if d.Guid=="" {
+		d.Guid=uuid.New()
 	}
+	
+	tx := db.MustBegin()
 
-	s := session.New(&awsConfig)
+	tx.MustExec(`INSERT INTO "pcs-document-tbl" (_id, label, uploadid, filename) VALUES ($1, $2, $3, $4);`, d.Guid,d.Label,d.UploadId,d.FileName)
+	
+	tx.Commit()
 
-	svc := s3.New(s)
+	return d,nil
+}
 
-	svc.Handlers.Sign.Clear()
-	svc.Handlers.Sign.PushBack(utils.SignV2)
+func (d *Document) Load(_id string) (*Document, error){
+	doc := Document{}
+	err := db.Get(&doc, `SELECT _id, label, uploadid, filename, createddate, createdby FROM "pcs-document-tbl" where _id=$1;`,_id)
 
-	return &Document{
-		Guid: uuid.New(),
-		Label: "Untitled",
-		S:          s,
-		Svc:        svc,
-		BucketName: bucketName,
+	if err!=nil{
+		return nil,err
 	}
+	return &doc,nil	
+}
+
+func GetDocumentsByProfileId(pId string) ([]Document, error){
+	
+	_qs := []Document{}
+	db.Select(&_qs, `SELECT _id, label, uploadid, filename, createddate, createdby FROM "pcs-document-tbl" where createdby=$1;`,pId)
+
+	return _qs,nil
 
 }
+
+func DeleteDocById(guid string) (error){
+
+	tx := db.MustBegin()
+
+	tx.MustExec(`DELETE FROM "pcs-document-tbl" WHERE _id=$1`,guid)
+	
+	tx.Commit()
+	
+	return nil
+
+}
+
+
+
 
 
 

@@ -13,14 +13,16 @@
 package api
 
 import (
+	"encoding/json"
+	"errors"
+	"github.com/pborman/uuid"
 	"io"
 	"strings"
 	"log"
 	"fmt"
 	"net/http"
+	"time"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
-	"github.build.ge.com/predixsolutions/catalog-onboarding-backend/utils"
-	"github.build.ge.com/predixsolutions/catalog-onboarding-backend/model"
 	"github.com/aws/aws-sdk-go/service/s3"
 	//"github.build.ge.com/predixsolutions/catalog-onboarding-backend/utils"
 	//"encoding/json"
@@ -28,6 +30,12 @@ import (
 	//"fmt"
 	//"io/ioutil"
 	//"strconv"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.build.ge.com/predixsolutions/catalog-onboarding-backend/utils"
+	"github.build.ge.com/predixsolutions/catalog-onboarding-backend/model"
+
 )
 
 const (
@@ -36,20 +44,49 @@ const (
 )
 
 var (
-	_doc       *model.Document
+	_doc       *S3Api
 )
 
-func InitDocApi(accessKeyId, secretAccessKey, bucketName, endpoint string){
-	
-	_doc=model.InitDoc(accessKeyId, secretAccessKey, bucketName, endpoint)
+type S3Api struct {
+	S           *session.Session
+	Svc         *s3.S3
+	BucketName  string
+}
 
+func InitDocApi(accessKeyID, secretAccessKey, bucketName, endpoint string) {
+	
+	region := "us-east-1"
+	
+	disableSSL := true
+	logLevel := aws.LogDebugWithRequestErrors
+	awsConfig := aws.Config{
+		Credentials: credentials.NewStaticCredentials(accessKeyID, secretAccessKey, ""),
+		Region:      &region,
+		Endpoint:    &endpoint,
+		DisableSSL:  &disableSSL,
+		LogLevel:    &logLevel,
+	}
+
+	s := session.New(&awsConfig)
+
+	svc := s3.New(s)
+
+	svc.Handlers.Sign.Clear()
+	svc.Handlers.Sign.PushBack(utils.SignV2)
+
+	_doc=&S3Api{
+		S:          s,
+		Svc:        svc,
+		BucketName: bucketName,
+	}
 }
 
 func UploadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 
+	w.Header().Set("Content-Type", "application/json")
+
 	if strings.ToUpper(r.Header.Get("Content-Type")) == "MULTIPART/FORM-DATA" {
 
-		fmt.Println("start multipart")
 		r.ParseMultipartForm(32 << 20)
 		file, handler, err := r.FormFile(FILEID)
 		if err != nil {
@@ -65,49 +102,97 @@ func UploadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 		svc.Handlers.Sign.Clear()
 		svc.Handlers.Sign.PushBack(utils.SignV2)
 
+		_guid:=uuid.New()
+
 		result, err := uploader.Upload(&s3manager.UploadInput{
 			Body:   file,
 			Bucket: &_doc.BucketName,
-			Key:    &fileName,
+			Key:    &_guid,
 		})
 
 		if err != nil {
-			log.Println("Failed to upload.", "Error:", err)
+			str:=fmt.Sprintf("failed to upload data to %s with fileName %s", _doc.BucketName,  fileName)
+			ErrResponse(w,err,str)
+			return 
 		}
 
-		log.Println("Successfully uploaded data.", "FileName:", fileName, "uploadID:", result.UploadID)
-		fmt.Println("end multi end")
-		http.Redirect(w, r, "/", http.StatusFound)
-		return
+		pd:=&model.Document{
+			Guid: _guid,
+			Label: r.FormValue("label"),
+			UploadId: result.UploadID,
+			FileName: fileName,
+			CreatedDate: time.Now(),
+			CreatedBy: model.CurrentProfile.ProfileId,
+		}
+
+		_,err2:=pd.Create()
+
+		if err2!=nil {
+			str:=fmt.Sprintf("failed to upload data to %s with fileName %s", _doc.BucketName,  fileName)
+			ErrResponse(w,err2,str)
+			return 
+			
+		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"status": "Successfully uploaded data.", "fileName":,"`+ fileName+`", "docId":"`+ _guid +`"}`))
+		//w.Write([]byte(`{"status": "Successfully uploaded data.", "FileName":,"`+ fileName+`", "uploadID":"`+ result.UploadID+`"}`))
+		return 
 
 	}
-	
+
+	str:=fmt.Sprintf("failed to upload document")
+	ErrResponse(w,errors.New(str),str)
+	return 
+
+	/*
 	r.ParseMultipartForm(32 << 20)
 	file, handler, err := r.FormFile(FILEID)
 	if err != nil {
-		log.Println(err)
-		w.WriteHeader(http.StatusBadRequest)
-		return
+		str:=fmt.Sprint("upload document error.")
+		ErrResponse(w,err,str)
+		return 
 	}
 	defer file.Close()
 
 	fileName := handler.Filename
 
+	_guid:=uuid.New()
+	
 	_, err = _doc.Svc.PutObject(&s3.PutObjectInput{
 		Body:   file,
 		Bucket: &_doc.BucketName,
-		Key:    &fileName,
+		Key:    &_guid,
 	})
 
 	if err != nil {
-		log.Println("failed to upload data to", "", _doc.BucketName, "/", fileName, "Error:", err)
+		str:=fmt.Sprint("upload document error.")
+		ErrResponse(w,err,str)
 		return
 	}
-	http.Redirect(w, r, "/", http.StatusFound)
+	
+	pd:=&model.Document{
+		Guid: _guid,
+		Label: r.FormValue("label"),
+		UploadId: result.UploadID,
+		FileName: fileName,
+		CreatedDate: time.Now(),
+		CreatedBy: model.CurrentProfile.ProfileId,
+	}
+
+	_,err:=pd.Create()
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(`{"status": "Successfully uploaded data.", "fileName":,"`+ fileName+`", "docId":"`+ _guid +`"}`))
+*/
+	//w.Write([]byte(`{"status": "Successfully uploaded data.", "fileName":,"`+ fileName+`", "uploadId":"`+ result.UploadID+`"}`))
 
 }
 
 func DeleteDocHttpHandler(w http.ResponseWriter, r *http.Request){
+
+	w.Header().Set("Content-Type", "application/json")
+
 	fileName := mux.Vars(r)["docId"]
 
 	params := &s3.DeleteObjectInput{
@@ -117,75 +202,35 @@ func DeleteDocHttpHandler(w http.ResponseWriter, r *http.Request){
 
 	_, err := _doc.Svc.DeleteObject(params)
 	if err != nil {
-		log.Println(err)
+		str:=fmt.Sprintf("delete document %s error.",fileName)
+		ErrResponse(w,err,str)
 		return
 	}
 
-	http.Redirect(w, r, "/", http.StatusFound)
-	/*
-	w.Header().Set("Content-Type", "application/json")
-
-	uid, err:=utils.RetrieveUpdateFile(r,DOCPATH); 
-
+	_=model.DeleteDocById(fileName)
 	
-	if err != nil {
-		fmt.Sprintln("err: %s", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(`{"err":`+err.Error()+`}`))
-		
-		return
-	}
-
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"status": "ok","_docId":"`+uid+`"}`))
-*/
+	w.Write([]byte(`{"status": "Successfully deleted the document# "`+ fileName+`"}`))
+
 }
 
 func GetDocListHttpHandler(w http.ResponseWriter, r *http.Request){
-	params := &s3.ListObjectsInput{
-		Bucket: &_doc.BucketName, // Required
-	}
-	resp, err := _doc.Svc.ListObjects(params)
-	if err != nil {
-		log.Println(err)
-	}
-	var files []string
-	for _, file := range resp.Contents {
-		files = append(files, *file.Key)
-	}
-	fmt.Println("End Get All Objects")
-	http.Redirect(w, r, "/", http.StatusOK)
 
-	/*
 	w.Header().Set("Content-Type", "application/json")
 
-	uid, err:=utils.RetrieveUpdateFile(r,DOCPATH); 
+	_ref,_:=model.GetDocumentsByProfileId(model.CurrentProfile.ProfileId)
 
-	
-	if err != nil {
-		fmt.Sprintln("err: %s", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(`{"err":`+err.Error()+`}`))
-		
-		return
-	}
+	_str,_:=json.Marshal(_ref)
 
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"status": "ok","_docId":"`+uid+`"}`))
-*/
-}
-
-func UpdateDocHttpHandler(w http.ResponseWriter, r *http.Request){
-
+	w.Write(_str)
 
 }
 
 func DownloadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 	
-	fmt.Println("Begin Get Object")
 	fileName := mux.Vars(r)["docId"]
-	fmt.Println("Get Object", "docId", fileName)
-
+	
 	input := &s3.GetObjectInput{
 		Bucket: &_doc.BucketName,
 		Key:    &fileName,
@@ -197,28 +242,23 @@ func DownloadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 	}
 	defer resp.Body.Close()
 
-	w.Header().Set("Content-Disposition", "attachment; filename="+fileName)
+	_ref:=&model.Document{}
+	_ref,_=_ref.Load(fileName)
+
+	w.Header().Set("Content-Disposition", "attachment; filename="+_ref.FileName)
 	w.Header().Set("Content-Type", *resp.ContentType)
-	io.Copy(w, resp.Body)
-	fmt.Println("End Get Object")
-
-	/*
-	w.Header().Set("Content-Type", "application/json")
-
-	uid, err:=utils.RetrieveUpdateFile(r,DOCPATH); 
-
-	
-	if err != nil {
-		fmt.Sprintln("err: %s", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(`{"err":`+err.Error()+`}`))
-		
-		return
-	}
-
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"status": "ok","_docId":"`+uid+`"}`))
-*/
+	io.Copy(w, resp.Body)
+	
+}
+
+func ErrResponse(w http.ResponseWriter, err error, str string) {
+	log.Println(str, "Error:", err)		
+	fmt.Sprintf("err: %v, reason: %s", err, str)
+	w.WriteHeader(http.StatusInternalServerError)
+	w.Write([]byte(`{"err":"`+err.Error()+`","reason":"`+str+`"}`))
+	//fmt.Fprint(w, )
+	return
 }
 
 
