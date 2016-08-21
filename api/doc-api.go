@@ -14,10 +14,10 @@ package api
 
 import (
 	"encoding/json"
-	"errors"
+	//"errors"
 	"github.com/pborman/uuid"
 	"io"
-	"strings"
+	//"strings"
 	"log"
 	"fmt"
 	"net/http"
@@ -85,7 +85,7 @@ func UploadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 
 	w.Header().Set("Content-Type", "application/json")
 
-	if strings.ToUpper(r.Header.Get("Content-Type")) == "MULTIPART/FORM-DATA" {
+//	if strings.ToUpper(r.Header.Get("Content-Type")) == "MULTIPART/FORM-DATA" {
 
 		r.ParseMultipartForm(32 << 20)
 		file, handler, err := r.FormFile(FILEID)
@@ -139,11 +139,11 @@ func UploadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 		//w.Write([]byte(`{"status": "Successfully uploaded data.", "FileName":,"`+ fileName+`", "uploadID":"`+ result.UploadID+`"}`))
 		return 
 
-	}
+	//}
 
-	str:=fmt.Sprintf("failed to upload document")
-	ErrResponse(w,errors.New(str),str)
-	return 
+	//str:=fmt.Sprintf("failed to upload document")
+	//ErrResponse(w,errors.New(str),str)
+	//return 
 
 	/*
 	r.ParseMultipartForm(32 << 20)
