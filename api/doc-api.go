@@ -139,56 +139,7 @@ func UploadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"status": "Successfully uploaded data.", "fileName":"`+ fileName+`", "docId":"`+ _guid +`"}`))
-	//w.Write([]byte(`{"status": "Successfully uploaded data.", "FileName":,"`+ fileName+`", "uploadID":"`+ result.UploadID+`"}`))
 	return 
-
-	//}
-
-	//str:=fmt.Sprintf("failed to upload document")
-	//ErrResponse(w,errors.New(str),str)
-	//return 
-
-	/*
-	r.ParseMultipartForm(32 << 20)
-	file, handler, err := r.FormFile(FILEID)
-	if err != nil {
-		str:=fmt.Sprint("upload document error.")
-		ErrResponse(w,err,str)
-		return 
-	}
-	defer file.Close()
-
-	fileName := handler.Filename
-
-	_guid:=uuid.New()
-	
-	_, err = _doc.Svc.PutObject(&s3.PutObjectInput{
-		Body:   file,
-		Bucket: &_doc.BucketName,
-		Key:    &_guid,
-	})
-
-	if err != nil {
-		str:=fmt.Sprint("upload document error.")
-		ErrResponse(w,err,str)
-		return
-	}
-	
-	pd:=&model.Document{
-		Guid: _guid,
-		Label: r.FormValue("label"),
-		UploadId: result.UploadID,
-		FileName: fileName,
-		CreatedDate: time.Now(),
-		CreatedBy: model.CurrentProfile.ProfileId,
-	}
-
-	_,err:=pd.Create()
-
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"status": "Successfully uploaded data.", "fileName":,"`+ fileName+`", "docId":"`+ _guid +`"}`))
-*/
-	//w.Write([]byte(`{"status": "Successfully uploaded data.", "fileName":,"`+ fileName+`", "uploadId":"`+ result.UploadID+`"}`))
 
 }
 
@@ -234,8 +185,6 @@ func DownloadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 	
 	fileName := mux.Vars(r)["docId"]
 
-	fmt.Println(fileName)
-	
 	input := &s3.GetObjectInput{
 		Bucket: &_doc.BucketName,
 		Key:    &fileName,
@@ -247,17 +196,20 @@ func DownloadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 	}
 	defer resp.Body.Close()
 
-	_ref:=&model.Document{}
-	_ref1,_:=_ref.Load(fileName)
+	_ref:=&model.Document{Guid:fileName,}
+	_,err3:=_ref.Load()
 
-	fmt.Println(_ref1.FileName)
-	fmt.Println(*resp.ContentType)
+	if err3!=nil {
+		ErrResponse(w,err,"data loading error.")
+		return
+	}
+
 	
-	w.Header().Set("Content-Disposition", "attachment; filename="+_ref1.FileName)
+	w.Header().Set("Content-Disposition", "attachment; filename="+_ref.FileName)
 	w.Header().Set("Content-Type", *resp.ContentType)
 	w.WriteHeader(http.StatusOK)
 	io.Copy(w, resp.Body)
-	
+
 }
 
 func ErrResponse(w http.ResponseWriter, err error, str string) {

@@ -24,7 +24,7 @@ import (
 	"time"
 	//"log"
 	
-	//"fmt"
+	"fmt"
 	//"io"
 	//"net/http"
 )
@@ -57,27 +57,29 @@ func (d *Document) Create() (*Document, error) {
 	
 	tx := db.MustBegin()
 
-	tx.MustExec(`INSERT INTO "pcs-document-tbl" (_id, label, uploadid, filename, createddate, createdby) VALUES ($1, $2, $3, $4, $5, $6);`, d.Guid,d.Label,d.UploadId,d.FileName, d.CreatedDate, d.CreatedBy)
+	tx.MustExec(`INSERT INTO "pcs-document-tbl" (_id, label, uploadid, filename, createddate, createdby) VALUES ($1, $2, $3, $4, $5, $6)`, d.Guid,d.Label,d.UploadId,d.FileName, d.CreatedDate, d.CreatedBy)
 	
 	tx.Commit()
 
 	return d,nil
 }
 
-func (d *Document) Load(_id string) (*Document, error){
-	doc := Document{}
-	err := db.Get(&doc, `SELECT _id, label, uploadid, filename, createddate, createdby FROM "pcs-document-tbl" where _id=$1;`,_id)
+func (d *Document) Load() (*Document, error){
+	//doc := Document{}
+	fmt.Println(d.Guid)
+	err := db.Get(d, `SELECT _id as guid, label, uploadid, filename, createddate, createdby FROM "pcs-document-tbl" where _id=$1`,d.Guid)
 
 	if err!=nil{
 		return nil,err
 	}
-	return &doc,nil	
+	
+	return d,nil	
 }
 
 func GetDocumentsByProfileId(pId string) ([]Document, error){
 	
 	_qs := []Document{}
-	db.Select(&_qs, `SELECT _id, label, uploadid, filename, createddate, createdby FROM "pcs-document-tbl" where createdby=$1;`,pId)
+	db.Select(&_qs, `SELECT _id as guid, label, uploadid, filename, createddate, createdby FROM "pcs-document-tbl" where createdby=$1`,pId)
 
 	return _qs,nil
 
