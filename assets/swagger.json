@@ -646,6 +646,7 @@
 		"responses": {
 		    "200": {
 			"description": "successful delete a document",
+			type
 			"schema": {
 			    "type": "object",
 			    "properties": {
@@ -804,6 +805,9 @@
 		},
 		"label": {
 		    "type": "string"
+		},
+		"content_type":{
+		    "type":"string"
 		},
 		"uploadId": {
 		    "type": "string"
