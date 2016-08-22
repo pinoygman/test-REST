@@ -233,6 +233,8 @@ func GetDocListHttpHandler(w http.ResponseWriter, r *http.Request){
 func DownloadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 	
 	fileName := mux.Vars(r)["docId"]
+
+	fmt.Println(fileName)
 	
 	input := &s3.GetObjectInput{
 		Bucket: &_doc.BucketName,
@@ -248,6 +250,9 @@ func DownloadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 	_ref:=&model.Document{}
 	_ref1,_:=_ref.Load(fileName)
 
+	fmt.Println(_ref1.FileName)
+	fmt.Println(*resp.ContentType)
+	
 	w.Header().Set("Content-Disposition", "attachment; filename="+_ref1.FileName)
 	w.Header().Set("Content-Type", *resp.ContentType)
 	w.WriteHeader(http.StatusOK)
