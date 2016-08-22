@@ -83,7 +83,7 @@ func InitDocApi(accessKeyID, secretAccessKey, bucketName, endpoint string) {
 }
 
 func UploadDocHttpHandler(w http.ResponseWriter, r *http.Request){
-
+	fmt.Println("hello world.")
 	w.Header().Set("Content-Type", "application/json")
 
 	//if strings.ToUpper(r.Header.Get("Content-Type")) == "MULTIPART/FORM-DATA" {
@@ -97,6 +97,8 @@ func UploadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 	}
 	defer file.Close()
 	fileName := handler.Filename
+	//_ct:=handler.Header
+	//fmt.Println(_ct["Content-Type"][0])
 
 	uploader := s3manager.NewUploader(_doc.S)
 	svc := uploader.S3.(*s3.S3) // in multiPartUpload we don't use the s.svc
@@ -114,7 +116,7 @@ func UploadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 	fmt.Println(result)
 
 	if err != nil {
-		str:=fmt.Sprintf("failed to upload data to %s with fileName %s", _doc.BucketName,  fileName)
+		str:=fmt.Sprintf("failed to upload data to %s with fileName %s", _doc.BucketName, fileName)
 		ErrResponse(w,err,str)
 		return 
 	}
@@ -123,6 +125,7 @@ func UploadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 		Guid: _guid,
 		Label: r.FormValue(LABEL),
 		UploadId: result.UploadID,
+		ContentType: handler.Header["Content-Type"][0],
 		FileName: fileName,
 		CreatedDate: time.Now(),
 		CreatedBy: model.CurrentProfile.ProfileId,
@@ -204,7 +207,7 @@ func DownloadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 		ErrResponse(w,err,"data loading error.")
 		return
 	}
-
+	//contentType := http.DetectContentType(resp.Body)
 	
 	w.Header().Set("Content-Disposition", "attachment; filename="+_ref.FileName)
 	w.Header().Set("Content-Type", *resp.ContentType)
