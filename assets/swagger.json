@@ -577,16 +577,18 @@
 		"tags": [
 		    "Document"
 		],
-		"consumes":["multipart/form-data"],
+		"consumes": [
+		    "multipart/form-data"
+		],
 		"parameters": [
 		    {
-			"in":"formData",
+			"in": "formData",
 			"type": "file",
 			"name": "pcs-fileId",
 			"required": true
 		    },
 		    {
-			"in":"formData",
+			"in": "formData",
 			"type": "string",
 			"name": "label",
 			"required": true
@@ -646,7 +648,6 @@
 		"responses": {
 		    "200": {
 			"description": "successful delete a document",
-			type
 			"schema": {
 			    "type": "object",
 			    "properties": {
@@ -806,8 +807,8 @@
 		"label": {
 		    "type": "string"
 		},
-		"content_type":{
-		    "type":"string"
+		"content_type": {
+		    "type": "string"
 		},
 		"uploadId": {
 		    "type": "string"
