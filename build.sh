@@ -129,7 +129,6 @@ function readinputs () {
 }
 
 readinputs $@
-
 DIST=dist
 ARTIFACT=pcs_backend_${REV}_${ENV}
 BUILD_TIME=`date +%FT%T%z`
@@ -151,7 +150,7 @@ eval "sed -i -e 's#{SQLDSN}#${SQLDSN}#g' ./Dockerfile"
 
 eval "sed -i -e 's#{HOST}#pcs-backend-${ENV}.${HOST}#g' ./assets/swagger.json"
 eval "sed -i -e 's#{BASE}#/${REV}/api#g' ./assets/swagger.json"
-eval "sed -i -e 's#{ENV}#${ENV}#g' ./assets/swagger.json"
+eval "sed -i -e 's#{ENV}#${ENV}.${BUILD_ID}#g' ./assets/swagger.json"
 
 eval "sed -i -e 's#{ENV}#${ENV}#g' ./email/manifest.yml"
 eval "sed -i -e 's#{SQLDSN}#${SQLDSN}#g' ./email/manifest.yml"
