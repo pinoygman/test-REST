@@ -137,9 +137,10 @@ func UploadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 		
 	}
 
+	_str,_:=json.Marshal(*pd)
+
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"status": "Successfully uploaded data.", "fileName":"`+ fileName+`", "docId":"`+ _guid +`"}`))
-	return 
+	w.Write(_str)
 
 }
 
