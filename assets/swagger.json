@@ -625,40 +625,6 @@
 			}
 		    }
 		}
-	    },
-	    "delete": {
-		"summary": "delete a document",
-		"description": "delete a document.\n",
-		"tags": [
-		    "Document"
-		],
-		"parameters": [
-		    {
-			"name": "docId",
-			"in": "path",
-			"required": true,
-			"type": "string"
-		    }
-		],
-		"responses": {
-		    "200": {
-			"description": "successful delete a document",
-			"schema": {
-			    "type": "object",
-			    "properties": {
-				"message": {
-				    "type": "string"
-				}
-			    }
-			}
-		    },
-		    "501": {
-			"description": "Unexpected error",
-			"schema": {
-			    "$ref": "#/definitions/Error"
-			}
-		    }
-		}
 	    }
 	},
 	"/document/{docId}/delete": {
