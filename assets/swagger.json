@@ -577,18 +577,19 @@
 		"tags": [
 		    "Document"
 		],
+		"consumes":["multipart/form-data"],
 		"parameters": [
 		    {
-			"paramType": "body",
+			"in":"formData",
 			"type": "file",
 			"name": "pcs-fileId",
 			"required": true
 		    },
 		    {
+			"in":"formData",
+			"type": "string",
 			"name": "label",
-			"paramType": "body",
-			"required": true,
-			"type": "string"
+			"required": true
 		    }
 		],
 		"responses": {
