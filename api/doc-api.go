@@ -41,6 +41,7 @@ import (
 const (
 	DOCPATH = "./docs/"
 	FILEID  = "pcs-fileId"
+	LABEL   = "label"
 )
 
 var (
@@ -85,7 +86,7 @@ func UploadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 
 	w.Header().Set("Content-Type", "application/json")
 
-//	if strings.ToUpper(r.Header.Get("Content-Type")) == "MULTIPART/FORM-DATA" {
+	//if strings.ToUpper(r.Header.Get("Content-Type")) == "MULTIPART/FORM-DATA" {
 
 		r.ParseMultipartForm(32 << 20)
 		file, handler, err := r.FormFile(FILEID)
@@ -118,7 +119,7 @@ func UploadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 
 		pd:=&model.Document{
 			Guid: _guid,
-			Label: r.FormValue("label"),
+			Label: r.FormValue(LABEL),
 			UploadId: result.UploadID,
 			FileName: fileName,
 			CreatedDate: time.Now(),
@@ -243,9 +244,9 @@ func DownloadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 	defer resp.Body.Close()
 
 	_ref:=&model.Document{}
-	_ref,_=_ref.Load(fileName)
+	_ref1,_:=_ref.Load(fileName)
 
-	w.Header().Set("Content-Disposition", "attachment; filename="+_ref.FileName)
+	w.Header().Set("Content-Disposition", "attachment; filename="+_ref1.FileName)
 	w.Header().Set("Content-Type", *resp.ContentType)
 	w.WriteHeader(http.StatusOK)
 	io.Copy(w, resp.Body)
