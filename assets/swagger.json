@@ -372,7 +372,7 @@
 				"status": {
 				    "type": "string"
 				},
-				"priority":{
+				"priority": {
 				    "type": "integer"
 				}
 			    }
@@ -577,6 +577,20 @@
 		"tags": [
 		    "Document"
 		],
+		"parameters": [
+		    {
+			"paramType": "Form",
+			"dataType": "file",
+			"name": "pcs-fileId",
+			"required": true
+		    },
+		    {
+			"name": "label",
+			"paramType": "Form",
+			"required": true,
+			"type": "string"
+		    }
+		],
 		"responses": {
 		    "200": {
 			"description": "successful retrieve current profile",
@@ -588,7 +602,7 @@
 		}
 	    }
 	},
-	"/document/{docId}": {
+	"/document/{docId}/download": {
 	    "get": {
 		"summary": "download a document",
 		"description": "download a document.\n",
@@ -607,11 +621,47 @@
 		    "200": {
 			"description": "successful retrieve current profile",
 			"schema": {
-			    "type": "object"
+			    "type": "file"
 			}
 		    }
 		}
 	    },
+	    "delete": {
+		"summary": "delete a document",
+		"description": "delete a document.\n",
+		"tags": [
+		    "Document"
+		],
+		"parameters": [
+		    {
+			"name": "docId",
+			"in": "path",
+			"required": true,
+			"type": "string"
+		    }
+		],
+		"responses": {
+		    "200": {
+			"description": "successful delete a document",
+			"schema": {
+			    "type": "object",
+			    "properties": {
+				"message": {
+				    "type": "string"
+				}
+			    }
+			}
+		    },
+		    "501": {
+			"description": "Unexpected error",
+			"schema": {
+			    "$ref": "#/definitions/Error"
+			}
+		    }
+		}
+	    }
+	},
+	"/document/{docId}/delete": {
 	    "delete": {
 		"summary": "delete a document",
 		"description": "delete a document.\n",
@@ -735,7 +785,7 @@
 		"status": {
 		    "type": "string"
 		},
-		"priority":{
+		"priority": {
 		    "type": "integer"
 		},
 		"answerOptions": {
@@ -782,7 +832,22 @@
 	"Document": {
 	    "type": "object",
 	    "properties": {
-		"_did": {
+		"_id": {
+		    "type": "string"
+		},
+		"label": {
+		    "type": "string"
+		},
+		"uploadId": {
+		    "type": "string"
+		},
+		"fileName": {
+		    "type": "string"
+		},
+		"created_date": {
+		    "type": "string"
+		},
+		"created_by": {
 		    "type": "string"
 		}
 	    }
