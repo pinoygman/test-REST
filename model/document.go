@@ -40,6 +40,7 @@ type Document struct {
 	Guid              string                    `json:"_id"`
 	Label             string                    `json:"label"`
 	UploadId          string                    `json:"uploadId"`
+	ContentType       string                    `json:"content_type"`
 	FileName          string                    `json:"fileName"`
 	CreatedDate       time.Time                 `json:"created_date"`
 	CreatedBy         string                    `json:"created_by"`
@@ -57,7 +58,7 @@ func (d *Document) Create() (*Document, error) {
 	
 	tx := db.MustBegin()
 
-	tx.MustExec(`INSERT INTO "pcs-document-tbl" (_id, label, uploadid, filename, createddate, createdby) VALUES ($1, $2, $3, $4, $5, $6)`, d.Guid,d.Label,d.UploadId,d.FileName, d.CreatedDate, d.CreatedBy)
+	tx.MustExec(`INSERT INTO "pcs-document-tbl" (_id, label, uploadid, filename, createddate, createdby, contenttype) VALUES ($1, $2, $3, $4, $5, $6, $7)`, d.Guid,d.Label,d.UploadId,d.FileName, d.CreatedDate, d.CreatedBy, d.ContentType)
 	
 	tx.Commit()
 
@@ -67,7 +68,7 @@ func (d *Document) Create() (*Document, error) {
 func (d *Document) Load() (*Document, error){
 	//doc := Document{}
 	fmt.Println(d.Guid)
-	err := db.Get(d, `SELECT _id as guid, label, uploadid, filename, createddate, createdby FROM "pcs-document-tbl" where _id=$1`,d.Guid)
+	err := db.Get(d, `SELECT _id as guid, label, contenttype, uploadid, filename, createddate, createdby FROM "pcs-document-tbl" where _id=$1`,d.Guid)
 
 	if err!=nil{
 		return nil,err
@@ -79,7 +80,7 @@ func (d *Document) Load() (*Document, error){
 func GetDocumentsByProfileId(pId string) ([]Document, error){
 	
 	_qs := []Document{}
-	db.Select(&_qs, `SELECT _id as guid, label, uploadid, filename, createddate, createdby FROM "pcs-document-tbl" where createdby=$1`,pId)
+	db.Select(&_qs, `SELECT _id as guid, label, contenttype, uploadid, filename, createddate, createdby FROM "pcs-document-tbl" where createdby=$1`,pId)
 
 	return _qs,nil
 
