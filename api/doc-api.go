@@ -135,7 +135,7 @@ func UploadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 		}
 
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"status": "Successfully uploaded data.", "fileName":,"`+ fileName+`", "docId":"`+ _guid +`"}`))
+		w.Write([]byte(`{"status": "Successfully uploaded data.", "fileName":"`+ fileName+`", "docId":"`+ _guid +`"}`))
 		//w.Write([]byte(`{"status": "Successfully uploaded data.", "FileName":,"`+ fileName+`", "uploadID":"`+ result.UploadID+`"}`))
 		return 
 

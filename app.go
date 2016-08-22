@@ -123,9 +123,9 @@ func main() {
 	//document
 	r.HandleFunc(fmt.Sprintf("/%s/%s/document",REV,ROOTPATH), api.UploadDocHttpHandler).Methods("POST")	
 
-	r.HandleFunc(fmt.Sprintf("/%s/%s/document/{docId}",REV,ROOTPATH), api.DeleteDocHttpHandler).Methods("DELETE")
+	r.HandleFunc(fmt.Sprintf("/%s/%s/document/{docId}/delete",REV,ROOTPATH), api.DeleteDocHttpHandler).Methods("DELETE")
 
-	r.HandleFunc(fmt.Sprintf("/%s/%s/document/{docId}",REV,ROOTPATH), api.DownloadDocHttpHandler).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/%s/document/{docId}/download",REV,ROOTPATH), api.DownloadDocHttpHandler).Methods("GET")
 
 	r.HandleFunc(fmt.Sprintf("/%s/%s/document/list",REV,ROOTPATH), api.GetDocListHttpHandler).Methods("GET")
 	
