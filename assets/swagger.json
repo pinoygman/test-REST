@@ -579,14 +579,14 @@
 		],
 		"parameters": [
 		    {
-			"paramType": "Form",
-			"dataType": "file",
+			"paramType": "form",
+			"type": "file",
 			"name": "pcs-fileId",
 			"required": true
 		    },
 		    {
 			"name": "label",
-			"paramType": "Form",
+			"paramType": "form",
 			"required": true,
 			"type": "string"
 		    }
