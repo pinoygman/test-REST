@@ -210,7 +210,7 @@ func DownloadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 	//contentType := http.DetectContentType(resp.Body)
 	
 	w.Header().Set("Content-Disposition", "attachment; filename="+_ref.FileName)
-	w.Header().Set("Content-Type", *resp.ContentType)
+	w.Header().Set("Content-Type", _ref.ContentType)
 	w.WriteHeader(http.StatusOK)
 	io.Copy(w, resp.Body)
 
