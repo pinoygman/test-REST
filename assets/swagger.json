@@ -3,7 +3,7 @@
     "info": {
 	"title": "PCS Portal API ({ENV})",
 	"description": "PCS Portal Backend API",
-	"version": "1.0.0"
+	"version": "0.{ENV}"
     },
     "host": "{HOST}",
     "schemes": [
