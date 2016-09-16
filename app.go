@@ -71,12 +71,13 @@ func main() {
 	if REV=="" {
 		REV="v1"
 	}
-/*
+
 	c := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET","POST","DELETE","PUT"},
 		AllowCredentials: true,
 	})
-*/
+
 
 	r := mux.NewRouter()
 
@@ -151,7 +152,7 @@ func main() {
 			panic(fmt.Sprintf("%v", err))
 		}
 
-		http.ListenAndServe(":"+conf.Port,cors.Default().Handler(r))
+		http.ListenAndServe(":"+conf.Port,c.Handler(r))
 		
 		return
 	}
@@ -188,6 +189,6 @@ func main() {
 
 	}
 
-	http.ListenAndServe(":"+os.Getenv("PORT"),cors.Default().Handler(r))
+	http.ListenAndServe(":"+os.Getenv("PORT"),c.Handler(r))
 
 }
