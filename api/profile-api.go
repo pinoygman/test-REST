@@ -40,7 +40,7 @@ func GetProfileHttpHandler(w http.ResponseWriter, r *http.Request){
 		
 		if err!=nil {
 			err := errors.New(`Invalid profile info.`)
-			ErrResponse(w,http.StatusInternalServerError,err,"wrong format.")
+			ErrResponse(w,http.StatusInternalServerError,err,"Invalid field(s) or wrong format.")
 			return
 		}
 		
