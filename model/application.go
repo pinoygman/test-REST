@@ -97,7 +97,7 @@ func (a *Application) Save() (*Application, error) {
 
 	_ea[a.Guid]=a
 
-	fmt.Printf("_ea: %+v\n",_ea)
+	fmt.Printf("_ea: %+v\n",_ea[a.Guid])
 	
 	b,_:=json.Marshal(_ea)
 	err2 := client.Set(a.ProfileId, string(b), 0).Err()
