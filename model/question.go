@@ -130,7 +130,7 @@ func (q *Question) Save() (*Question, error) {
 	
 	tx := db.MustBegin()
 
-	tx.MustExec(`UPDATE "pcs-question-tbl" SET title=$1, name=$2, description=$3, type=$4, "answerOptions"=$5 status=$7 priority=$8 WHERE _id=$6`,q.Title,q.Name,q.Desc,q.Type,q.AnswerOptions,q.Guid, q.Status, q.Priority)
+	tx.MustExec(`UPDATE "pcs-question-tbl" SET title=$1, name=$2, description=$3, type=$4, "answerOptions"=$5, status=$7, priority=$8 WHERE _id=$6`,q.Title,q.Name,q.Desc,q.Type,q.AnswerOptions,q.Guid, q.Status, q.Priority)
 	
 	tx.Commit()
 
