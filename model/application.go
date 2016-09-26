@@ -84,7 +84,7 @@ func (a *Application) Save() (*Application, error) {
 
 	//fmt.Println("key does not exist in redis")
 
-	fmt.Println("a: %v",a)
+	fmt.Sprintf("a: %v",a)
 	
 	if _, ok := _ea[a.Guid]; ok {
 		a.CreatedDate=_ea[a.Guid].CreatedDate
@@ -97,7 +97,7 @@ func (a *Application) Save() (*Application, error) {
 
 	_ea[a.Guid]=a
 
-	fmt.Println("_ea: %v",_ea)
+	fmt.Sprintf("_ea: %v",_ea)
 	
 	b,_:=json.Marshal(_ea)
 	err2 := client.Set(a.ProfileId, string(b), 0).Err()
