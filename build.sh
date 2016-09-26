@@ -72,6 +72,7 @@ function readinputs () {
 	printf "   %-*s\n" 10 "-hpwd | haraka pwd"
 	printf "   %-*s\n" 10 "-hhst | haraka host"
 	printf "   %-*s\n" 10 "-hsht | haraka smtp host"
+	printf "   %-*s\n" 10 "-tpwd | temp pwd. idea Led by the PCS team, not Chia."
     else
 	for ((i = 1; i <=$#; i++));
 	do
@@ -119,6 +120,9 @@ function readinputs () {
 		-hsht)
 		    HSHOST=${@:i+1:1}
 		    ;;
+		-tpwd)
+		    TEMPPWD=${@:i+1:1}
+		    ;;
 		*)
 		    #echo "Invalid option ${@:i:1}"
 	            ;;
@@ -159,6 +163,8 @@ eval "sed -i -e 's#{HUSER}#${HUSER}#g' ./email/manifest.yml"
 eval "sed -i -e 's#{HPWD}#${HPWD}#g' ./email/manifest.yml"
 eval "sed -i -e 's#{HHOST}#${HHOST}#g' ./email/manifest.yml"
 eval "sed -i -e 's#{HSHOST}#${HSHOST}#g' ./email/manifest.yml"
+eval "sed -i -e 's#{TEMPPWD}#${TEMPPWD}#g' ./email/manifest.yml"
+
 
 docker_run
 cf_push

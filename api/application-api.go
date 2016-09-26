@@ -26,10 +26,13 @@ func GetApplicationsByProfileIdHttpHandler(w http.ResponseWriter, r *http.Reques
 
 	w.Header().Set("Content-Type", "application/json")
 
-	vars := mux.Vars(r)
-	key := vars["profileId"]
+	//temp represent token
+	key:=r.Header.Get("ProfileId")
+	//vars := mux.Vars(r)
+	//key := vars["profileId"]
 
-	_ref,err:=model.GetApplicationsByProfileId(key)
+	_a:=&model.Application{ProfileId:key}
+	_ref,err:=_a.GetApplications()
 
 	if err != nil {
 		fmt.Sprintf("err: %s", err)
@@ -50,10 +53,13 @@ func GetDraftsByProfileIdHttpHandler(w http.ResponseWriter, r *http.Request){
 
 	w.Header().Set("Content-Type", "application/json")
 
-	vars := mux.Vars(r)
-	key := vars["profileId"]
-
-	_ref,err:=model.GetDraftsByProfileId(key)
+	//temp loading profile id
+	key:=r.Header.Get("ProfileId")
+	//vars := mux.Vars(r)
+	//key := vars["profileId"]
+	
+	_a:=&model.Application{ProfileId:key}
+	_ref,err:=_a.GetDrafts()
 
 	if err != nil {
 		fmt.Sprintf("err: %s", err)
@@ -67,7 +73,7 @@ func GetDraftsByProfileIdHttpHandler(w http.ResponseWriter, r *http.Request){
 	_str,err:=json.Marshal(_ref)
 	
 	w.WriteHeader(http.StatusOK)
-	w.Write(_str)	
+	w.Write(_str)
 }
 
 func SubmitApplicationHttpHandler(w http.ResponseWriter, r *http.Request){
@@ -139,10 +145,14 @@ func DeleteApplicationHttpHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 
+	pid:=r.Header.Get("ProfileId")
+	
+	_a:=&model.Application{ProfileId:pid}
+
 	vars := mux.Vars(r)
 	key := vars["applicationId"]
 
-	err :=model.DeleteApplicationById(key)
+	err :=_a.DeleteApplication(key)
 	
 	if err != nil {
 		fmt.Sprintf("err: %s", err)
@@ -160,10 +170,16 @@ func DeleteDraftHttpHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 
+	pid:=r.Header.Get("ProfileId")
+	//vars := mux.Vars(r)
+	//key := vars["profileId"]
+	
+	_a:=&model.Application{ProfileId:pid}
+
 	vars := mux.Vars(r)
 	key := vars["applicationId"]
 
-	err :=model.DeleteDraftById(key)
+	err :=_a.DeleteDraft(key)
 	
 	if err != nil {
 		fmt.Sprintf("err: %s", err)

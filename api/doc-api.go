@@ -83,8 +83,15 @@ func InitDocApi(accessKeyID, secretAccessKey, bucketName, endpoint string) {
 }
 
 func UploadDocHttpHandler(w http.ResponseWriter, r *http.Request){
-	fmt.Println("hello world.")
+
 	w.Header().Set("Content-Type", "application/json")
+
+	key:=r.Header.Get("ProfileId")
+	//vars := mux.Vars(r)
+	//key := vars["profileId"]
+	
+	_a:=&model.Application{ProfileId:key}
+
 
 	//if strings.ToUpper(r.Header.Get("Content-Type")) == "MULTIPART/FORM-DATA" {
 
@@ -117,7 +124,7 @@ func UploadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 
 	if err != nil {
 		str:=fmt.Sprintf("failed to upload data to %s with fileName %s", _doc.BucketName, fileName)
-		ErrResponse(w,err,str)
+		ErrResponse(w,http.StatusInternalServerError,err,str)
 		return 
 	}
 
@@ -128,14 +135,14 @@ func UploadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 		ContentType: handler.Header["Content-Type"][0],
 		FileName: fileName,
 		CreatedDate: time.Now(),
-		CreatedBy: model.CurrentProfile.ProfileId,
+		CreatedBy: _a.ProfileId,
 	}
 
 	_,err2:=pd.Create()
 
 	if err2!=nil {
 		str:=fmt.Sprintf("failed to upload data to %s with fileName %s", _doc.BucketName,  fileName)
-		ErrResponse(w,err2,str)
+		ErrResponse(w,http.StatusInternalServerError,err2,str)
 		return 
 		
 	}
@@ -161,7 +168,7 @@ func DeleteDocHttpHandler(w http.ResponseWriter, r *http.Request){
 	_, err := _doc.Svc.DeleteObject(params)
 	if err != nil {
 		str:=fmt.Sprintf("delete document %s error.",fileName)
-		ErrResponse(w,err,str)
+		ErrResponse(w,http.StatusInternalServerError,err,str)
 		return
 	}
 
@@ -176,7 +183,14 @@ func GetDocListHttpHandler(w http.ResponseWriter, r *http.Request){
 
 	w.Header().Set("Content-Type", "application/json")
 
-	_ref,_:=model.GetDocumentsByProfileId(model.CurrentProfile.ProfileId)
+	pid:=r.Header.Get("ProfileId")
+	//vars := mux.Vars(r)
+	//key := vars["profileId"]
+	
+	_a:=&model.Application{ProfileId:pid}
+
+
+	_ref,_:=model.GetDocumentsByProfileId(_a.ProfileId)
 
 	_str,_:=json.Marshal(_ref)
 
@@ -204,7 +218,7 @@ func DownloadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 	_,err3:=_ref.Load()
 
 	if err3!=nil {
-		ErrResponse(w,err,"data loading error.")
+		ErrResponse(w,http.StatusInternalServerError,err,"data loading error.")
 		return
 	}
 	//contentType := http.DetectContentType(resp.Body)
@@ -216,10 +230,10 @@ func DownloadDocHttpHandler(w http.ResponseWriter, r *http.Request){
 
 }
 
-func ErrResponse(w http.ResponseWriter, err error, str string) {
+func ErrResponse(w http.ResponseWriter, errcode uint16, err error, str string) {
 	log.Println(str, "Error:", err)		
 	fmt.Sprintf("err: %v, reason: %s", err, str)
-	w.WriteHeader(http.StatusInternalServerError)
+	w.WriteHeader(int(errcode))
 	w.Write([]byte(`{"err":"`+err.Error()+`","reason":"`+str+`"}`))
 	//fmt.Fprint(w, )
 	return

@@ -37,7 +37,6 @@ const (
 	Service = 1001
 )
 
-
 type Question struct {
 	Guid            string                      `json:"_id"`
 	Title           string                      `json:"title"`
