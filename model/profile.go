@@ -55,7 +55,7 @@ func GetProfileByEmail(email string) (Profile, error) {
 
 	_pf:=Profile{}
 
-	db.Get(&_pf, `SELECT _id, name, email, sfdcid FROM "pcs-profile" where email=$1`,email)
+	db.Get(&_pf, `SELECT _id as "profileid", name, email, sfdcid FROM "pcs-profile" where email=$1`,email)
 	fmt.Printf("%#v\n", _pf)
 	
 	return _pf, nil	
