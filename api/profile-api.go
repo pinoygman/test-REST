@@ -28,7 +28,7 @@ const (
 func GetProfileHttpHandler(w http.ResponseWriter, r *http.Request){
 
 	eml, pwd, ok:=r.BasicAuth()
-	if ok {
+	if !ok {
 		err := errors.New(`Authorization header's not in correct format.`)
 		ErrResponse(w,http.StatusInternalServerError,err,"wrong format.")
 		return
