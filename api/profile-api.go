@@ -35,12 +35,13 @@ func GetProfileHttpHandler(w http.ResponseWriter, r *http.Request){
 	}
 	//temp pwd verify. will validate against pwd grant_type authentication later
 	if pwd==os.Getenv(TEMPPWD){
-		pf, err:=model.GetProfileByEmail(eml)
+		pf:=&model.Profile{Email:eml}
+		err:=pf.GetProfileByEmail()
 		
 		if err!=nil {
 			err := errors.New(`Invalid profile info.`)
 			ErrResponse(w,http.StatusInternalServerError,err,"wrong format.")
-			return	
+			return
 		}
 		
 		w.Header().Set("Content-Type", "application/json")

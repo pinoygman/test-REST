@@ -16,7 +16,7 @@ package model
 import (
 	"fmt"
 	//"log"
-
+	"errors"
 	//"github.com/nimajalali/go-force/force"
 	//"github.com/nimajalali/go-force/sobjects"
 )
@@ -51,12 +51,16 @@ func (p *Profile) Init(profileId string) (error){
 	return  nil
 }
 
-func GetProfileByEmail(email string) (Profile, error) {
+func (p *Profile) GetProfileByEmail() (error) {
 
-	_pf:=Profile{}
+	//_pf:=Profile{}
 
-	db.Get(&_pf, `SELECT _id as "profileid", name, email, sfdcid FROM "pcs-profile" where email=$1`,email)
-	fmt.Printf("%#v\n", _pf)
+	db.Get(p, `SELECT _id as "profileid", name, email, sfdcid FROM "pcs-profile" where email=$1`,p.Email)
+	fmt.Printf("%#v\n", p)
+
+	if p.ProfileId=="" {
+		return errors.New("no such a profile found.")
+	}
 	
-	return _pf, nil	
+	return nil	
 }
