@@ -16,24 +16,18 @@
     "paths": {
 	"/profile": {
 	    "post": {
-		"summary": "get current profile info",
-		"description": "get currnt profile information.\n",
+		"summary": "get the profile info with user credential.",
+		"description": "get the profile info with the format 'Basic base64(username:pwd)' .\n",
 		"tags": [
 		    "Profile"
 		],
 		"parameters": [
 		    {
-			"name": "email",
-			"in": "body",
-			"required": true,
-			"type": "string"
-		    },
-		    {
-			"name": "token",
-			"in": "body",
+			"name": "Authorization",
+			"in": "header",
 			"required": true,
 			"type": "string",
-			"description": "token from predix.io UAA"
+			"description": "Basic base64(username:pwd)"
 		    }
 		],
 		"responses": {
@@ -50,17 +44,24 @@
 		}
 	    }
 	},
-	"/application/list/{profileId}": {
+	"/application/list": {
 	    "get": {
-		"summary": "get the application list by profileId",
-		"description": "get the list of applications by profileId.\n",
+		"summary": "get your application list",
+		"description": "get the list of applications\n",
 		"tags": [
 		    "Application"
 		],
 		"parameters": [
 		    {
-			"name": "profileId",
-			"in": "path",
+			"name": "Authorization",
+			"in": "header",
+			"required": true,
+			"type": "string",
+			"description": "Bearer *your_token"
+		    },
+		    {
+			"name": "ProfileId",
+			"in": "header",
 			"required": true,
 			"type": "string"
 		    }
@@ -79,17 +80,24 @@
 		}
 	    }
 	},
-	"/application/draft/list/{profileId}": {
+	"/application/draft/list": {
 	    "get": {
-		"summary": "get the draft list by profileId",
-		"description": "get the list of applications by profileId.\n",
+		"summary": "get your drafted application list",
+		"description": "get the list of drafted applications.\n",
 		"tags": [
 		    "Application"
 		],
 		"parameters": [
 		    {
-			"name": "profileId",
-			"in": "path",
+			"name": "Authorization",
+			"in": "header",
+			"required": true,
+			"type": "string",
+			"description": "Bearer *your_token"
+		    },
+		    {
+			"name": "ProfileId",
+			"in": "header",
 			"required": true,
 			"type": "string"
 		    }

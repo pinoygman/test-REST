@@ -78,18 +78,17 @@ func main() {
 		AllowCredentials: true,
 	})
 
-
 	r := mux.NewRouter()
 
 	//Profile
 	r.HandleFunc(fmt.Sprintf("/%s/%s/profile",REV,ROOTPATH), api.GetProfileHttpHandler).Methods("POST")
 	
 	//Questions
-	r.HandleFunc(fmt.Sprintf("/%s/%s/question",REV,ROOTPATH), api.InsertQuestionHttpHandler).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/%s/question",REV,ROOTPATH), api.Auth(api.InsertQuestionHttpHandler)).Methods("POST")
 	
-	r.HandleFunc(fmt.Sprintf("/%s/%s/question",REV,ROOTPATH), api.UpdateQuestionHttpHandler).Methods("PUT")
+	r.HandleFunc(fmt.Sprintf("/%s/%s/question",REV,ROOTPATH), api.Auth(api.UpdateQuestionHttpHandler)).Methods("PUT")
 	
-	r.HandleFunc(fmt.Sprintf("/%s/%s/question/list",REV,ROOTPATH), api.GetQuestionsHttpHandler).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/%s/question/list",REV,ROOTPATH), api.Auth(api.GetQuestionsHttpHandler)).Methods("GET")
 	
 	r.HandleFunc(fmt.Sprintf("/%s/%s/question/list/{typeId}",REV,ROOTPATH), api.GetQuestionsByTypeIdHttpHandler).Methods("GET")
 	
@@ -103,20 +102,20 @@ func main() {
 	r.HandleFunc(fmt.Sprintf("/%s/%s/questiontype/{questionTypeId}",REV,ROOTPATH), api.DeleteQuestionTypeHttpHandler).Methods("DELETE")
 
 	//Applications
-	r.HandleFunc(fmt.Sprintf("/%s/%s/application",REV,ROOTPATH), api.CreateApplicationHttpHandler).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/%s/application",REV,ROOTPATH), api.Auth(api.CreateApplicationHttpHandler)).Methods("POST")
 	
-	r.HandleFunc(fmt.Sprintf("/%s/%s/application",REV,ROOTPATH), api.SaveApplicationHttpHandler).Methods("PUT")
+	r.HandleFunc(fmt.Sprintf("/%s/%s/application",REV,ROOTPATH), api.Auth(api.SaveApplicationHttpHandler)).Methods("PUT")
 	
-	r.HandleFunc(fmt.Sprintf("/%s/%s/application/submit",REV,ROOTPATH), api.SubmitApplicationHttpHandler).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/%s/application/submit",REV,ROOTPATH), api.Auth(api.SubmitApplicationHttpHandler)).Methods("POST")
 
-	r.HandleFunc(fmt.Sprintf("/%s/%s/application/list/{profileId}",REV,ROOTPATH), api.GetApplicationsByProfileIdHttpHandler).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/%s/application/list",REV,ROOTPATH), api.Auth(api.GetApplicationsByProfileIdHttpHandler)).Methods("GET")
 	
-	r.HandleFunc(fmt.Sprintf("/%s/%s/application/{applicationId}",REV,ROOTPATH), api.DeleteApplicationHttpHandler).Methods("DELETE")
+	r.HandleFunc(fmt.Sprintf("/%s/%s/application/{applicationId}",REV,ROOTPATH), api.Auth(api.DeleteApplicationHttpHandler)).Methods("DELETE")
 
 	//draft
-	r.HandleFunc(fmt.Sprintf("/%s/%s/application/draft/list/{profileId}",REV,ROOTPATH), api.GetDraftsByProfileIdHttpHandler).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/%s/application/draft/list",REV,ROOTPATH), api.Auth(api.GetDraftsByProfileIdHttpHandler)).Methods("GET")
 
-	r.HandleFunc(fmt.Sprintf("/%s/%s/application/draft/{applicationId}",REV,ROOTPATH), api.DeleteDraftHttpHandler).Methods("DELETE")
+	r.HandleFunc(fmt.Sprintf("/%s/%s/application/draft/{applicationId}",REV,ROOTPATH), api.Auth(api.DeleteDraftHttpHandler)).Methods("DELETE")
 	
 	//email
 	r.HandleFunc(fmt.Sprintf("/%s/%s/email",REV,ROOTPATH), api.SendMailApplicationHttpHandler).Methods("POST")

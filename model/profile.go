@@ -14,7 +14,7 @@
 package model
 
 import (
-	_ "fmt"
+	"fmt"
 	//"log"
 
 	//"github.com/nimajalali/go-force/force"
@@ -37,14 +37,26 @@ type Profile struct {
 
 var (
 	//questionnaires map[string]Questionnaire
-	CurrentProfile    * Profile 
+	//CurrentProfile    * Profile 
 )
 
 func init(){
-	CurrentProfile=&Profile{
-		ProfileId:"sentochihirono_kamikakushi",
-		Name:"千と千尋の神隠し",
-		Email:"chia.chang@ge.com",
-		SFDCId:"299a0979-d06b-4796-a329-7b5d4d3abf20",
-	}
+}
+
+func (p *Profile) Init(profileId string) (error){
+	
+	db.Get(p, `SELECT _id, name, email, sfdcid FROM "pcs-profile" where _id=$1`,profileId)
+	fmt.Printf("%#v\n", p)
+	
+	return  nil
+}
+
+func GetProfileByEmail(email string) (Profile, error) {
+
+	_pf:=Profile{}
+
+	db.Get(&_pf, `SELECT _id, name, email, sfdcid FROM "pcs-profile" where email=$1`,email)
+	fmt.Printf("%#v\n", _pf)
+	
+	return _pf, nil	
 }
