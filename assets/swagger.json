@@ -242,6 +242,12 @@
 			"in": "path",
 			"required": true,
 			"type": "string"
+		    },
+		    {
+			"name": "ProfileId",
+			"in": "header",
+			"required": true,
+			"type": "string"
 		    }
 		],
 		"responses": {
