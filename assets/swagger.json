@@ -125,6 +125,19 @@
 		],
 		"parameters": [
 		    {
+			"name": "Authorization",
+			"in": "header",
+			"required": true,
+			"type": "string",
+			"description": "Bearer *your_token"
+		    },
+		    {
+			"name": "ProfileId",
+			"in": "header",
+			"required": true,
+			"type": "string"
+		    },
+		    {
 			"name": "applicationId",
 			"in": "path",
 			"required": true,
