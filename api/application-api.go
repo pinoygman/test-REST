@@ -165,7 +165,6 @@ func DeleteApplicationHttpHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"status": "application `+key+` has been deleted."}`))
 }
-
 func DeleteDraftHttpHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
