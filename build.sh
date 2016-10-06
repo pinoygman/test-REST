@@ -137,7 +137,7 @@ DIST=dist
 ARTIFACT=pcs_backend_${REV}_${ENV}
 BUILD_TIME=`date +%FT%T%z`
 LDFLAGS="main.REV=${REV}"
-DHOME=github.build.ge.com/predixsolutions/catalog-onboarding-backend
+DHOME=github.build.ge.com/predixsolutions/catalog-onboarding-api
 
 #predix select
 HOST=run.asv-pr.ice.predix.io
