@@ -14,7 +14,7 @@ package api
 
 import (
 	"net/http"
-	"github.build.ge.com/predixsolutions/catalog-onboarding-backend/model"
+	"github.build.ge.com/predixsolutions/catalog-onboarding-api/model"
 	"encoding/json"
 	//"github.com/gorilla/mux"
 	//"fmt"

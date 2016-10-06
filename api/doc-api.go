@@ -33,8 +33,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.build.ge.com/predixsolutions/catalog-onboarding-backend/utils"
-	"github.build.ge.com/predixsolutions/catalog-onboarding-backend/model"
+	"github.build.ge.com/predixsolutions/catalog-onboarding-api/utils"
+	"github.build.ge.com/predixsolutions/catalog-onboarding-api/model"
 
 )
 
