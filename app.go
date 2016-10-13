@@ -53,6 +53,7 @@ const (
 		
 )
 
+//init the package
 func init(){
 	
 	s,err:=config.Init(SETTING)
